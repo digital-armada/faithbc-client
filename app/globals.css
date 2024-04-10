@@ -98,7 +98,7 @@
     }
 }
 
-.progress-bar::-webkit-slider-thumb {
+.progress-bar::-moz-range-thumb {
     z-index: 4;
     position: relative;
 }

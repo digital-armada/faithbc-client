@@ -108,6 +108,16 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
         onPrev();
     };
 
+    // useEffect(() => {
+    //     if (isPlaying) {
+    //         audioRef.current?.pause();
+    //         dispatch(playPause(false));
+    //     } else {
+    //         audioRef.current?.play();
+    //         dispatch(playPause(true));
+    //     }
+    // }, [isPlaying]);
+
     const togglePlayPause = () => {
         if (!isReady) return;
 
@@ -119,6 +129,24 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
             dispatch(playPause(true));
         }
     };
+
+    // Add ability to control play/pause from Redux state
+    const playPauseFromRedux = () => {
+        if (!isReady) return;
+
+        if (isPlaying) {
+            audioRef.current?.play();
+        } else {
+            audioRef.current?.pause();
+        }
+
+        dispatch(playPause(isPlaying));
+    };
+
+    // Call playPauseFromRedux on state changes
+    useEffect(() => {
+        playPauseFromRedux();
+    }, [isPlaying]);
 
     //     const togglePlayPause = () => {
     // if (!isReady) return; // Do nothing if audio is not ready
