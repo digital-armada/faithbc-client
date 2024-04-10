@@ -2,32 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    section {
+        @apply w-full p-8;
+    }
+    .contain {
+        @apply w-full p-8;
+    }
+    .container {
+        @apply max-w-5xl mx-auto;
+    }
+}
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --progress-width: 0;
+    --buffered-width: 0;
+    --buffered-left: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.noise {
+    background: rgba(137, 139, 150, 0.501);
+    background-image: url(/noise.png);
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.menu-close p {
+    color: #000;
+    cursor: pointer;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.menu-overlay {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+}
+
+.menu-close-icon {
+    flex: 2;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.menu-copy {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 2em;
+}
+
+.menu-preview {
+    flex: 4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.menu-close-icon p {
+    font-size: 100px;
+    -webkit-text-stroke: #c5fb45;
+    line-height: 70%;
+}
+
+.menu-link-item {
+    width: max-content;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.menu-link-item-holder {
+    position: relative;
+}
+.menu-link-item-holder a {
+    font-size: 80px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 85%;
+}
+
+.menu-info {
+    display: flex;
+}
+
+.menu-info-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+    .menu-close-icon {
+        display: none;
+    }
+
+    .menu-link-item-holder a {
+        font-size: 60px;
+    }
+}
+
+.progress-bar::-webkit-slider-thumb {
+    z-index: 4;
+    position: relative;
+}
+
+.progress-bar::before {
+    transform: scaleX(var(--progress-width));
+    z-index: 3;
+}
+
+.progress-bar::after {
+    transform: scaleX(var(--buffered-width));
+    transform-origin: left;
+    z-index: 2;
 }
