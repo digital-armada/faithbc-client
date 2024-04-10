@@ -7,7 +7,7 @@ import Providers from '@/lib/Providers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MusicWrapper from '@/components/Music/MusicWrapper';
-import AudioWrapper from '@/components/Music/AudioWrapper';
+import DesktopAudioWrapper from '@/components/Music/DesktopAudioWrapper';
 export const loraFont = Lora({
     subsets: ['latin'],
     weight: ['400', '700'],
@@ -38,7 +38,7 @@ export default function RootLayout({
                     {children}
                     <ToastContainer />
                     {/* <MusicWrapper /> */}
-                    <AudioWrapper />
+                    <DesktopAudioWrapper />
                 </Providers>
             </body>
         </html>

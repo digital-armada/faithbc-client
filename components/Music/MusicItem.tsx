@@ -3,13 +3,7 @@ import { useDispatch } from 'react-redux';
 import { playPause, setActiveSermon } from '@/redux/features/playerSlice';
 import PlayPause from './PlayPause';
 
-export const MusicItem = ({
-    sermon,
-    isPlaying,
-    activeSermon,
-    data,
-    isActive,
-}) => {
+export const MusicItem = ({ sermon, isPlaying, activeSermon, data }) => {
     const dispatch = useDispatch();
 
     const handlePauseClick = () => {

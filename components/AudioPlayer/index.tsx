@@ -7,6 +7,7 @@ import {
     nextSermon,
     prevSermon,
     playPause,
+    setActiveSermon,
 } from '@/redux/features/playerSlice';
 import {
     MdPlayArrow,
@@ -30,22 +31,7 @@ function formatDurationDisplay(duration: number) {
     return formatted;
 }
 
-// interface AudioPlayerProps {
-//     currentSong?: { title: string; src: string };
-//     songIndex: number;
-//     songCount: number;
-//     onNext: () => void;
-//     onPrev: () => void;
-// }
-
-// export default function AudioPlayer({
-//     currentSong,
-//     songCount,
-//     songIndex,
-//     onNext,
-//     onPrev,
-// }: AudioPlayerProps) {
-export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
+export default function AudioPlayer({ activeSermon, isPlaying }) {
     const audioRef = React.useRef<HTMLAudioElement | null>(null);
     const [duration, setDuration] = React.useState(0);
     const [volume, setVolume] = React.useState(1);
@@ -57,12 +43,8 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
 
     const durationDisplay = formatDurationDisplay(duration);
     const elapsedDisplay = formatDurationDisplay(currentProgress);
-    console.log(activeSermon);
-    console.log(duration);
-    console.log(currentProgress);
 
     useEffect(() => {
-        console.log('hit');
         if (activeSermon) {
             const playAudio = () => {
                 audioRef.current?.play();
@@ -87,36 +69,6 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
             };
         }
     }, [activeSermon, dispatch]);
-    //
-    //     useEffect(() => {
-    //         audioRef.current?.pause();
-    //
-    //         const timeout = setTimeout(() => {
-    //             audioRef.current?.play();
-    //         }, 500);
-    //
-    //         return () => {
-    //             clearTimeout(timeout);
-    //         };
-    //     }, [activeSermon]);
-
-    const handleNext = () => {
-        onNext();
-    };
-
-    const handlePrev = () => {
-        onPrev();
-    };
-
-    // useEffect(() => {
-    //     if (isPlaying) {
-    //         audioRef.current?.pause();
-    //         dispatch(playPause(false));
-    //     } else {
-    //         audioRef.current?.play();
-    //         dispatch(playPause(true));
-    //     }
-    // }, [isPlaying]);
 
     const togglePlayPause = () => {
         if (!isReady) return;
@@ -147,18 +99,6 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
     useEffect(() => {
         playPauseFromRedux();
     }, [isPlaying]);
-
-    //     const togglePlayPause = () => {
-    // if (!isReady) return; // Do nothing if audio is not ready
-    //
-    //         if (isPlaying) {
-    //             audioRef.current?.pause();
-    //             setIsPlaying(false);
-    //         } else {
-    //             audioRef.current?.play();
-    //             setIsPlaying(true);
-    //         }
-    //     };
 
     const handleBufferProgress: React.ReactEventHandler<
         HTMLAudioElement
@@ -213,7 +153,7 @@ export default function AudioPlayer({ activeSermon, isActive, isPlaying }) {
                     }
                     onPlaying={() => dispatch(playPause(true))}
                     onPause={() => dispatch(playPause(false))}
-                    // onEnded={handleNext}
+                    onEnded={() => dispatch(setActiveSermon(false))}
                     onCanPlay={e => {
                         setIsReady(true);
                     }}

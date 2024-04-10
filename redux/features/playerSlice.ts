@@ -14,8 +14,11 @@ const playerSlice = createSlice({
     reducers: {
         setActiveSermon: (state, action) => {
             state.activeSermon = action.payload.sermon;
-            state.isActive = true;
-
+            if (action.payload == false) {
+                state.isActive = false;
+            } else {
+                state.isActive = true;
+            }
             // if (action.payload?.data?.tracks?.hits) {
             //     state.currentSermons = action.payload.data.tracks.hits;
             // } else if (action.payload?.data?.properties) {
@@ -52,7 +55,6 @@ const playerSlice = createSlice({
         //         },
 
         playPause: (state, action) => {
-            console.log(state, action);
             state.isPlaying = action.payload;
         },
     },
