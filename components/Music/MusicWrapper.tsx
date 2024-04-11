@@ -62,6 +62,7 @@ export default function MusicWrapper() {
                 {activeSermon?.attributes?.name && (
                     <>
                         <motion.button
+                            key=''
                             className={`fixed bg-white text-black rounded-full bottom-2 left-2  z-50`}
                             initial={{ y: 100 }}
                             animate={{

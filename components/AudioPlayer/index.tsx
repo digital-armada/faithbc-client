@@ -8,6 +8,9 @@ import {
     prevSermon,
     playPause,
     setActiveSermon,
+    setCurrentProgress,
+    setBuffered,
+    setDuration,
 } from '@/redux/features/playerSlice';
 import {
     MdPlayArrow,
@@ -21,6 +24,7 @@ import { CgSpinner } from 'react-icons/cg';
 import IconButton from '@/components/AudioPlayer/IconButton';
 import AudioProgressBar from '@/components/AudioPlayer/AudioProgressBar';
 import VolumeInput from '@/components/AudioPlayer/VolumeInput';
+import { set } from 'date-fns';
 
 function formatDurationDisplay(duration: number) {
     const min = Math.floor(duration / 60);
@@ -33,17 +37,20 @@ function formatDurationDisplay(duration: number) {
 
 export default function AudioPlayer({ activeSermon, isPlaying }) {
     const audioRef = React.useRef<HTMLAudioElement | null>(null);
-    const [duration, setDuration] = React.useState(0);
+    // const [duration, setDuration] = React.useState(0);
     const [volume, setVolume] = React.useState(1);
     const [isReady, setIsReady] = React.useState(false);
-    const [currentProgress, setCurrentProgress] = React.useState(0);
-    const [buffered, setBuffered] = React.useState(0);
+    // const [currentProgress, setCurrentProgress] = React.useState(0);
+    // const [buffered, setBuffered] = React.useState(0);
+
+    const { duration, currentProgress, buffered } = useSelector(
+        state => state.player
+    );
 
     const dispatch = useDispatch();
 
     const durationDisplay = formatDurationDisplay(duration);
     const elapsedDisplay = formatDurationDisplay(currentProgress);
-
     useEffect(() => {
         if (activeSermon) {
             const playAudio = () => {
@@ -93,6 +100,12 @@ export default function AudioPlayer({ activeSermon, isPlaying }) {
         }
 
         dispatch(playPause(isPlaying));
+
+        // Update progress
+        const currentTime = audioRef.current?.currentTime;
+        if (currentTime) {
+            dispatch(setCurrentProgress(currentTime));
+        }
     };
 
     // Call playPauseFromRedux on state changes
@@ -114,7 +127,7 @@ export default function AudioPlayer({ activeSermon, isPlaying }) {
                     const bufferedLength = audio.buffered.end(
                         audio.buffered.length - 1 - i
                     );
-                    setBuffered(bufferedLength);
+                    dispatch(setBuffered(bufferedLength));
                     break;
                 }
             }
@@ -149,7 +162,7 @@ export default function AudioPlayer({ activeSermon, isPlaying }) {
                     ref={audioRef}
                     preload='metadata'
                     onDurationChange={e =>
-                        setDuration(e.currentTarget.duration)
+                        dispatch(setDuration(e.currentTarget.duration))
                     }
                     onPlaying={() => dispatch(playPause(true))}
                     onPause={() => dispatch(playPause(false))}
@@ -158,9 +171,9 @@ export default function AudioPlayer({ activeSermon, isPlaying }) {
                         setIsReady(true);
                     }}
                     onTimeUpdate={e => {
-                        // console.log(e.currentTarget.volume);
-
-                        setCurrentProgress(e.currentTarget.currentTime);
+                        dispatch(
+                            setCurrentProgress(e.currentTarget.currentTime)
+                        );
                         handleBufferProgress(e);
                     }}
                     onProgress={handleBufferProgress}
@@ -175,16 +188,13 @@ export default function AudioPlayer({ activeSermon, isPlaying }) {
                 </audio>
             )}
             <AudioProgressBar
-                duration={duration}
-                currentProgress={currentProgress}
-                buffered={buffered}
                 onChange={e => {
                     if (!audioRef.current) return;
 
                     audioRef.current.currentTime =
                         e.currentTarget.valueAsNumber;
 
-                    setCurrentProgress(e.currentTarget.valueAsNumber);
+                    dispatch(setCurrentProgress(e.currentTarget.valueAsNumber));
                 }}
             />
 

@@ -1,18 +1,26 @@
+'use client';
+import { setCurrentProgress } from '@/redux/features/playerSlice';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 interface ProgressCSSProps extends React.CSSProperties {
     '--progress-width': number;
     '--buffered-width': number;
 }
 
-interface AudioProgressBarProps
-    extends React.ComponentPropsWithoutRef<'input'> {
-    duration: number;
-    currentProgress: number;
-    buffered: number;
-}
+// interface AudioProgressBarProps
+//     extends React.ComponentPropsWithoutRef<'input'> {
+//     duration: number;
+//     currentProgress: number;
+//     buffered: number;
+// }
 
-export default function AudioProgressBar(props: AudioProgressBarProps) {
-    const { duration, currentProgress, buffered, ...rest } = props;
-
+// export default function AudioProgressBar(props: AudioProgressBarProps) {
+export default function AudioProgressBar(props) {
+    const { duration, currentProgress, buffered } = useSelector(
+        state => state.player
+    );
+    const dispatch = useDispatch();
     const progressBarWidth = isNaN(currentProgress / duration)
         ? 0
         : currentProgress / duration;
@@ -22,7 +30,13 @@ export default function AudioProgressBar(props: AudioProgressBarProps) {
         '--progress-width': progressBarWidth,
         '--buffered-width': bufferedWidth,
     };
+    const handleProgressChange = e => {
+        const newTime = e.currentTarget.valueAsNumber;
+        console.log(newTime);
+        dispatch(setCurrentProgress(newTime));
+    };
 
+    console.log(currentProgress);
     return (
         <div className='absolute h-1 -top-[4px] left-0 right-0 group'>
             <input
@@ -33,7 +47,8 @@ export default function AudioProgressBar(props: AudioProgressBarProps) {
                 min={0}
                 max={duration}
                 value={currentProgress}
-                {...rest}
+                onChange={handleProgressChange}
+                {...props}
             />
         </div>
     );

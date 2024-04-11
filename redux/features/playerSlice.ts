@@ -6,8 +6,11 @@ const initialState = {
     isActive: false,
     isPlaying: false,
     activeSermon: {},
+    duration: 0,
+    currentProgress: 0,
+    buffered: 0,
 };
-
+console.log(initialState);
 const playerSlice = createSlice({
     name: 'player',
     initialState,
@@ -57,6 +60,19 @@ const playerSlice = createSlice({
         playPause: (state, action) => {
             state.isPlaying = action.payload;
         },
+        setDuration(state, action) {
+            console.log(action.payload);
+            state.duration = action.payload;
+        },
+        setCurrentProgress(state, action) {
+            console.log(state);
+            console.log(action.payload);
+            state.currentProgress = action.payload;
+        },
+        setBuffered(state, action) {
+            console.log(action.payload);
+            state.buffered = action.payload;
+        },
     },
 });
 
@@ -64,6 +80,9 @@ export const {
     setActiveSermon,
     // nextSermon, prevSermon,
     playPause,
+    setDuration,
+    setCurrentProgress,
+    setBuffered,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;
