@@ -1,6 +1,6 @@
 import HeadingTwo from './ui/headingtwo';
 import More from './ui/more';
-import NottyDot from './ui/nottyDot';
+import NottyDot from './ui/NottyDot';
 
 export default function HomeServices() {
     const services = {
