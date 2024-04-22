@@ -13,14 +13,14 @@ import MobilePlayer from './MobilePlayer';
 
 export default function DesktopAudioWrapper() {
     const [miniOut, SetMiniOut] = useState(false);
-    console.log(miniOut);
     const { activeSermon, isPlaying, isActive } = useSelector(
         state => state.player
     );
+
     const dispatch = useDispatch();
 
-    const togglePlayPause = () => {
-        //  if (!isReady) return;
+    const togglePlayPause = e => {
+        e.stopPropagation();
 
         if (isPlaying) {
             dispatch(playPause(false));

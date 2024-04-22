@@ -14,6 +14,7 @@ export const MusicItem = ({ sermon, isPlaying, activeSermon, data }) => {
         dispatch(setActiveSermon({ sermon, data }));
         dispatch(playPause(true));
     };
+
     return (
         <>
             <PlayPause

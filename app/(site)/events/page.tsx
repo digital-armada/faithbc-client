@@ -1,4 +1,4 @@
-import { getInfiniteEvents } from '@/actions/events';
+import { getInfiniteEvents } from '@/data/events';
 
 import WrapperEvent from '@/components/Events/WrapperEvent';
 

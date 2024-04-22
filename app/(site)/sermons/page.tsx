@@ -1,4 +1,4 @@
-import { getInfiniteSermons } from '@/actions/sermons';
+import { getInfiniteSermons } from '@/data/sermons';
 import WrapperSermons from '@/components/Sermons/WrapperSermons';
 
 export default async function page({ searchParams }) {

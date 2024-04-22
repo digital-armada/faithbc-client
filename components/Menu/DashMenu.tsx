@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { IoMdNotificationsOutline } from 'react-icons/io';
@@ -40,10 +41,11 @@ export default function DashMenu() {
                             <div className='flex items-center'>
                                 <div className='flex-shrink-0'>
                                     <Link href='/'>
-                                        <img
-                                            className='w-16 cursor-pointer'
+                                        <Image
                                             src='/fbc(darker).png'
                                             alt='Faith Baptist Church Logo'
+                                            width={16}
+                                            height={16}
                                         />
                                     </Link>
                                 </div>
@@ -96,10 +98,12 @@ export default function DashMenu() {
                                                 <span className='sr-only'>
                                                     Open user menu
                                                 </span>
-                                                <img
+                                                <Image
                                                     className='h-8 w-8 rounded-full'
                                                     src={user.imageUrl}
                                                     alt=''
+                                                    width={32}
+                                                    height={32}
                                                 />
                                             </Menu.Button>
                                         </div>

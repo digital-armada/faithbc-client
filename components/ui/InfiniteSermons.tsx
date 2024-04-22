@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import { FaYoutube } from 'react-icons/fa';
 import { IoMdBook, IoMdDownload, IoMdMicrophone } from 'react-icons/io';
 import { useInView } from 'react-intersection-observer';
-import { RiExternalLinkLine } from 'react-icons/ri';
 import { MusicItem } from '../Music/MusicItem';
 import { useSelector } from 'react-redux';
 import { IoTodayOutline } from 'react-icons/io5';
 import LoadingSpinner from './LoadingSpinner';
+import Image from 'next/image';
 
 export default function InfiniteScrollSermons({ search, initialSermons }) {
     const { activeSermon, isPlaying } = useSelector(state => state.player);
@@ -22,49 +22,39 @@ export default function InfiniteScrollSermons({ search, initialSermons }) {
     const hasMoreSermons =
         sermons?.meta?.pagination?.total > sermons?.data?.length;
 
-    async function loadMoreSermons() {
-        const next = page + 1;
-        const newSermons = await getInfiniteSermons({ search, page: next });
+    useEffect(() => {
+        const loadMoreSermons = async () => {
+            const nextPage = page + 1;
 
-        if (newSermons?.data?.length) {
-            setPage(next);
-            setSermons(prevSermons => {
-                // Check if prevSermons is an iterable object (array or object with data property)
-                if (
-                    Array.isArray(prevSermons) ||
-                    (prevSermons?.data && Array.isArray(prevSermons.data))
-                ) {
-                    // Spread the data property if prevSermons is an object
+            const newSermons = await getInfiniteSermons({
+                search,
+                page: nextPage,
+            });
+
+            if (newSermons?.data?.length) {
+                setPage(nextPage);
+
+                setSermons(prevSermons => {
                     const prevData = Array.isArray(prevSermons)
                         ? prevSermons
                         : prevSermons.data;
+
                     return {
                         ...prevSermons,
                         data: [...prevData, ...newSermons.data],
                     };
-                } else {
-                    // Handle the case where prevSermons is neither an array nor an object with data property
-                    console.error(
-                        'Invalid state structure for prevSermons:',
-                        prevSermons
-                    );
-                    return prevSermons;
-                }
-            });
-        }
-    }
+                });
+            }
+        };
 
-    useEffect(() => {
         if (inView && hasMoreSermons) {
             loadMoreSermons();
         }
-    }, [inView, hasMoreSermons]);
+    }, [inView, hasMoreSermons, page, search]);
 
     const handleDownload = audioUrl => {
         window.open(audioUrl, '_blank');
     };
-
-    // console.log(sermons);
 
     return (
         <div className=' '>
@@ -78,16 +68,22 @@ export default function InfiniteScrollSermons({ search, initialSermons }) {
                         {/* IMAGE */}
 
                         {sermon?.attributes?.imageUrl ? (
-                            <img
+                            <Image
                                 src={sermon?.attributes?.imageUrl}
-                                className=' w-full pb-4 sm:pb-0 sm:w-48 object-contain '
+                                className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
+                                width={200}
+                                height={200}
+                                alt='Sermon image'
                             />
                         ) : (
-                            <img
+                            <Image
                                 src={`https://i.ytimg.com/vi/${sermon?.attributes?.youtube?.slice(
                                     32
                                 )}/0.jpg`}
                                 className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
+                                width={1920}
+                                height={1080}
+                                alt=''
                             />
                         )}
 

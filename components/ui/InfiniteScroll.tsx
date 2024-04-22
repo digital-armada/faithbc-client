@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -9,7 +9,7 @@ export default function InfiniteScroll({ fetchData, renderItem, initialData }) {
     const [ref, inView] = useInView();
     const [loading, setLoading] = useState(false);
 
-    const loadMoreData = async () => {
+    const loadMoreData = useCallback(async () => {
         const next = page + 1;
         if (loading) return;
         setLoading(true);
@@ -23,13 +23,13 @@ export default function InfiniteScroll({ fetchData, renderItem, initialData }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, loading, setLoading, setData, setPage, fetchData]);
 
     useEffect(() => {
         if (inView) {
             loadMoreData();
         }
-    }, [inView]);
+    }, [inView, loadMoreData]);
 
     return (
         <>

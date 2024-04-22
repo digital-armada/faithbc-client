@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
@@ -68,14 +69,15 @@ export default function Menu() {
     }, [isMenuOpen]);
 
     return (
-        <div className='menu-container' ref={container}>
-            <div className='menu-bar contain container top-0 left-0 w-full flex justify-between items-center z-1'>
+        <div className='pt-2 px-4' ref={container}>
+            <div className='menu-bar container top-0 left-0 w-full flex justify-between items-center z-1 border-solid border-b-[1px] border-gray-800 '>
                 <div>
                     <Link href='/'>
-                        <img
+                        <Image
                             src='/fbc(darker).png'
                             alt='FBC Logo'
-                            className='w-28'
+                            width={64}
+                            height={64}
                         />
                     </Link>
                 </div>
@@ -86,14 +88,15 @@ export default function Menu() {
                 </div>
             </div>
 
-            <div className='menu-overlay fixed top-0 left-0 w-full h-full bg-[#bcbcbc] z-10 flex-col flex overflow-y-auto'>
-                <div className='menu-overlay-bar contain container flex justify-between items-center'>
+            <div className='menu-overlay fixed top-0 left-0 w-full h-full bg-[#bcbcbc] z-10 flex-col flex overflow-y-auto px-4'>
+                <div className='pt-2 menu-overlay-bar container flex justify-between items-center border-solid border-b-[1px] border-gray-800'>
                     <div>
                         <Link href='/'>
-                            <img
+                            <Image
                                 src='/fbc(darker).png'
                                 alt='FBC Logo'
-                                className='w-28'
+                                width={64}
+                                height={64}
                             />
                         </Link>
                     </div>

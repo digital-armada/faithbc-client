@@ -1,8 +1,9 @@
 'use client';
 import InfiniteScroll from '@/components/ui/InfiniteScroll';
 import SermonItem from './SermonItem';
-import { getInfiniteSermons } from '@/actions/sermons';
+import { getInfiniteSermons } from '@/data/sermons';
 import HeadingTwo from '@/components/ui/headingtwo';
+import PageHeader from '../ui/PageHeader';
 
 export default function WrapperSermons({ initialSermons }) {
     const fetchData = async ({ page }) => {
@@ -19,7 +20,7 @@ export default function WrapperSermons({ initialSermons }) {
     return (
         <section>
             <div className=' text-gray-700 container'>
-                <HeadingTwo heading='Sermons' />
+                <PageHeader heading='Sermons' />{' '}
                 <InfiniteScroll
                     initialData={initialSermons}
                     fetchData={fetchData}

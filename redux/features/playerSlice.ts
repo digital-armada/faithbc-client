@@ -9,69 +9,54 @@ const initialState = {
     duration: 0,
     currentProgress: 0,
     buffered: 0,
+    volume: 1,
+    isReady: false,
+    newCurrentProgress: 0,
 };
-console.log(initialState);
 const playerSlice = createSlice({
     name: 'player',
     initialState,
     reducers: {
         setActiveSermon: (state, action) => {
             state.activeSermon = action.payload.sermon;
+
             if (action.payload == false) {
                 state.isActive = false;
             } else {
                 state.isActive = true;
+                // Check if it's a new sermon
+                if (state.activeSermon.id == action.payload.sermon.id) {
+                    // Reset the currentProgress and newCurrentProgress to 0
+                    state.currentProgress = 0;
+                    state.newCurrentProgress = 0;
+                }
             }
-            // if (action.payload?.data?.tracks?.hits) {
-            //     state.currentSermons = action.payload.data.tracks.hits;
-            // } else if (action.payload?.data?.properties) {
-            //     state.currentSermons = action.payload?.data?.tracks;
-            // } else {
-            //     state.currentSermons = action.payload.data;
-            // }
-
-            // state.currentIndex = action.payload.i;
-            // console.log(state.currentIndex);
         },
-        //         nextSermon: (state, action) => {
-        //             if (state.currentSermons[action.payload]?.track) {
-        //                 state.activeSermon =
-        //                     state.currentSermons[action.payload]?.track;
-        //             } else {
-        //                 state.activeSermon = state.currentSermons[action.payload];
-        //             }
-        //
-        //             state.currentIndex = action.payload;
-        //             state.isActive = true;
-        //         },
-        //
-        //         prevSermon: (state, action) => {
-        //             if (state.currentSermons[action.payload]?.track) {
-        //                 state.activeSermon =
-        //                     state.currentSermons[action.payload]?.track;
-        //             } else {
-        //                 state.activeSermon = state.currentSermons[action.payload];
-        //             }
-        //
-        //             state.currentIndex = action.payload;
-        //             state.isActive = true;
-        //         },
 
         playPause: (state, action) => {
             state.isPlaying = action.payload;
         },
         setDuration(state, action) {
-            console.log(action.payload);
             state.duration = action.payload;
         },
         setCurrentProgress(state, action) {
-            console.log(state);
-            console.log(action.payload);
             state.currentProgress = action.payload;
+            if (action.payload === 0) {
+                state.newCurrentProgress = 0;
+            }
+        },
+
+        setNewCurrentProgress(state, action) {
+            state.newCurrentProgress = action.payload;
         },
         setBuffered(state, action) {
-            console.log(action.payload);
             state.buffered = action.payload;
+        },
+        setVolume: (state, action) => {
+            state.volume = action.payload;
+        },
+        setIsReady: (state, action) => {
+            state.isReady = action.payload;
         },
     },
 });
@@ -83,6 +68,9 @@ export const {
     setDuration,
     setCurrentProgress,
     setBuffered,
+    setVolume,
+    setIsReady,
+    setNewCurrentProgress,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

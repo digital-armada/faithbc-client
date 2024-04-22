@@ -1,4 +1,6 @@
+import PageHeader from '@/components/ui/PageHeader';
 import HeadingTwo from '@/components/ui/headingtwo';
+import NottyDot from '@/components/ui/nottyDot';
 
 export default function ministries() {
     const services = {
@@ -6,7 +8,7 @@ export default function ministries() {
             Wednesday: [
                 {
                     // day: 'Wednesday',
-                    time: '7pm',
+                    time: '7:00 pm',
                     name: 'Bible Study',
                     description: '',
                     frequency: 'Weekly',
@@ -14,7 +16,7 @@ export default function ministries() {
                 },
                 {
                     // day: 'Wednesday',
-                    time: '7:30pm',
+                    time: '7:30 pm',
                     name: 'Prayer Group',
                     description: '',
                     frequency: 'Weekly',
@@ -24,7 +26,7 @@ export default function ministries() {
             Friday: [
                 {
                     // day: 'Friday',
-                    time: '4:30pm to 6:00pm',
+                    time: '4:30pm',
                     name: 'Kids Club',
                     description: '',
                     frequency: 'Weekly',
@@ -32,7 +34,7 @@ export default function ministries() {
                 },
                 {
                     // day: 'Friday',
-                    time: '7:30pm',
+                    time: '7:30 pm',
                     name: 'Youth Group',
                     description: '',
                     frequency: 'Weekly',
@@ -42,7 +44,7 @@ export default function ministries() {
             Sunday: [
                 {
                     // day: 'Sunday',
-                    time: '10am',
+                    time: '10:00 am',
                     name: 'Creche',
                     description: '',
                     frequency: 'Weekly',
@@ -50,7 +52,7 @@ export default function ministries() {
                 },
                 {
                     // day: 'Sunday',
-                    time: '10am ',
+                    time: '10:00 am ',
                     name: 'Sunday School',
                     description: '',
                     frequency: 'Weekly',
@@ -58,7 +60,7 @@ export default function ministries() {
                 },
                 {
                     // day: 'Sunday',
-                    time: '10am ',
+                    time: '10:00 am ',
                     name: 'English Morning Service',
                     description: '',
                     frequency: 'Weekly',
@@ -66,14 +68,14 @@ export default function ministries() {
                 },
                 {
                     // day: 'Sunday',
-                    time: '6pm',
+                    time: '3:00 pm',
                     name: 'English Evening Service',
                     description: '',
                     frequency: 'Weekly',
                 },
                 {
                     // day: 'Sunday',
-                    time: '7pm',
+                    time: '7:00 pm',
                     name: 'Weekly Fellowship Dinner',
                     description: '',
                     frequency: 'Weekly',
@@ -93,7 +95,7 @@ export default function ministries() {
             Monthly: [
                 {
                     // day: '',
-                    time: 'Monthly',
+                    time: '',
                     name: 'Visitation Ministry',
                     description: '',
                     frequency: 'Monthly',
@@ -119,33 +121,75 @@ export default function ministries() {
         },
     };
 
+    const compareDates = (date, day) => {
+        const getCurrentDay = () => {
+            const days = [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+            ];
+            const currentDate = new Date();
+            const currentDayIndex = currentDate.getDay();
+            const currentDay = days[currentDayIndex];
+            return currentDay;
+        };
+
+        const currentDay = getCurrentDay();
+        const currentHour = new Date().getHours();
+        console.log(currentHour);
+        const serviceDate = date.toString();
+        if (
+            serviceDate === '' ||
+            serviceDate === null ||
+            serviceDate === undefined
+        ) {
+            return false;
+        }
+
+        let checkTime;
+        if (serviceDate.includes('pm')) {
+            checkTime = parseInt(serviceDate.split(':')[0]) + 12;
+        }
+
+        if (checkTime == currentHour && currentDay == day) return true;
+    };
+
     return (
         <section>
             <div className='container'>
-                <HeadingTwo heading='Ministries' />
+                <PageHeader heading='Ministries' />
                 {Object.entries(services.days).map(([day, services]) => (
-                    <div className='mb-12'>
-                        <div key={day}>
+                    <div key={day} className='mb-12'>
+                        <div>
                             <h2 className='text-2xl text-gray-700 mb-3 font-semibold font-display'>
                                 {day}
                             </h2>
                         </div>
-                        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 '>
                             {services.map((service, index) => (
                                 <div
                                     key={index}
-                                    className='bg-[#bcbcbc] text-gray-700 p-4 mb-4 min-h-48 flex flex-col justify-between '>
+                                    className='bg-[#bcbcbc] text-gray-700 p-4 mb-4 flex flex-col justify-between rounded-md shadow-md relative'>
+                                    {compareDates(service.time, day) ? (
+                                        <NottyDot />
+                                    ) : (
+                                        ''
+                                    )}
+
                                     <div>
-                                        <p className='mt-4 font-display text-lg font-bold'>
+                                        <p className=' font-display text-lg font-bold'>
                                             {service.name}
                                         </p>
-                                    </div>
-                                    <div>
                                         {(service.time || service.group) && (
                                             <hr className='border-1 border-gray-700 mb-2' />
                                         )}
-
-                                        <div className='flex gap-8'>
+                                    </div>
+                                    <div>
+                                        <div className='flex gap-4 '>
                                             {service.time && (
                                                 <div className='font-body'>
                                                     <p className='text-[10px] font-bold'>

@@ -1,18 +1,17 @@
 import { auth } from '@/auth';
 import axios from 'axios';
 
-export async function getEvent(id: string) {
-    const session = await auth();
-    const accessToken = session?.accessToken;
-    console.log(id);
+export async function getEventSlug(slug: string) {
+    // const session = await auth();
+    // const accessToken = session?.accessToken;
     try {
         const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/events/${id}?populate=*`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
+            `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?populate=*`
+            // {
+            //     headers: {
+            //         Authorization: `Bearer ${accessToken}`,
+            //     },
+            // }
         );
 
         console.log(res.data);
@@ -22,9 +21,34 @@ export async function getEvent(id: string) {
 
         return res.data;
     } catch (error) {
-        throw new Error('Failed to fetch event');
+        throw new Error('Failed to fetch event' + error);
     }
 }
+
+// export async function getEvent(id: string) {
+//     const session = await auth();
+//     const accessToken = session?.accessToken;
+//     console.log(id);
+//     try {
+//         const res = await axios.get(
+//             `${process.env.NEXT_PUBLIC_API_URL}/events/${id}?populate=*`,
+//             {
+//                 headers: {
+//                     Authorization: `Bearer ${accessToken}`,
+//                 },
+//             }
+//         );
+//
+//         console.log(res.data);
+//         if (res.status !== 200) {
+//             throw new Error('Failed to fetch event');
+//         }
+//
+//         return res.data;
+//     } catch (error) {
+//         throw new Error('Failed to fetch event');
+//     }
+// }
 
 export async function getEvents() {
     const session = await auth();
@@ -70,5 +94,38 @@ export async function getLatestEvents() {
         return res.data;
     } catch (error) {
         throw new Error('Failed to fetch users');
+    }
+}
+
+export async function getInfiniteEvents({
+    page = 1,
+    // search = ''
+}) {
+    // const session = await auth();
+    // const accessToken = session?.accessToken;
+    // console.log(page);
+
+    try {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/events?populate=*&sort=createdAt:desc&pagination[page]=${page}`;
+
+        // if (search && search.trim()) {
+        //     url += `&filters[name][$contains]=${encodeURIComponent(search)}`;
+        // }
+
+        const res = await axios.get(url, {
+            // headers: {
+            //     Authorization: `Bearer ${accessToken}`,
+            // },
+        });
+
+        // console.log(res.data);
+
+        if (res.status !== 200) {
+            throw new Error('Failed to fetch events');
+        }
+
+        return res.data;
+    } catch (error) {
+        throw new Error('Failed to fetch events:' + error);
     }
 }

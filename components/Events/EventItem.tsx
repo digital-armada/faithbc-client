@@ -1,5 +1,6 @@
 import formatDateRange from '@/lib/formatDate';
 import { format } from 'date-fns';
+import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineNotification } from 'react-icons/ai';
 
@@ -36,13 +37,15 @@ export default function EventItem({ event }) {
                     key={event.id}
                     className='flex items-center justify-between py-4  '>
                     <div className='flex items-center'>
-                        <img
+                        <Image
                             src={`${process.env.NEXT_PUBLIC_URL}${event?.attributes?.featuredImage?.data?.attributes?.formats?.thumbnail?.url}`}
                             className='size-16 rounded-md object-cover'
                             alt='A flat white coffee'
+                            width={16}
+                            height={16}
                         />
 
-                        <Link href={`/events/${event.id}`}>
+                        <Link href={`/events/${event?.attributes?.slug}`}>
                             <div className='ml-6'>
                                 <p className='text-3xl'>
                                     {event?.attributes?.title}

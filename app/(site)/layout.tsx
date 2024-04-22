@@ -7,7 +7,7 @@ export default function Layout({
     children: React.ReactNode;
 }) {
     return (
-        <div className='noise min-h-screen'>
+        <div className='noise min-h-screen pb-20'>
             <Providers>
                 <Menu />
                 {children}

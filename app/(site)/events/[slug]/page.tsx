@@ -1,4 +1,4 @@
-import { getEvent } from '@/actions/events';
+import { getEventSlug } from '@/data/events';
 import EventMap from '@/components/EventMap';
 import HeadingTwo from '@/components/ui/headingtwo';
 import formatDateRange from '@/lib/formatDate';
@@ -11,16 +11,16 @@ import { redirect } from 'next/navigation';
 
 export default async function page({ params }) {
     const id = params?.id;
+    const slug = params?.slug;
 
-    const { data } = await getEvent(id);
-    const address = data?.attributes.venAdd;
+    const data = await getEventSlug(slug);
+    const address = data?.venAdd;
     const rid = id - 1;
 
-    if (data.attributes.eventType === 'notification') {
+    if (data?.eventType === 'notification') {
         redirect(`/events/${rid}`); // Navigate to the new events page
     }
-    console.log(data.attributes.featuredImage.data.attributes.formats);
-    const formats = data.attributes.featuredImage.data.attributes.formats;
+    const formats = data?.featuredImage?.formats;
 
     const sizes = ['medium', 'small', 'thumbnail'];
     sizes.reverse();
@@ -32,16 +32,15 @@ export default async function page({ params }) {
         return url;
     }, '');
 
-    console.log(imgSrc);
     return (
         <section>
             <div className='container min-h-screen'>
                 <div className='relative w-full h-80 mb-10'>
-                    {data.attributes.featuredImage ? (
+                    {data?.featuredImage ? (
                         <>
                             <Image
                                 src={imgSrc}
-                                alt={data.attributes.title}
+                                alt={data?.title}
                                 fill
                                 objectFit='cover'
                                 className='rounded-md blur-lg'
@@ -49,7 +48,7 @@ export default async function page({ params }) {
                             />
                             <Image
                                 src={imgSrc}
-                                alt={data.attributes.title}
+                                alt={data?.title}
                                 fill
                                 objectFit='contain'
                                 className='rounded-md'
@@ -59,7 +58,7 @@ export default async function page({ params }) {
                         ''
                     )}
                 </div>
-                <HeadingTwo heading={data.attributes.title} />
+                <HeadingTwo heading={data?.title} />
 
                 <div className='sm:flex gap-6 mt-10'>
                     {address ? (
@@ -93,10 +92,7 @@ const EventDetails = ({ data }) => {
                     <IoMdCalendar className='text-2xl' />
 
                     <p className='text-md'>
-                        {formatDateRange(
-                            data?.attributes?.startDate,
-                            data?.attributes?.endDate
-                        )}
+                        {formatDateRange(data?.startDate, data?.endDate)}
                     </p>
                 </div>
             </div>
@@ -105,17 +101,15 @@ const EventDetails = ({ data }) => {
                 <div className='flex items-start gap-3 '>
                     <IoMdMap className='text-2xl' />
                     <div>
-                        <div className='text-md'>{data.attributes.venName}</div>
-                        <div className='font-light text-xs'>
-                            {data?.attributes.venAdd}
-                        </div>
+                        <div className='text-md'>{data?.venName}</div>
+                        <div className='font-light text-xs'>{data?.venAdd}</div>
                     </div>
                 </div>
             </div>
             <h3 className='text-lg font-bold text-gray-700 mt-10'>
                 Additional Info
             </h3>
-            <Markdown>{data.attributes.content}</Markdown>
+            <Markdown>{data?.content}</Markdown>
         </div>
     );
 };

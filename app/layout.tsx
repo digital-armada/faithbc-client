@@ -34,6 +34,7 @@ export default function RootLayout({
             lang='en'
             className={`${loraFont.variable} ${robotoFont.variable}`}>
             <body>
+
                 <Providers>
                     {children}
                     <ToastContainer />

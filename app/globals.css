@@ -6,9 +6,11 @@
     section {
         @apply w-full p-8;
     }
+
     .contain {
         @apply w-full p-8;
     }
+
     .container {
         @apply max-w-5xl mx-auto;
     }
@@ -112,4 +114,28 @@
     transform: scaleX(var(--buffered-width));
     transform-origin: left;
     z-index: 2;
+}
+
+.markdown {
+    & h3 {
+        font-size: 30px;
+        color: rgb(55 65 81);
+    }
+    & h4 {
+        font-size: 24px;
+        color: rgb(55 65 81);
+        padding: 10px 0px 10px 0px;
+    }
+    & p {
+        margin: 0.5em 0em 0.5em 0em;
+    }
+    & ul {
+        padding: 10px 0px 10px 20px;
+        list-style: disc;
+        & li {
+            font-weight: 400;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+    }
 }

@@ -6,9 +6,9 @@ import { IoMdBook, IoMdDownload, IoMdMicrophone } from 'react-icons/io';
 import { MusicItem } from '../Music/MusicItem';
 import { useSelector } from 'react-redux';
 import { IoTodayOutline } from 'react-icons/io5';
+import Image from 'next/image';
 
 export default function SermonItem({ sermon }) {
-    console.log('sermon', sermon);
     const { activeSermon, isPlaying } = useSelector(state => state.player);
 
     return (
@@ -17,16 +17,22 @@ export default function SermonItem({ sermon }) {
             {/* IMAGE */}
 
             {sermon?.attributes?.imageUrl ? (
-                <img
+                <Image
                     src={sermon?.attributes?.imageUrl}
-                    className=' w-full pb-4 sm:pb-0 sm:w-48 object-contain '
+                    className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
+                    width={1000}
+                    height={1000}
+                    alt=''
                 />
             ) : (
-                <img
+                <Image
                     src={`https://i.ytimg.com/vi/${sermon?.attributes?.youtube?.slice(
                         32
                     )}/0.jpg`}
                     className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
+                    width={1000}
+                    height={1000}
+                    alt=''
                 />
             )}
 
@@ -46,7 +52,7 @@ export default function SermonItem({ sermon }) {
                             data={sermon}
                         />
                     </div>
-                    <div className='flex flex-col sm:flex-row gap-2 text-[11px]'>
+                    <div className='flex flex-col sm:flex-row gap-2 text-[11px] flex-wrap'>
                         {sermon?.attributes?.speaker?.data?.attributes
                             ?.speaker && (
                             <div className='flex items-center gap-1'>

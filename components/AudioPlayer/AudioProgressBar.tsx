@@ -1,5 +1,8 @@
 'use client';
-import { setCurrentProgress } from '@/redux/features/playerSlice';
+import {
+    setCurrentProgress,
+    setNewCurrentProgress,
+} from '@/redux/features/playerSlice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -8,15 +11,7 @@ interface ProgressCSSProps extends React.CSSProperties {
     '--buffered-width': number;
 }
 
-// interface AudioProgressBarProps
-//     extends React.ComponentPropsWithoutRef<'input'> {
-//     duration: number;
-//     currentProgress: number;
-//     buffered: number;
-// }
-
-// export default function AudioProgressBar(props: AudioProgressBarProps) {
-export default function AudioProgressBar(props) {
+export default function AudioProgressBar() {
     const { duration, currentProgress, buffered } = useSelector(
         state => state.player
     );
@@ -30,25 +25,23 @@ export default function AudioProgressBar(props) {
         '--progress-width': progressBarWidth,
         '--buffered-width': bufferedWidth,
     };
+
     const handleProgressChange = e => {
         const newTime = e.currentTarget.valueAsNumber;
-        console.log(newTime);
-        dispatch(setCurrentProgress(newTime));
+        dispatch(setNewCurrentProgress(newTime));
     };
 
-    console.log(currentProgress);
     return (
         <div className='absolute h-1 -top-[4px] left-0 right-0 group'>
             <input
                 type='range'
                 name='progress'
-                className={`progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-amber-600 hover:accent-amber-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-amber-600 before:origin-left after:absolute after:h-full after:w-full after:bg-amber-600/50`}
+                className={`progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-sky-600 hover:accent-sky-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-sky-600 before:origin-left after:absolute after:h-full after:w-full after:bg-sky-600/50`}
                 style={progressStyles}
                 min={0}
                 max={duration}
                 value={currentProgress}
                 onChange={handleProgressChange}
-                {...props}
             />
         </div>
     );

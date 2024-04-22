@@ -21,7 +21,7 @@ export default function EventMap({ address }) {
         };
 
         getCoordinates();
-    }, []);
+    }, [address]);
 
     const position = latlng
         ? { lat: latlng.latitude, lng: latlng.longitude }
@@ -50,13 +50,13 @@ export default function EventMap({ address }) {
                                 glyphColor={'white'}
                             />
                         </AdvancedMarker>
-                        {open && (
+                        {/* {open && (
                             <InfoWindow
                                 position={position}
                                 onCloseClick={() => setOpen(false)}>
                                 <p>I'm in Hamburg</p>
                             </InfoWindow>
-                        )}
+                        )} */}
                     </Map>
                 ) : (
                     <div>Loading map...</div>
