@@ -81,11 +81,11 @@ export default function Menu() {
                         />
                     </Link>
                 </div>
-                <div
+                <button
                     className='menu-open text-gray-800 cursor-pointer'
                     onClick={toggleMenu}>
-                    <p>Menu</p>
-                </div>
+                    Menu
+                </button>
             </div>
 
             <div className='menu-overlay fixed top-0 left-0 w-full h-full bg-[#bcbcbc] z-10 flex-col flex overflow-y-auto px-4'>

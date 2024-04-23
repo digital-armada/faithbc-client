@@ -1,4 +1,5 @@
 import Menu from '@/components/Menu/Menu';
+import DesktopAudioWrapper from '@/components/Music/DesktopAudioWrapper';
 import Providers from '@/lib/Providers';
 
 export default function Layout({
@@ -10,7 +11,10 @@ export default function Layout({
         <div className='noise min-h-screen pb-20'>
             <Providers>
                 <Menu />
-                {children}
+                <div>
+                    {children}
+                    <DesktopAudioWrapper />
+                </div>
             </Providers>
         </div>
     );
