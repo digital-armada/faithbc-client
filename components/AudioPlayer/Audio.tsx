@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function Audio({ src, activeSermon }) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
     const { isReady, isPlaying, volume, newCurrentProgress } = useSelector(
         state => state.player
     );
@@ -111,21 +112,25 @@ export default function Audio({ src, activeSermon }) {
     return (
         <audio
             ref={audioRef}
-            preload='metadata'
+            preload='auto'
             onDurationChange={e =>
                 dispatch(setDuration(e.currentTarget.duration))
             }
-            onCanPlay={() => dispatch(setIsReady(true))}
+            onCanPlay={() => {
+                dispatch(setIsReady(true));
+            }}
             onPlaying={() => dispatch(playPause(true))}
             onPause={() => dispatch(playPause(false))}
             onEnded={() => dispatch(setActiveSermon(false))}
-            // onEnded={() => dispatch(setIsReady(true))}
             onTimeUpdate={e => {
                 dispatch(setCurrentProgress(e.currentTarget.currentTime));
                 handleBufferProgress(e);
             }}
             onProgress={handleBufferProgress}
-            onVolumeChange={e => dispatch(setVolume(e.currentTarget.volume))}>
+            onVolumeChange={e => dispatch(setVolume(e.currentTarget.volume))}
+            onLoadStart={() => setLoading(true)} // add this
+            onLoadedData={() => setLoading(false)} // add this
+        >
             <source type='audio/mpeg' src={src} />
         </audio>
     );
