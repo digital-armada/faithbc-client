@@ -12,11 +12,8 @@ export default function MobilePlayer({
     activeSermon,
     audioRef,
 }) {
-    const { duration, currentProgress, buffered } = useSelector(
-        state => state.player
-    );
-    const dispatch = useDispatch();
-    // console.log(activeSermon);
+    const { duration, currentProgress } = useSelector(state => state.player);
+
     function formatDurationDisplay(duration: number) {
         const min = Math.floor(duration / 60);
         const sec = Math.floor(duration - min * 60);
@@ -29,43 +26,37 @@ export default function MobilePlayer({
     const durationDisplay = formatDurationDisplay(duration);
     const elapsedDisplay = formatDurationDisplay(currentProgress);
     return (
-        <div className='relative h-screen w-full overflow-hidden '>
-            {/* Blurry glassy background */}
-            <div
-                className='absolute inset-0 bg-gray-800
-             '></div>
-            {/* HEADER */}
-            <div className='p-4 absolute h-screen inset-0 flex flex-col  text-white'>
+        <div className='relative h-screen w-full bg-gray-800 '>
+            <div className='p-4 absolute inset-0 flex flex-col  text-white'>
                 <div className='flex-none text-center h-10'>
                     <IoIosArrowDown
                         className='cursor-pointer text-white text-2xl'
                         onClick={toggleMiniPlayer}
                     />
-                    {/* <h1 className='text-4xl font-bold'>Hello, World!</h1> */}
                 </div>
 
                 {/* CONTROLS */}
-                <div className='flex flex-col px-8 mt-4 text-center  '>
-                    <div>
-                        <Image
-                            src={activeSermon?.attributes?.imageUrl}
-                            className='w-full rounded-md'
-                            layout='responsive'
-                            width={1920}
-                            height={1080}
-                            alt=''
-                        />
+                <div className='flex flex-col text-center  '>
+                    {/* <div> */}
+                    <Image
+                        src={activeSermon?.attributes?.imageUrl}
+                        className='w-full rounded-md'
+                        layout='responsive'
+                        width={1920}
+                        height={1080}
+                        alt=''
+                    />
 
-                        <h1 className='text-2xl font-bold mt-4'>
-                            {activeSermon?.attributes?.name}
-                        </h1>
-                        <h2 className='font-light'>
-                            {
-                                activeSermon?.attributes?.speaker?.data
-                                    ?.attributes?.speaker
-                            }
-                        </h2>
-                    </div>
+                    <h1 className='text-2xl font-bold mt-4'>
+                        {activeSermon?.attributes?.name}
+                    </h1>
+                    <h2 className='font-light'>
+                        {
+                            activeSermon?.attributes?.speaker?.data?.attributes
+                                ?.speaker
+                        }
+                    </h2>
+                    {/* </div> */}
                     <div className='flex flex-col gap-4  w-full h-full space-between'>
                         <div className='relative mt-10'>
                             <AudioProgressBar />
@@ -74,7 +65,7 @@ export default function MobilePlayer({
                                 <span> {durationDisplay}</span>
                             </div>
                         </div>
-                        <div className='mt-4 space-y-10 flex flex-col gap-4 items-center w-full'>
+                        <div className='mt-4 flex-col space-y-2 flex gap-4 items-center w-full'>
                             <PlayAndPause />
                             <VolumeInput />
                         </div>
@@ -84,41 +75,3 @@ export default function MobilePlayer({
         </div>
     );
 }
-
-// import { IoIosArrowDown } from 'react-icons/io';
-//
-// export default function MobilePlayer({ toggleMiniPlayer, activeSermon }) {
-//     console.log(activeSermon);
-//     return (
-//         <div className='h-screen w-full bg-transparent blur-2xl'>
-//             {/* <IoIosArrowDown
-//                 className='cursor-pointer text-white'
-//                 onClick={toggleMiniPlayer}
-//             />
-//             <div className=' inset-0 h-3/4 w-full'>
-//                 <img
-//                     src={activeSermon?.attributes?.imageUrl ?? ''}
-//                     alt='Background Image'
-//                     className=' w-[300px]  object-cover'
-//                 />
-//             </div> */}
-//         </div>
-//     );
-// }
-//
-// {
-//     /* Background image */
-// }
-//
-// {
-//     /* Black container with gradient */
-// }
-// <div className='absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black to-transparent'></div>;
-// {
-//     /* Content */
-// }
-// <div className='absolute bottom-0 left-0 w-full h-1/4 flex items-center justify-center text-white'>
-//     <div className='text-center'>
-//         <h1 className='text-4xl font-bold'>Hello, World!</h1>
-//     </div>
-// </div>;
