@@ -11,6 +11,7 @@ import {
 } from '@/redux/features/playerSlice';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { debounce } from 'lodash';
 
 export default function Audio({ src, activeSermon }) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -99,39 +100,44 @@ export default function Audio({ src, activeSermon }) {
 
     useEffect(() => {
         if (!audioRef.current) return;
-
         audioRef.current.currentTime = newCurrentProgress;
     }, [newCurrentProgress]);
-    // Reset the newCurrentProgress when the activeSermon changes
-    // useEffect(() => {
-    //     if (activeSermon) {
-    //         dispatch(setNewCurrentProgress(0));
-    //     }
-    // }, [activeSermon, dispatch]);
 
     return (
-        <audio
-            ref={audioRef}
-            preload='auto'
-            onDurationChange={e =>
-                dispatch(setDuration(e.currentTarget.duration))
-            }
-            onCanPlay={() => {
-                dispatch(setIsReady(true));
-            }}
-            onPlaying={() => dispatch(playPause(true))}
-            onPause={() => dispatch(playPause(false))}
-            onEnded={() => dispatch(setActiveSermon(false))}
-            onTimeUpdate={e => {
-                dispatch(setCurrentProgress(e.currentTarget.currentTime));
-                handleBufferProgress(e);
-            }}
-            onProgress={handleBufferProgress}
-            onVolumeChange={e => dispatch(setVolume(e.currentTarget.volume))}
-            onLoadStart={() => setLoading(true)} // add this
-            onLoadedData={() => setLoading(false)} // add this
-        >
-            <source type='audio/mpeg' src={src} />
-        </audio>
+        <>
+            {activeSermon && (
+                <audio
+                    ref={audioRef}
+                    preload='auto'
+                    onCanPlay={() => dispatch(setIsReady(true))}
+                    // onCanPlayThrough={() => dispatch(setIsReady(true))}
+                    onDurationChange={e =>
+                        dispatch(setDuration(e.currentTarget.duration))
+                    }
+                    onPlaying={() => dispatch(playPause(true))}
+                    onPause={() => dispatch(playPause(false))}
+                    onEnded={() => dispatch(setActiveSermon(false))}
+                    onVolumeChange={e =>
+                        dispatch(setVolume(e.currentTarget.volume))
+                    }
+                    onProgress={handleBufferProgress}
+                    onTimeUpdate={e => {
+                        dispatch(
+                            setCurrentProgress(e.currentTarget.currentTime)
+                        );
+                        // handleBufferProgress(e);
+                    }}
+                    onSeeking={e => {
+                        dispatch(
+                            setCurrentProgress(e.currentTarget.currentTime)
+                        );
+                        handleBufferProgress(e);
+                    }} // add this
+                    // onSeeked={() => playPause(true)} // add this
+                >
+                    <source type='audio/mpeg' src={src} />
+                </audio>
+            )}
+        </>
     );
 }

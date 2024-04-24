@@ -35,7 +35,7 @@ export default function MobilePlayer({
                 className='absolute inset-0 bg-gray-800
              '></div>
             {/* HEADER */}
-            <div className='p-8 absolute h-screen inset-0 flex flex-col  text-white'>
+            <div className='p-4 absolute h-screen inset-0 flex flex-col  text-white'>
                 <div className='flex-none text-center h-10'>
                     <IoIosArrowDown
                         className='cursor-pointer text-white text-2xl'
@@ -45,7 +45,7 @@ export default function MobilePlayer({
                 </div>
 
                 {/* CONTROLS */}
-                <div className='flex flex-col px-8 mt-10 text-center  '>
+                <div className='flex flex-col px-8 mt-4 text-center  '>
                     <div>
                         <Image
                             src={activeSermon?.attributes?.imageUrl}
@@ -56,7 +56,7 @@ export default function MobilePlayer({
                             alt=''
                         />
 
-                        <h1 className='text-4xl font-bold mt-10'>
+                        <h1 className='text-2xl font-bold mt-4'>
                             {activeSermon?.attributes?.name}
                         </h1>
                         <h2 className='font-light'>
@@ -69,12 +69,12 @@ export default function MobilePlayer({
                     <div className='flex flex-col gap-4  w-full h-full space-between'>
                         <div className='relative mt-10'>
                             <AudioProgressBar />
-                            <div className='flex justify-between items-center mt-4 font-thin text-sm'>
+                            <div className='flex justify-between items-center mt-2 font-thin text-sm'>
                                 <span> {elapsedDisplay}</span>
                                 <span> {durationDisplay}</span>
                             </div>
                         </div>
-                        <div className='mt-10 space-y-10 flex flex-col gap-4 items-center w-full'>
+                        <div className='mt-4 space-y-10 flex flex-col gap-4 items-center w-full'>
                             <PlayAndPause />
                             <VolumeInput />
                         </div>

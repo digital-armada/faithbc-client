@@ -100,9 +100,9 @@ export default function Menu() {
                             />
                         </Link>
                     </div>
-                    <div className='menu-close' onClick={toggleMenu}>
+                    <button className='menu-close' onClick={toggleMenu}>
                         <p>Close &#x2715;</p>
-                    </div>
+                    </button>
                 </div>
 
                 <section className='menu-copy container'>
