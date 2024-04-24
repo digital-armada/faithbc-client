@@ -126,12 +126,12 @@ export default function Audio({ src, activeSermon }) {
                         );
                         handleBufferProgress(e);
                     }}
-                    // onSeeking={e => {
-                    //     dispatch(
-                    //         setCurrentProgress(e.currentTarget.currentTime)
-                    //     );
-                    //     handleBufferProgress(e);
-                    // }} // add this
+                    onSeeking={e => {
+                        dispatch(
+                            setCurrentProgress(e.currentTarget.currentTime)
+                        );
+                        handleBufferProgress(e);
+                    }} // add this
                     onSeeked={e => {
                         dispatch(
                             setCurrentProgress(e.currentTarget.currentTime)

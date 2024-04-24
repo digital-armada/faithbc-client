@@ -15,7 +15,9 @@ const AudioProgressBar = () => {
     const dispatch = useDispatch();
 
     const [seekingProgress, setSeekingProgress] = useState(currentProgress);
-
+    const [isDragging, setIsDragging] = useState(false);
+    console.log(currentProgress);
+    console.log(seekingProgress);
     const progressBarWidth = useMemo(() => {
         return isNaN(seekingProgress / duration)
             ? 0
@@ -35,23 +37,51 @@ const AudioProgressBar = () => {
 
     const handleProgressChange = e => {
         const newTime = parseInt(e.currentTarget.value);
+        // dispatch(setNewCurrentProgress(newTime)); // Update Redux state
+
         setSeekingProgress(newTime); // Update component state
     };
 
-    const handleMouseDown = e => {
-        console.log('handleMouseDown', parseInt(e.currentTarget.value));
-
-        setSeekingProgress(parseInt(e.currentTarget.value)); // Update on start drag
-    };
+    // const handleMouseDown = e => {
+    //     setSeekingProgress(parseInt(e.currentTarget.value)); // Update on start drag
+    // };
 
     const handleMouseUp = e => {
-        console.log('handleMouseUp');
-        const newTime = parseInt(e.currentTarget.value);
-        // if (newTime >= 0 && newTime <= buffered) {
-        //     // Check if within buffered range
-        //     audioRef.current.currentTime = newTime; // Set currentTime for immediate play
-        // }
-        dispatch(setNewCurrentProgress(newTime)); // Update Redux state
+        // const newTime = parseInt(e.currentTarget.value);
+        dispatch(setNewCurrentProgress(seekingProgress)); // Update Redux state
+    };
+
+    const handleTouchStart = useCallback(
+        e => {
+            e.preventDefault();
+            const rect = e.currentTarget.getBoundingClientRect();
+            const touchX = e.touches[0].clientX - rect.left;
+            const newProgress = Math.floor((touchX / rect.width) * duration);
+            setSeekingProgress(newProgress);
+            // dispatch(setNewCurrentProgress(newProgress));
+            setIsDragging(true); // Set isDragging to true
+        },
+        [dispatch, duration]
+    );
+
+    const handleTouchMove = useCallback(
+        e => {
+            // e.preventDefault();
+            if (isDragging) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const touchX = e.touches[0].clientX - rect.left;
+                const newProgress = Math.floor(
+                    (touchX / rect.width) * duration
+                );
+                setSeekingProgress(newProgress);
+                // dispatch(setNewCurrentProgress(newProgress));
+            }
+        },
+        [dispatch, duration, isDragging]
+    );
+
+    const handleTouchEnd = e => {
+        dispatch(setNewCurrentProgress(seekingProgress));
     };
 
     return (
@@ -59,15 +89,17 @@ const AudioProgressBar = () => {
             <input
                 type='range'
                 name='progress'
-                className='progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-sky-600 hover:accent-sky-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-sky-600 before:origin-left after:absolute after:h-full after:w-full after:bg-sky-600/50 touch-pan-x '
+                className='progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-sky-600 hover:accent-sky-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-sky-600 before:origin-left after:absolute after:h-full after:w-full after:bg-sky-600/50  '
                 style={progressStyles}
                 min={0}
                 max={duration}
-                value={seekingProgress} // Controlled value
+                value={currentProgress} // Controlled value
                 onChange={handleProgressChange}
-                onMouseDown={handleMouseDown}
+                // onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
-                step='1'
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             />
         </div>
     );
