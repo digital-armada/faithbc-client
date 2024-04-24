@@ -110,7 +110,6 @@ export default function Audio({ src, activeSermon }) {
                     ref={audioRef}
                     preload='auto'
                     onCanPlay={() => dispatch(setIsReady(true))}
-                    // onCanPlayThrough={() => dispatch(setIsReady(true))}
                     onDurationChange={e =>
                         dispatch(setDuration(e.currentTarget.duration))
                     }
@@ -125,15 +124,20 @@ export default function Audio({ src, activeSermon }) {
                         dispatch(
                             setCurrentProgress(e.currentTarget.currentTime)
                         );
-                        // handleBufferProgress(e);
+                        handleBufferProgress(e);
                     }}
-                    onSeeking={e => {
+                    // onSeeking={e => {
+                    //     dispatch(
+                    //         setCurrentProgress(e.currentTarget.currentTime)
+                    //     );
+                    //     handleBufferProgress(e);
+                    // }} // add this
+                    onSeeked={e => {
                         dispatch(
                             setCurrentProgress(e.currentTarget.currentTime)
                         );
                         handleBufferProgress(e);
                     }} // add this
-                    // onSeeked={() => playPause(true)} // add this
                 >
                     <source type='audio/mpeg' src={src} />
                 </audio>

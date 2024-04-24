@@ -14,11 +14,13 @@ const AudioProgressBar = () => {
     );
     const dispatch = useDispatch();
 
+    const [seekingProgress, setSeekingProgress] = useState(currentProgress);
+
     const progressBarWidth = useMemo(() => {
-        return isNaN(currentProgress / duration)
+        return isNaN(seekingProgress / duration)
             ? 0
-            : currentProgress / duration;
-    }, [currentProgress, duration]);
+            : seekingProgress / duration;
+    }, [seekingProgress, duration]);
 
     const bufferedWidth = useMemo(() => {
         return isNaN(buffered / duration) ? 0 : buffered / duration;
@@ -33,7 +35,15 @@ const AudioProgressBar = () => {
 
     const handleProgressChange = e => {
         const newTime = parseInt(e.currentTarget.value);
-        dispatch(setNewCurrentProgress(newTime));
+        setSeekingProgress(newTime); // Update component state
+    };
+
+    const handleMouseDown = e => {
+        setSeekingProgress(parseInt(e.currentTarget.value)); // Update on start drag
+    };
+
+    const handleMouseUp = e => {
+        dispatch(setNewCurrentProgress(seekingProgress)); // Update Redux on finish
     };
 
     return (
@@ -41,13 +51,15 @@ const AudioProgressBar = () => {
             <input
                 type='range'
                 name='progress'
-                className='progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-sky-600 hover:accent-sky-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-sky-600 before:origin-left after:absolute after:h-full after:w-full after:bg-sky-600/50'
+                className='progress-bar absolute inset-0 w-full m-0 h-full bg-transparent appearance-none cursor-pointer dark:bg-gray-700 group-hover:h-2 transition-all accent-sky-600 hover:accent-sky-600 before:absolute before:inset-0 before:h-full before:w-full before:bg-sky-600 before:origin-left after:absolute after:h-full after:w-full after:bg-sky-600/50 touch-pan-x '
                 style={progressStyles}
                 min={0}
                 max={duration}
-                value={currentProgress}
+                value={seekingProgress} // Controlled value
                 onChange={handleProgressChange}
-                step='0.01'
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                step='1'
             />
         </div>
     );
