@@ -1,3 +1,4 @@
+'use client';
 import HeadingTwo from './ui/headingtwo';
 import More from './ui/more';
 import NottyDot from './ui/NottyDot';

@@ -26,9 +26,13 @@ export default function SermonItem({ sermon }) {
                 />
             ) : (
                 <Image
-                    src={`https://i.ytimg.com/vi/${sermon?.attributes?.youtube?.slice(
-                        32
-                    )}/0.jpg`}
+                    src={
+                        sermon?.attributes?.youtube
+                            ? `https://i.ytimg.com/vi/${
+                                  sermon?.attributes?.youtube.split('=')[1]
+                              }/0.jpg`
+                            : ''
+                    }
                     className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
                     width={1000}
                     height={1000}
@@ -86,7 +90,7 @@ export default function SermonItem({ sermon }) {
                                 </div>
                             </>
                         )}
-                    </div>{' '}
+                    </div>
                 </div>
                 {/* BOTTOM PART */}
                 <div>

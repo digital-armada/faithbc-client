@@ -1,48 +1,37 @@
 import axios from 'axios';
 
 export async function getStatement(slug: string) {
-    console.log(slug);
-    // const session = await auth();
-    // const accessToken = session?.accessToken;
-    // const parseId = parseInt(id);
     try {
-        const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/doctrines/${slug}`
-            // {
-            //     headers: {
-            //         Authorization: `Bearer ${accessToken}`,
-            //     },
-            // }
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/doctrines/${slug}`,
+            {
+                next: { revalidate: 60 },
+            }
         );
-        console.log(res.data);
         if (res.status !== 200) {
             throw new Error('Failed to fetch statements');
         }
 
-        return res.data;
+        return res.json();
     } catch (error) {
         throw new Error('Failed to fetch statements');
     }
 }
 
 export async function getStatements() {
-    // const session = await auth();
-    // const accessToken = session?.accessToken;
     try {
-        const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/doctrines?pagination[limit]=30`
-            // {
-            //     headers: {
-            //         Authorization: `Bearer ${accessToken}`,
-            //     },
-            // }
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/doctrines?pagination[limit]=30`,
+            {
+                next: { revalidate: 60 },
+            }
         );
-        // console.log(res.data);
+
         if (res.status !== 200) {
             throw new Error('Failed to fetch statements');
         }
 
-        return res.data;
+        return res.json();
     } catch (error) {
         throw new Error('Failed to fetch statements');
     }

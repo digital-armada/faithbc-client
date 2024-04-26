@@ -65,13 +65,31 @@ export default function AudioPlayer() {
 
             <div className='grid grid-cols-3 mt-2'>
                 <div className='flex'>
-                    <Image
-                        src={activeSermon?.attributes?.imageUrl}
-                        className='size-14 object-cover rounded-md'
-                        width={56}
-                        height={56}
-                        alt=''
-                    />
+                    {activeSermon?.attributes?.imageUrl ? (
+                        <Image
+                            src={activeSermon?.attributes?.imageUrl}
+                            className='size-14 object-cover rounded-md'
+                            width={56}
+                            height={56}
+                            alt=''
+                        />
+                    ) : (
+                        <Image
+                            src={
+                                activeSermon?.attributes?.youtube
+                                    ? `https://i.ytimg.com/vi/${
+                                          activeSermon?.attributes?.youtube.split(
+                                              '='
+                                          )[1]
+                                      }/0.jpg`
+                                    : ''
+                            }
+                            className='size-14 object-cover rounded-md'
+                            width={56}
+                            height={56}
+                            alt=''
+                        />
+                    )}
 
                     <div className='mb-1 items-center ml-4 min-w-[183px]'>
                         {activeSermon?.attributes?.name && (

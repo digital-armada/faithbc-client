@@ -7,6 +7,8 @@ export default async function HomeSermonWidget() {
     const data = await getSermons();
     const sermons = data.data.slice(0, 4);
 
+    console.log(data);
+
     return (
         <section>
             <div className='w-full space-y-4 mt-10 text-sm font-body container '>
@@ -21,7 +23,6 @@ export default async function HomeSermonWidget() {
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8'>
                     {sermons?.map(sermon => {
-                        console.log(sermon);
                         return (
                             <HomeSermonCard sermon={sermon} key={sermon.id} />
                         );

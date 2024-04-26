@@ -37,15 +37,33 @@ export default function MobilePlayer({
 
                 {/* CONTROLS */}
                 <div className='flex flex-col text-center  '>
-                    {/* <div> */}
-                    <Image
-                        src={activeSermon?.attributes?.imageUrl}
-                        className='w-full rounded-md'
-                        layout='responsive'
-                        width={1920}
-                        height={1080}
-                        alt=''
-                    />
+                    {activeSermon?.attributes?.imageUrl ? (
+                        <Image
+                            src={activeSermon?.attributes?.imageUrl}
+                            className='w-full rounded-md'
+                            layout='responsive'
+                            width={1920}
+                            height={1080}
+                            alt=''
+                        />
+                    ) : (
+                        <Image
+                            src={
+                                activeSermon?.attributes?.youtube
+                                    ? `https://i.ytimg.com/vi/${
+                                          activeSermon?.attributes?.youtube.split(
+                                              '='
+                                          )[1]
+                                      }/0.jpg`
+                                    : ''
+                            }
+                            className='w-full rounded-md'
+                            layout='responsive'
+                            width={1920}
+                            height={1080}
+                            alt=''
+                        />
+                    )}
 
                     <h1 className='text-2xl font-bold mt-4'>
                         {activeSermon?.attributes?.name}
@@ -56,7 +74,6 @@ export default function MobilePlayer({
                                 ?.speaker
                         }
                     </h2>
-                    {/* </div> */}
                     <div className='flex flex-col gap-4  w-full h-full space-between'>
                         <div className='relative mt-10'>
                             <AudioProgressBar />

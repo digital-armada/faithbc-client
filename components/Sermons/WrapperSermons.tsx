@@ -2,13 +2,11 @@
 import InfiniteScroll from '@/components/ui/InfiniteScroll';
 import SermonItem from './SermonItem';
 import { getInfiniteSermons } from '@/data/sermons';
-import HeadingTwo from '@/components/ui/headingtwo';
+// import HeadingTwo from '@/components/ui/headingtwo';
 import PageHeader from '../ui/PageHeader';
 
 export default function WrapperSermons({ initialSermons }) {
     const fetchData = async ({ page }) => {
-        console.log(page);
-
         const { data } = await getInfiniteSermons({ page });
         return data;
     };

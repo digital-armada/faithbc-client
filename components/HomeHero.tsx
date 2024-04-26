@@ -11,14 +11,34 @@ export default function HomeHero() {
                     <br />
                     <span>Church</span>
                 </div>
-                <p className='font-body text-sm'>
-                    We are a church that has its foundation built upon the Word
-                    of God. We welcome you to come and join us for worship
-                    through hymns, preaching, teaching, and ministries for
-                    children and teenagers, to young adults and parents. At
-                    Faith Baptist Church, we believe that the Bible is the one
-                    and only source for seeking truth and wisdom.
-                </p>
+                <div className='font-body text-sm'>
+                    <p>
+                        We are an Independent Baptist church built upon the firm
+                        foundation of God's inerrant Word and believe the KJV is
+                        the most faithful English translation, and it is our
+                        sole source for truth and wisdom.
+                    </p>
+                    <p>
+                        At our church, we worship the Lord through biblical
+                        preaching, teaching, hymns, and vibrant ministries for
+                        all ages - children, teens, and adults. Our services are
+                        reverent and God-honoring as we seek to glorify Him in
+                        all we do.
+                    </p>
+                    <p>
+                        {' '}
+                        Whether you are a lifelong believer or simply seeking
+                        answers about the Christian faith, we invite you to join
+                        us for worship and bible study. Our church family is
+                        committed to proclaiming the truth of Scripture and
+                        sharing the life-changing gospel of Jesus Christ.
+                    </p>{' '}
+                    <p>
+                        Explore our website to learn more about our doctrine,
+                        ministries, service times, and upcoming events.
+                    </p>
+                    <p>We look forward to welcoming you in person soon!</p>
+                </div>
 
                 <More title='Statement of Faith' link='/statement' />
             </div>

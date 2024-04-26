@@ -68,20 +68,22 @@ export default function WrapperEvent({ initialEvents }) {
         <section>
             <div className='container'>
                 <PageHeader heading='Events' />
-                <div className='w-full mb-20'>
+                <div className='w-full mb-20 space-y-4'>
                     <h2 className='text-2xl font-bold mb-4 text-gray-600'>
                         Notifications and Updates
                     </h2>
                     {notifications.map(notification => (
                         <div
                             key={notification.id}
-                            className='flex gap-2 items-center border-solid border-[1px] border-sky-500 rounded-md bg-sky-500/40 text-sky-700 text-sm '>
-                            <p className=' px-3 py-2'>
+                            className='text-center border-solid border-[1px] border-sky-500 rounded-md bg-sky-500/40 text-sky-700 text-sm p-1 '>
+                            <p className=' font-bold'>
                                 {formatDateRange(
                                     notification?.attributes?.startDate
                                 )}
                             </p>
-                            <p>{notification.attributes.title}</p>
+                            <p className='text-xs'>
+                                {notification.attributes.title}
+                            </p>
                         </div>
                     ))}
                 </div>

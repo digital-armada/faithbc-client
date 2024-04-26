@@ -41,8 +41,8 @@ export default function EventItem({ event }) {
                             src={`${process.env.NEXT_PUBLIC_URL}${event?.attributes?.featuredImage?.data?.attributes?.formats?.thumbnail?.url}`}
                             className='size-16 rounded-md object-cover'
                             alt='A flat white coffee'
-                            width={16}
-                            height={16}
+                            width={500}
+                            height={500}
                         />
 
                         <Link href={`/events/${event?.attributes?.slug}`}>

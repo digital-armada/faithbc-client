@@ -4,6 +4,10 @@ import { playPause, setActiveSermon } from '@/redux/features/playerSlice';
 import PlayPause from './PlayPause';
 
 export const MusicItem = ({ sermon, isPlaying, activeSermon, data }) => {
+    // console.log('sermon', sermon);
+    // console.log('activeSermon', activeSermon);
+    // console.log('data', data);
+
     const dispatch = useDispatch();
 
     const handlePauseClick = () => {

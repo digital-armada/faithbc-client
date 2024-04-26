@@ -13,14 +13,32 @@ export default function MiniPlayer({
     return (
         <div className='bg-gray-800 text-gray-300 rounded-md max-w-md mx-auto '>
             <div className='flex items-center justify-between px-3 py-2 '>
-                {/* <div className='flex items-center gap-4'> */}
-                <Image
-                    src={activeSermon?.attributes?.imageUrl}
-                    className=' size-10 object-cover rounded-md'
-                    width={40}
-                    height={40}
-                    alt=''
-                />
+                {activeSermon?.attributes?.imageUrl ? (
+                    <Image
+                        src={activeSermon?.attributes?.imageUrl}
+                        className=' size-10 object-cover rounded-md'
+                        width={40}
+                        height={40}
+                        alt=''
+                    />
+                ) : (
+                    <Image
+                        src={
+                            activeSermon?.attributes?.youtube
+                                ? `https://i.ytimg.com/vi/${
+                                      activeSermon?.attributes?.youtube.split(
+                                          '='
+                                      )[1]
+                                  }/0.jpg`
+                                : ''
+                        }
+                        className=' size-10 object-cover rounded-md'
+                        width={40}
+                        height={40}
+                        alt=''
+                    />
+                )}
+
                 <div className='w-3/4'>
                     <p className='font-body truncate '>
                         {activeSermon?.attributes?.name ?? 'Select a sermon'}
@@ -30,7 +48,6 @@ export default function MiniPlayer({
                             ?.speaker ?? ''}
                     </p>
                 </div>
-                {/* </div> */}
                 <div className='flex gap-2'>
                     <IconButton
                         disabled={!activeSermon}
