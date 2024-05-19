@@ -10,7 +10,7 @@ import Image from 'next/image';
 
 export default function SermonItem({ sermon }) {
     const { activeSermon, isPlaying } = useSelector(state => state.player);
-
+    console.log(sermon);
     return (
         // CONTAINER
         <div key={sermon.id} className=' text-gray-700 sm:flex py-8'>

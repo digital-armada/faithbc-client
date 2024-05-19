@@ -12,7 +12,7 @@ export default function HomeSermonCard({ sermon }) {
 
     return (
         <div className=' col-span-1 py-2 '>
-            {/* {sermon?.attributes?.imageUrl ? (
+            {sermon?.attributes?.imageUrl ? (
                 <Image
                     src={sermon?.attributes?.imageUrl}
                     width={400}
@@ -30,7 +30,7 @@ export default function HomeSermonCard({ sermon }) {
                     className='w-28 rounded-sm'
                     alt=''
                 />
-            )} */}
+            )}
             {/* <hr className='border-gray-600' /> */}
 
             <div className='mt-2'>

@@ -128,10 +128,7 @@ export default function HomeServices() {
                                                     : 'before:w-0'
                                             }`}>
                                             {compareDates(session.time, day) ? (
-                                                <span className='absolute top-[6px] -left-[2px] flex h-3 w-3'>
-                                                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-fbc-dark opacity-75'></span>
-                                                    <span className='relative inline-flex rounded-full h-3 w-3 bg-fbc-dark'></span>
-                                                </span>
+                                                <NottyDot />
                                             ) : (
                                                 <svg
                                                     xmlns='http://www.w3.org/2000/svg'
@@ -160,6 +157,7 @@ export default function HomeServices() {
                                                 </p>
                                             )}
                                         </div>
+                                        {console.log(session)}
                                     </li>
                                 ))}
                             </ul>
