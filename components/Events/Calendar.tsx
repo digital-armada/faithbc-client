@@ -252,63 +252,55 @@ function Meeting({ meeting }) {
     const isMidnight = date => getHours(date) === 0 && getMinutes(date) === 0;
     console.log(isMidnight);
     return (
-        <Link href={`/events/${encodeURIComponent(meeting?.slug)}`}>
-            <li className='flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-200'>
-                <Image
-                    src={`${process.env.NEXT_PUBLIC_URL}/${meeting.imageUrl}`}
-                    alt=''
-                    width={10}
-                    height={10}
-                    className='flex-none w-10 h-10 rounded-full object-cover'
-                />
+      <Link href={`/events/${encodeURIComponent(meeting?.slug)}`}>
+        <li className="group flex items-center space-x-4 rounded-xl px-4 py-2 focus-within:bg-gray-100 hover:bg-gray-200">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}/${meeting.imageUrl}`}
+            alt=""
+            width={10}
+            height={10}
+            className="h-10 w-10 flex-none rounded-full object-cover"
+          />
 
-                <div className='flex-auto'>
-                    <p className='text-gray-900'>{meeting.name}</p>
-                    <p className='mt-0.5'>
-                        {meeting.endDatetime &&
-                        !isSameDay(startDateTime, endDateTime) ? (
-                            <>
-                                <time dateTime={meeting?.startDatetime}>
-                                    {isMidnight(startDateTime)
-                                        ? format(startDateTime, 'MMM d')
-                                        : format(
-                                              startDateTime,
-                                              'MMM d, h:mm a'
-                                          )}
-                                </time>
-                                <time dateTime={meeting?.endDatetime}>
-                                    <span> - </span>
-                                    {isMidnight(endDateTime)
-                                        ? format(endDateTime, 'MMM d')
-                                        : format(endDateTime, 'MMM d, h:mm a')}
-                                </time>
-                            </>
-                        ) : (
-                            <>
-                                <time dateTime={meeting?.startDatetime}>
-                                    {format(
-                                        startDateTime,
-                                        isMidnight(startDateTime)
-                                            ? 'MMM d'
-                                            : 'MMM d - h:mm a'
-                                    )}
-                                </time>
-                                {meeting?.endDatetime && (
-                                    <time dateTime={meeting?.endDatetime}>
-                                        <span> - </span>
-                                        {format(
-                                            endDateTime,
-                                            isMidnight(endDateTime)
-                                                ? 'MMM d'
-                                                : 'h:mm a'
-                                        )}
-                                    </time>
-                                )}
-                            </>
-                        )}
-                    </p>
-                </div>
-            </li>
-        </Link>
+          <div className="flex-auto">
+            <p className="text-gray-900">{meeting.name}</p>
+            <p className="mt-0.5">
+              {meeting.endDatetime && !isSameDay(startDateTime, endDateTime) ? (
+                <>
+                  <time dateTime={meeting?.startDatetime}>
+                    {isMidnight(startDateTime)
+                      ? format(startDateTime, "MMM d")
+                      : format(startDateTime, "MMM d, h:mm a")}
+                  </time>
+                  <time dateTime={meeting?.endDatetime}>
+                    <span> - </span>
+                    {isMidnight(endDateTime)
+                      ? format(endDateTime, "MMM d")
+                      : format(endDateTime, "MMM d, h:mm a")}
+                  </time>
+                </>
+              ) : (
+                <>
+                  <time dateTime={meeting?.startDatetime}>
+                    {format(
+                      startDateTime,
+                      isMidnight(startDateTime) ? "MMM d" : "MMM d - h:mm a",
+                    )}
+                  </time>
+                  {meeting?.endDatetime && (
+                    <time dateTime={meeting?.endDatetime}>
+                      <span> - </span>
+                      {format(
+                        endDateTime,
+                        isMidnight(endDateTime) ? "MMM d" : "h:mm a",
+                      )}
+                    </time>
+                  )}
+                </>
+              )}
+            </p>
+          </div>
+        </li>
+      </Link>
     );
 }

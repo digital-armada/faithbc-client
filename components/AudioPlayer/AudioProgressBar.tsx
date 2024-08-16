@@ -16,8 +16,7 @@ const AudioProgressBar = () => {
 
     const [seekingProgress, setSeekingProgress] = useState(currentProgress);
     const [isDragging, setIsDragging] = useState(false);
-    console.log(currentProgress);
-    console.log(seekingProgress);
+
     const progressBarWidth = useMemo(() => {
         return isNaN(seekingProgress / duration)
             ? 0

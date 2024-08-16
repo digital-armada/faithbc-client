@@ -21,13 +21,19 @@ export default function HomeServices() {
             Friday: [
                 {
                     time: '4:30 pm',
-                    name: 'Kids Club',
+                    name: 'Kids Club (During School Term)',
                     description: '',
                 },
                 {
                     time: '7:30 pm',
                     name: 'Youth Group',
                     description: '',
+                },
+                {
+                    time: '7:30 pm',
+                    name: 'Friday Night Arabic Service',
+                    description: '',
+                    language: 'arabic',
                 },
             ],
             Sunday: [
@@ -43,8 +49,14 @@ export default function HomeServices() {
                 },
                 {
                     time: '10:00 am ',
-                    name: 'Morning Service',
+                    name: 'Morning Service English',
                     description: '',
+                },
+                {
+                    time: '10:00 am ',
+                    name: 'Morning Service Arabic',
+                    description: '',
+                    language: 'arabic',
                 },
                 {
                     time: '6:00 pm',
@@ -109,7 +121,7 @@ export default function HomeServices() {
                     </div>
                 </div>
 
-                <div className='space-y-4'>
+                <div className='flex-col lg:flex-row flex justify-between mt-10'>
                     {Object.entries(services.days).map(([day, sessions]) => (
                         <div key={day}>
                             <h2 className='text-2xl text-gray-700 mb-3 font-semibold font-display'>
@@ -120,7 +132,7 @@ export default function HomeServices() {
                                 {sessions.map((session, index, sessions) => (
                                     <li
                                         key={index}
-                                        className='relative flex items-baseline pb-3 '>
+                                        className='relative flex items-center pb-3 '>
                                         <div
                                             className={`before:absolute before:top-3 before:left-[3.5px] before:h-full ml-8 ${
                                                 index !== sessions.length - 1
@@ -134,7 +146,7 @@ export default function HomeServices() {
                                                     xmlns='http://www.w3.org/2000/svg'
                                                     width='8'
                                                     height='8'
-                                                    className='absolute  top-[8px] left-0  bi bi-circle-fill fill-gray-500'
+                                                    className='absolute top-[5px] left-0  bi bi-circle-fill fill-gray-500'
                                                     viewBox='0 0 16 16'>
                                                     <circle
                                                         cx='8'
@@ -144,11 +156,11 @@ export default function HomeServices() {
                                                 </svg>
                                             )}
                                         </div>
-                                        <div className='flex gap-2 items-center'>
-                                            <p className='font-light text-xs text-gray-600 font-display'>
+                                        <div className='flex gap-2 text-sm items-center'>
+                                            <p className='font-light  text-gray-600 font-body'>
                                                 {session.time}
                                             </p>
-                                            <p className=' text-gray-600 text-xs font-body'>
+                                            <p className=' text-gray-600 text-sm font-body'>
                                                 {session.name}
                                             </p>
                                             {session.description && (
@@ -156,8 +168,14 @@ export default function HomeServices() {
                                                     {session.description}
                                                 </p>
                                             )}
+                                            {session.language === 'arabic' ? (
+                                                <span className='border-black border-[1px] rounded px-1 py-0 text-sm font-light'>
+                                                    العربية
+                                                </span>
+                                            ) : (
+                                                ''
+                                            )}
                                         </div>
-                                        {console.log(session)}
                                     </li>
                                 ))}
                             </ul>

@@ -1,34 +1,32 @@
-import More from './ui/more';
-import { getSermons } from '@/data/sermons';
-import HomeSermonCard from './HomeSermonCard';
-import HeadingTwo from './ui/headingtwo';
+import More from "./ui/more";
+import { getSermons } from "@/data/sermons";
+import HomeSermonCard from "./HomeSermonCard";
+import HeadingTwo from "./ui/headingtwo";
 
 export default async function HomeSermonWidget() {
-    const data = await getSermons();
-    const sermons = data.data.slice(0, 4);
+  const data = await getSermons();
+  const sermons = data.data.slice(0, 4);
 
-    console.log(data);
+  console.log(data);
 
-    return (
-        <section>
-            <div className='w-full space-y-4 mt-10 text-sm font-body container '>
-                <div className='sm:flex w-full justify-between items-center pb-10'>
-                    <div>
-                        <HeadingTwo heading='Recent Sermons' />
-                    </div>
-                    <div>
-                        <More title='All Sermons' link='/sermons' />
-                    </div>
-                </div>
+  return (
+    <section>
+      <div className="container mt-10 w-full space-y-4 font-body text-sm">
+        <div className="w-full items-center justify-between pb-10 sm:flex">
+          <div>
+            <HeadingTwo heading="Recent Sermons" />
+          </div>
+          <div>
+            <More title="All Sermons" link="/sermons" />
+          </div>
+        </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8'>
-                    {sermons?.map(sermon => {
-                        return (
-                            <HomeSermonCard sermon={sermon} key={sermon.id} />
-                        );
-                    })}
-                </div>
-            </div>
-        </section>
-    );
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+          {sermons?.map((sermon) => {
+            return <HomeSermonCard sermon={sermon} key={sermon.id} />;
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }

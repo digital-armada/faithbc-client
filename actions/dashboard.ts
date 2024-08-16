@@ -3,7 +3,7 @@
 //
 // import axios from 'axios';
 // import { revalidatePath } from 'next/cache';
-//
+
 // export async function createGroup(prevState: any, formData: FormData) {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
@@ -33,7 +33,7 @@
 //         // throw new Error('Failed to fetch users');
 //     }
 // }
-//
+
 // export async function deleteGroup(id: string) {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
@@ -107,6 +107,7 @@
 //         return { message: 'Failed to create user' };
 //     }
 // }
+
 // export async function deleteUser(id) {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
@@ -133,7 +134,7 @@
 //         // throw new Error('Failed to fetch users');
 //     }
 // }
-//
+
 // export async function getAllMembers() {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
@@ -156,7 +157,7 @@
 //         throw new Error('Failed to fetch users');
 //     }
 // }
-//
+
 // export async function getMe() {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
@@ -180,7 +181,7 @@
 //         throw new Error('Failed to fetch user');
 //     }
 // }
-//
+
 // export async function getAllGroups() {
 //     const session = await auth();
 //     const accessToken = session?.accessToken;
