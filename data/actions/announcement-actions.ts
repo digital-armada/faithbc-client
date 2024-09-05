@@ -3,12 +3,29 @@
 import { auth } from "@/auth";
 import { mutateData } from "@/data/services/mutate-data";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const announcementSchema = z.object({
+  message: z.string().min(1, "Message is required"),
+  date: z.string().min(1, "Date and time is required"),
+});
 
 export async function createNewAnnouncement(prevState, formData: FormData) {
-  try {
-    const message = formData.get("message");
-    const date = formData.get("event-date");
+  const validatedFields = announcementSchema.safeParse({
+    message: formData.get("message"),
+    date: formData.get("event-date"),
+  });
 
+  if (!validatedFields.success) {
+    return {
+      error: true,
+      inputErrors: validatedFields.error.flatten().fieldErrors,
+      message: "Please verify your data.",
+    };
+  }
+  const { message, date } = validatedFields.data;
+
+  try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
@@ -34,6 +51,7 @@ export async function createNewAnnouncement(prevState, formData: FormData) {
     return { error: error.message || "An error occurred" };
   }
 }
+
 export async function deleteAnnouncement(id: number) {
   try {
     const session = await auth();

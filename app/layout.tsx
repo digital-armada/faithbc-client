@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${loraFont.variable} ${robotoFont.variable}`}>
       <body>
-        {children}
+        <Providers>{children}</Providers>
         <ToastContainer />
       </body>
     </html>

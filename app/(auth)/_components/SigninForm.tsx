@@ -13,10 +13,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
 import { z } from "zod";
 
 import { ZodErrors } from "@/components/custom/ZodErrors";
@@ -24,9 +24,16 @@ import { StrapiErrors } from "@/components/custom/StrapiErrors";
 import { SubmitButton } from "@/components/custom/SubmitButton";
 
 import { FormErrorsT } from "@/types/types";
-import { useFormState } from "react-dom";
-import { loginUserAction } from "@/data/actions/auth-actions";
-
+// import { useFormState } from "react-dom";
+import { loginUserAction, signinUserAction } from "@/data/actions/auth-actions";
+import { LoginSchema } from "@/schemas";
+import { getUserMeLoader } from "@/data/services/get-user-me-loader";
+import { auth } from "@/auth";
+// type FormErrorsT = {
+//   identifier?: undefined | string[];
+//   password?: undefined | string[];
+//   strapiError?: string;
+// };
 const INITIAL_STATE = {
   zodErrors: null,
   strapiErrors: null,
@@ -35,76 +42,84 @@ const INITIAL_STATE = {
   showConfirmationError: false,
 };
 
-function ConfirmationError() {
-  return (
-    <p>
-      It looks like you {"haven't"} confirmed your email yet. Check your email
-      client for a confirmation email. Did not find it?{" "}
-      <Link href="/confirmation/newrequest" className="underline">
-        Resend the confirmation email.
-      </Link>
-    </p>
-  );
-}
+const initialData = {
+  identifier: "",
+  password: "",
+};
 
 export default function SignInForm() {
-  const [formState, formAction] = useFormState(loginUserAction, INITIAL_STATE);
-  console.log(formState);
-  // const [data, setData] = useState(initialData);
-  // const [errors, setErrors] = useState<FormErrorsT>({});
-  // const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  const router = useRouter();
+  const callbackUrl = searchParams.get("callbackUrl");
+
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+  console.log(error);
+  // const [formState, formAction] = useFormState(loginUserAction, INITIAL_STATE);
+  // console.log(formState);
+  const [data, setData] = useState(initialData);
+  console.log(data);
+  // const [errors, setErrors] = useState<FormErrorsT>({});
+  // console.log(errors);
+  // const [loading, setLoading] = useState(false);
+  // const searchParams = useSearchParams();
+  // // const callbackUrl = searchParams.get("callbackUrl") || "/";
+  // const router = useRouter();
   // listen for unconfirmed email
   // const hasConfirmationError =
   //   errors.strapiError === "Your account email is not confirmed";
 
-  //   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //     setData({
-  //       ...data,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   }
-  //
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  }
+
   //   async function handleSubmit(e: React.FormEvent) {
   //     e.preventDefault();
   //     setLoading(true);
   //
-  //     const validatedFields = formSchema.safeParse(data);
+  //     const validatedFields = LoginSchema.safeParse(data);
   //
   //     if (!validatedFields.success) {
   //       setErrors(validatedFields.error.formErrors.fieldErrors);
-  //       /**
-  //              {
-  //                 identifier: [ 'String must contain at least 2 character(s)' ],
-  //                 password: [ 'Password must be at least 6 characters long.' ]
-  //               }
-  //          */
   //       setLoading(false);
-  //     } else {
-  //       // no zod errors
-  //       const signInResponse = await signIn("credentials", {
-  //         identifier: data.identifier,
-  //         password: data.password,
-  //         redirect: false,
-  //       });
-  //       console.log(signInResponse);
-  //
-  //       if (signInResponse && !signInResponse?.ok) {
-  //         setErrors({
-  //           strapiError: signInResponse.error
-  //             ? signInResponse.error
-  //             : "Something went wrong.",
-  //         });
-  //         setLoading(false);
-  //       } else {
-  //         // handle success
-  //         router.push(callbackUrl);
-  //         router.refresh();
-  //       }
+  //       return;
   //     }
+  //
+  //     const res = await signinUserAction({ data: validatedFields.data });
+  //     console.log(res);
+  //     if (res.success) {
+  //       // Handle successful sign-in, e.g., redirect to profile page
+  //       window.location.href = "/profile";
+  //       setLoading(true);
+  //     } else {
+  //       setErrors({ general: res.error });
+  //       setLoading(true);
+  //     }
+  //
+  //     setLoading(false);
   //   }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    startTransition(() => {
+      loginUserAction(data)
+        .then((data) => {
+          if (data?.error) {
+            setError(data.error);
+          }
+
+          if (data?.success) {
+            console.log(data);
+            setSuccess(data.success);
+          }
+        })
+        .catch(() => setError("Something went wrong"));
+    });
+  }
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -115,7 +130,8 @@ export default function SignInForm() {
         </CardDescription>
       </CardHeader>
 
-      <form action={formAction} className="my-4">
+      {/* <form action={formAction} className="my-4"> */}
+      <form onSubmit={handleSubmit} className="my-4">
         <CardContent>
           <div className="grid gap-4">
             <div className="grid gap-2">
@@ -126,11 +142,11 @@ export default function SignInForm() {
                 type="text"
                 placeholder="m@example.com"
                 required
-                // value={data.identifier}
-                // onChange={handleChange}
+                value={data.identifier}
+                onChange={handleChange}
               />
 
-              {/* <ZodErrors error={formState?.zodErrors?.identifier} /> */}
+              {/* <ZodErrors error={errors?.identifier} /> */}
 
               {/* {errors?.identifier ? (
                 <div className="text-red-700" aria-live="polite">
@@ -153,10 +169,9 @@ export default function SignInForm() {
                 type="password"
                 name="password"
                 required
-                // value={data.password}
-                // onChange={handleChange}
+                value={data.password}
+                onChange={handleChange}
               />
-              <ZodErrors error={formState?.zodErrors?.password} />
               {/* <ZodErrors error={errors?.password} /> */}
               {/* {errors?.password ? (
                 <div className="text-red-700" aria-live="polite">
@@ -178,10 +193,12 @@ export default function SignInForm() {
                 className="w-full"
                 text="Sign In"
                 loadingText="Loading"
+                // loading={loading}
               />
-              {formState?.message}
-              <StrapiErrors error={formState?.strapiErrors} />
-              {formState?.showConfirmationError && <ConfirmationError />}
+              {/* {formState?.message} */}
+              {/* <StrapiErrors error={errors} /> */}
+              {/* {formState?.showConfirmationError && <ConfirmationError />} */}
+              {error && error}
             </CardFooter>
 
             {/* {errors.password || errors.identifier ? (

@@ -4,7 +4,8 @@ interface StrapiErrorsProps {
   status: string | null;
 }
 
-export function StrapiErrors( { error }: { readonly error: StrapiErrorsProps }) {
-  if (!error?.message) return null;
-  return <div className="text-pink-500 text-md italic py-2">{error.message}</div>;
+export function StrapiErrors({ error }: { readonly error: StrapiErrorsProps }) {
+  console.log(error);
+  if (!error) return null;
+  return <div className="text-md py-2 italic text-pink-500">{error}</div>;
 }

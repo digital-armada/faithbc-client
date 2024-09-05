@@ -6,33 +6,31 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { PiHandsPraying } from "react-icons/pi";
 import {
   TiArrowSortedDown,
-  TiCalendarOutline,
   TiChevronLeft,
   TiChevronRight,
-  TiCogOutline,
-  TiGroupOutline,
-  TiHomeOutline,
-  TiInfoLargeOutline,
-  TiPower,
-  TiVideoOutline,
-  TiVolumeUp,
-  TiWorldOutline,
 } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Avatar from "./Avatar";
 
+import { filterMenuItemsByRole } from "@/lib/menuUtils";
+import { menuItems } from "@/app/dashboard/_components/Sidenav/MenuItems";
+import { BaseMenuItem } from "@/types/types";
+import { useSession } from "next-auth/react";
+
 export default function Sidenav() {
   const [activeItems, setActiveItems] = useState({});
   const isSidebarCollapsed = useSelector((state) => state.sidebar.isCollapsed);
-  console.log(isSidebarCollapsed);
   const dispatch = useDispatch();
   const menuRef = useRef();
   const pathname = usePathname();
+
+  const { data: session } = useSession();
+  const userRoles = session?.user?.role ? [session.user.role] : [];
+  console.log(session);
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -61,89 +59,89 @@ export default function Sidenav() {
     dispatch(toggleSidebar());
   };
 
-  const menuItems = [
-    {
-      title: "Main",
-      items: [
-        {
-          icon: <TiHomeOutline />,
-          text: "Dashboard",
-          link: "/dashboard/home",
-        },
-        {
-          text: "Sermon Manager",
-          link: "/dashboard/sermon-manager",
-          icon: <TiVideoOutline />,
-        },
-        {
-          text: "Announcements",
-          link: "/dashboard/announcements",
-          icon: <TiVolumeUp />,
-        },
-        {
-          text: "Contacts",
-          link: "/dashboard/contacts",
-          icon: <TiGroupOutline />,
-          subItems: [
-            { text: "All", link: "/dashboard/contacts/all" },
-            {
-              text: "Comms Lists",
-              link: "/dashboard/contacts/comms",
-            },
-          ],
-        },
-        {
-          text: "Events",
-          link: "/dashboard/events",
-          icon: <TiCalendarOutline />,
-          subItems: [
-            { text: "All Events", link: "/dashboard/events" },
-            {
-              text: "Create New Event",
-              link: "/dashboard/events/new",
-            },
-            {
-              text: "Manage Events",
-              link: "/dashboard/events/manage",
-            },
-          ],
-        },
-
-        {
-          text: "Prayer Requests",
-          link: "/dashboard/prayer-requests",
-          icon: <PiHandsPraying />,
-        },
-        {
-          text: "Missionaries",
-          link: "/dashboard/missionaries",
-          icon: <TiWorldOutline />,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      items: [
-        {
-          text: "Profile",
-          link: "/dashboard/profile",
-          icon: <TiCogOutline />,
-        },
-      ],
-    },
-    {
-      title: "Account",
-      items: [
-        {
-          text: "Info",
-          link: "/dashboard/info",
-          icon: <TiInfoLargeOutline />,
-        },
-        ,
-        { icon: <TiPower />, text: "Logout", link: "#" },
-      ],
-    },
-  ];
+  //   const menuItems = [
+  //     {
+  //       title: "Main",
+  //       items: [
+  //         {
+  //           icon: <TiHomeOutline />,
+  //           text: "Dashboard",
+  //           link: "/dashboard/home",
+  //         },
+  //         {
+  //           text: "Sermon Manager",
+  //           link: "/dashboard/sermon-manager",
+  //           icon: <TiVideoOutline />,
+  //         },
+  //         {
+  //           text: "Announcements",
+  //           link: "/dashboard/announcements",
+  //           icon: <TiVolumeUp />,
+  //         },
+  //         {
+  //           text: "Contacts",
+  //           link: "/dashboard/contacts",
+  //           icon: <TiGroupOutline />,
+  //           subItems: [
+  //             { text: "All", link: "/dashboard/contacts/all" },
+  //             {
+  //               text: "Comms Lists",
+  //               link: "/dashboard/contacts/comms",
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           text: "Events",
+  //           link: "/dashboard/events",
+  //           icon: <TiCalendarOutline />,
+  //           subItems: [
+  //             { text: "All Events", link: "/dashboard/events" },
+  //             {
+  //               text: "Create New Event",
+  //               link: "/dashboard/events/new",
+  //             },
+  //             {
+  //               text: "Manage Events",
+  //               link: "/dashboard/events/manage",
+  //             },
+  //           ],
+  //         },
+  //
+  //         {
+  //           text: "Prayer Requests",
+  //           link: "/dashboard/prayer-requests",
+  //           icon: <PiHandsPraying />,
+  //         },
+  //         {
+  //           text: "Missionaries",
+  //           link: "/dashboard/missionaries",
+  //           icon: <TiWorldOutline />,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "Settings",
+  //       items: [
+  //         {
+  //           text: "Profile",
+  //           link: "/dashboard/profile",
+  //           icon: <TiCogOutline />,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "Account",
+  //       items: [
+  //         {
+  //           text: "Info",
+  //           link: "/dashboard/info",
+  //           icon: <TiInfoLargeOutline />,
+  //         },
+  //         ,
+  //         { icon: <TiPower />, text: "Logout", link: "#" },
+  //       ],
+  //     },
+  //   ];
 
   const handleItemClick = (itemText, subItemText = null) => {
     setActiveItems((prevActiveItems) => {
@@ -174,7 +172,7 @@ export default function Sidenav() {
         key={item.text}
         className={cn(
           isActive
-            ? "bg-fbc-default hover:bg-fbc-default text-white"
+            ? "bg-fbc-default text-white hover:bg-fbc-default"
             : "text-gray-600 hover:bg-gray-100",
           "cursor-pointer text-xs",
         )}
@@ -192,7 +190,7 @@ export default function Sidenav() {
               )}
             >
               <div className="flex items-center">
-                <div className="w-iconPanel flex h-[40px] items-center justify-center text-xl">
+                <div className="flex h-[40px] w-iconPanel items-center justify-center text-xl">
                   {item.icon}
                 </div>
                 <span>{item.text}</span>
@@ -203,7 +201,7 @@ export default function Sidenav() {
         ) : (
           // MENU ITEM NO CHILDREN
           <Link href={item.link} className="flex w-full items-center">
-            <div className="w-iconPanel flex h-[40px] items-center justify-center text-xl">
+            <div className="flex h-[40px] w-iconPanel items-center justify-center text-xl">
               {item.icon}
             </div>
             <span>{item.text}</span>
@@ -244,7 +242,7 @@ export default function Sidenav() {
         {!isSidebarCollapsed && item.subItems && (
           <div className="relative">
             <ul
-              className={`left-iconPanel absolute -top-10 z-50 space-y-2 bg-white p-2 before:absolute before:left-[-10px] before:top-0 before:h-0 before:w-0 before:border-b-[10px] before:border-r-[10px] before:border-t-[10px] before:border-b-transparent before:border-r-white before:border-t-transparent before:content-[''] ${
+              className={`absolute -top-10 left-iconPanel z-50 space-y-2 bg-white p-2 before:absolute before:left-[-10px] before:top-0 before:h-0 before:w-0 before:border-b-[10px] before:border-r-[10px] before:border-t-[10px] before:border-b-transparent before:border-r-white before:border-t-transparent before:content-[''] ${
                 activeItems[item.text] ? "block" : "hidden"
               }`}
             >
@@ -275,13 +273,13 @@ export default function Sidenav() {
 
   return (
     <div
-      className="w-sideBarPanel absolute left-0 top-0 flex flex-col bg-gray-100"
+      className="absolute left-0 top-0 flex w-sideBarPanel flex-col bg-gray-100"
       ref={menuRef}
     >
       <div className="flex-shrink-0">
         {/* LOGO */}
         <div className="mb-4 flex items-center">
-          <div className="w-iconPanel relative mt-4 flex h-[52px] items-center justify-center">
+          <div className="relative mt-4 flex h-[52px] w-iconPanel items-center justify-center">
             <Image src="/logo.png" alt="logo" fill />
           </div>
 
@@ -305,7 +303,7 @@ export default function Sidenav() {
           {menuItems.map((menu, index) => (
             <div key={index}>
               {isSidebarCollapsed === false ? (
-                <div className="w-iconPanel flex h-6 items-center justify-center px-2">
+                <div className="flex h-6 w-iconPanel items-center justify-center px-2">
                   <hr className="w-full border-b-[.05px] border-black/10" />
                 </div>
               ) : (

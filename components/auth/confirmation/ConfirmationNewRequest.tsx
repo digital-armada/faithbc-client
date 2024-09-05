@@ -1,8 +1,19 @@
-'use client';
+"use client";
 
-import { useFormState } from 'react-dom';
-import confirmationNewRequestAction from './confirmationNewRequestAction';
-import PendingSubmitButton from '../PendingSubmitButton';
+import { useFormState } from "react-dom";
+import confirmationNewRequestAction from "./confirmationNewRequestAction";
+import PendingSubmitButton from "../PendingSubmitButton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/custom/SubmitButton";
 
 type InputErrorsT = {
   email?: string[];
@@ -32,42 +43,46 @@ export default function ConfirmationNewRequest() {
     FormData
   >(confirmationNewRequestAction, initialState);
 
+  console.log(state);
+
   return (
-    <div className='mx-auto my-8 p-8 max-w-lg bg-zinc-100 rounded-sm'>
-      <h2 className='text-center text-2xl text-blue-400 mb-8 font-bold'>
-        Confirmation request
-      </h2>
-      <p className='mb-4'>
-        Request a new confirmation email. Maybe some info about token expiry or
-        limited request here.
-      </p>
-      <form action={formAction} className='my-8'>
-        <div className='mb-3'>
-          <label htmlFor='email' className='block mb-1'>
-            Email *
-          </label>
-          <input
-            type='email'
-            id='email'
-            name='email'
-            required
-            className='bg-white border border-zinc-300 w-full rounded-sm p-2'
-          />
-          {state.error && state?.inputErrors?.email ? (
-            <div className='text-red-700' aria-live='polite'>
-              {state.inputErrors.email[0]}
+    <>
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Confirmation request</CardTitle>
+          <CardDescription>
+            <p className="mb-2">
+              Please enter your email to receive an activation link to the
+              provided email.
+            </p>
+          </CardDescription>
+        </CardHeader>
+        <form action={formAction} className="my-2">
+          <CardContent>
+            <div className="mb-3">
+              <Label htmlFor="identifier">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="email@example.com"
+                required
+              />
             </div>
-          ) : null}
-        </div>
-        <div className='mb-3'>
-          <PendingSubmitButton />
-        </div>
-        {state.error && state.message ? (
-          <div className='text-red-700' aria-live='polite'>
-            {state.message}
-          </div>
-        ) : null}
-      </form>
-    </div>
+            {/* <div className="mb-3">
+              <PendingSubmitButton />
+            </div> */}
+            <CardFooter className="flex flex-col">
+              <SubmitButton
+                className="w-full"
+                text="Send Request"
+                loadingText="Loading"
+                // loading={loading}
+              />
+            </CardFooter>
+          </CardContent>
+        </form>
+      </Card>
+    </>
   );
 }

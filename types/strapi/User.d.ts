@@ -4,6 +4,7 @@ export type StrapiUserT = {
   email: string;
   blocked: boolean;
   provider: "local" | "google";
+  confirmed: boolean;
 };
 
 export type StrapiLoginResponseT = {

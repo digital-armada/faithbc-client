@@ -1,16 +1,15 @@
-import DashHeader from "./DashHeader";
 import CreateNew from "./missions/CreateNew";
-import MissionsCreate from "./MissionsCreate";
 import MissionsMap from "./MissionsMap";
 
 export default function Missions({ missionaries }) {
+  console.log(missionaries);
   return (
     <div>
       <div className="mb-10">
         <CreateNew />
       </div>
       <MissionsMap missionaries={missionaries} />
-      <div className="grid grid-cols-12 gap-4">
+      {/* <div className="grid grid-cols-12 gap-4">
         {missionaries.map((mission) => {
           return (
             <article className="relative col-span-12 mt-4 flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 shadow-md md:col-span-6 lg:col-span-4">
@@ -29,7 +28,7 @@ export default function Missions({ missionaries }) {
             </article>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 }

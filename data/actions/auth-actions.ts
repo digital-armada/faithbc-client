@@ -1,6 +1,6 @@
 "use server";
 
-import { z } from "zod";
+import { unknown, z } from "zod";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -11,7 +11,10 @@ import {
 } from "@/data/services/auth-service";
 import { mutateData } from "../services/mutate-data";
 import { revalidatePath } from "next/cache";
-import { auth, signOut } from "@/auth";
+import { signIn, auth, signOut } from "@/auth";
+import { AuthError, CredentialsSignin } from "next-auth";
+import { LoginSchema } from "@/schemas";
+// export const DEFAULT_LOGIN_REDIRECT = "/profile";
 
 // import { ConfirmationNewRequestFormStateT } from "./ConfirmationNewRequest";
 
@@ -24,9 +27,56 @@ const config = {
 };
 
 export const logout = async () => {
-  await signOut();
+  await signOut({ redirectTo: "/" });
 };
-//
+
+export async function signinUserAction({ data }) {
+  console.log("signinUserAction", data);
+  try {
+    const result = await signIn("credentials", { ...data, redirect: false });
+    console.log(result);
+    return { success: true };
+  } catch (err) {
+    if (err instanceof AuthError) {
+      switch (err.type) {
+        case "CredentialsSignin":
+        case "CallbackRouteError":
+          return {
+            success: false,
+            error: "Invalid credentials",
+            statusCode: 401,
+          };
+        case "AccessDenied":
+          return {
+            success: false,
+            error:
+              "Please verify your email, sign up again to resend verification email",
+            statusCode: 401,
+          };
+        // custom error
+        case "OAuthAccountAlreadyLinked" as AuthError["type"]:
+          return {
+            success: false,
+            error: "Login with your Google or Github account",
+            statusCode: 401,
+          };
+        default:
+          return {
+            success: false,
+            error: "Oops. Something went wrong",
+            statusCode: 500,
+          };
+      }
+    }
+
+    console.error(err);
+    return {
+      success: false,
+      error: "Internal Server Error",
+      statusCode: 500,
+    };
+  }
+}
 
 export async function registerUserAction(prevState: any, formData: FormData) {
   console.log("registerUserAction", formData);
@@ -96,51 +146,36 @@ const schemaLogin = z.object({
     }),
 });
 
-export async function loginUserAction(prevState: any, formData: FormData) {
-  const validatedFields = schemaLogin.safeParse({
-    identifier: formData.get("identifier"),
-    password: formData.get("password"),
-  });
+export async function loginUserAction(
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string | null,
+) {
+  const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return {
-      ...prevState,
-      zodErrors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Login.",
-    };
+    return { error: "Invalid fields!" };
   }
 
-  console.log("validatedFields", validatedFields);
+  const { identifier, password, code } = validatedFields.data;
 
-  const responseData = await loginUserService(validatedFields.data);
-  console.log("responseData", responseData);
-  const isConfirmed = responseData.user.confirmed;
-  console.log(
-    "isConfirmedisConfirmedisConfirmedisConfirmedisConfirmedisConfirmed",
-    isConfirmed,
-  );
+  try {
+    await signIn("credentials", {
+      identifier,
+      password,
+      redirectTo: callbackUrl || "/dashboard",
+    });
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Error) {
+      const credentialsError = error as CredentialsSignin;
+      if (credentialsError.cause?.err?.message) {
+        return { error: credentialsError.cause?.err?.message };
+      }
+      // return { error: "An unknown error occurred" };
+    }
 
-  if (!responseData || responseData.error) {
-    return {
-      ...prevState,
-      strapiErrors: responseData.error,
-      zodErrors: null,
-      message: "Ops! Something went wrong. Please try again.",
-    };
+    throw error; // This needs to be here or wont redirect
   }
-
-  if (!isConfirmed) {
-    return {
-      ...prevState,
-      strapiErrors: responseData.error,
-      zodErrors: null,
-      showConfirmationError: true,
-      message: "Failed to Login.",
-      data: responseData.user.email,
-    };
-  }
-
-  redirect("/dashboard");
 }
 
 export async function logoutAction() {

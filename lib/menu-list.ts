@@ -11,6 +11,7 @@ import {
   Globe,
   HandHeart,
   Calendar,
+  MegaphoneIcon,
 } from "lucide-react";
 import {
   TiArrowSortedDown,
@@ -57,6 +58,13 @@ export function getMenuList(pathname: string): Group[] {
           label: "Dashboard",
           active: pathname.includes("/dashboard"),
           icon: LayoutGrid,
+          submenus: [],
+        },
+        {
+          href: "/dashboard/announcements",
+          label: "Announcements",
+          active: pathname.includes("/announcements"),
+          icon: MegaphoneIcon,
           submenus: [],
         },
       ],

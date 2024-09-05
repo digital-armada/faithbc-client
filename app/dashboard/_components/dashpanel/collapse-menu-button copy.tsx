@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { ChevronDown, Dot, LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -34,40 +34,61 @@ type Submenu = {
 };
 
 interface CollapseMenuButtonProps {
-  icon: React.ReactNode;
+  icon: LucideIcon;
   label: string;
   active: boolean;
   submenus: Submenu[];
   isOpen: boolean | undefined;
-  isExpanded: boolean;
-  onToggle: () => void;
 }
 
 export function CollapseMenuButton({
-  icon,
+  icon: Icon,
   label,
   active,
   submenus,
   isOpen,
-  isExpanded,
-  onToggle,
 }: CollapseMenuButtonProps) {
+  const isSubmenuActive = submenus.some((submenu) => submenu.active);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive);
+
   return isOpen ? (
-    <Collapsible open={isExpanded} onOpenChange={onToggle} className="w-full">
+    <Collapsible
+      open={isCollapsed}
+      onOpenChange={setIsCollapsed}
+      className="w-full"
+    >
       <CollapsibleTrigger
         className="mb-1 [&[data-state=open]>div>div>svg]:rotate-180"
         asChild
       >
         <Button
           variant={active ? "secondary" : "ghost"}
-          className={cn("h-10 w-full justify-start", active && "bg-accent")}
+          className="h-10 w-full justify-start"
         >
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
-              <span className="mr-4">{icon}</span>
-              <p className="max-w-[150px] truncate">{label}</p>
+              <span className="mr-4">
+                <Icon size={18} />
+              </span>
+              <p
+                className={cn(
+                  "max-w-[150px] truncate",
+                  isOpen
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-96 opacity-0",
+                )}
+              >
+                {label}
+              </p>
             </div>
-            <div>
+            <div
+              className={cn(
+                "whitespace-nowrap",
+                isOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-96 opacity-0",
+              )}
+            >
               <ChevronDown
                 size={18}
                 className="transition-transform duration-200"
@@ -81,17 +102,23 @@ export function CollapseMenuButton({
           <Button
             key={index}
             variant={active ? "secondary" : "ghost"}
-            className={cn(
-              "mb-1 h-10 w-full justify-start",
-              active && "bg-accent",
-            )}
+            className="mb-1 h-10 w-full justify-start"
             asChild
           >
             <Link href={href}>
               <span className="ml-2 mr-4">
                 <Dot size={18} />
               </span>
-              <p className="max-w-[170px] truncate">{label}</p>
+              <p
+                className={cn(
+                  "max-w-[170px] truncate",
+                  isOpen
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-96 opacity-0",
+                )}
+              >
+                {label}
+              </p>
             </Link>
           </Button>
         ))}
@@ -105,16 +132,21 @@ export function CollapseMenuButton({
             <DropdownMenuTrigger asChild>
               <Button
                 variant={active ? "secondary" : "ghost"}
-                className={cn(
-                  "mb-1 h-10 w-full justify-start",
-                  active && "bg-accent",
-                )}
+                className="mb-1 h-10 w-full justify-start"
               >
                 <div className="flex w-full items-center justify-between">
                   <div className="flex items-center">
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      {icon}
+                      <Icon size={18} />
                     </span>
+                    <p
+                      className={cn(
+                        "max-w-[200px] truncate",
+                        isOpen === false ? "opacity-0" : "opacity-100",
+                      )}
+                    >
+                      {label}
+                    </p>
                   </div>
                 </div>
               </Button>
@@ -130,12 +162,9 @@ export function CollapseMenuButton({
           {label}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {submenus.map(({ href, label, active }, index) => (
+        {submenus.map(({ href, label }, index) => (
           <DropdownMenuItem key={index} asChild>
-            <Link
-              className={cn("cursor-pointer", active && "bg-accent")}
-              href={href}
-            >
+            <Link className="cursor-pointer" href={href}>
               <p className="max-w-[180px] truncate">{label}</p>
             </Link>
           </DropdownMenuItem>

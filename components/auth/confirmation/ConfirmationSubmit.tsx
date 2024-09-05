@@ -25,7 +25,7 @@ export default async function ConfirmationSubmit({ confirmationToken }: Props) {
     const strapiResponse = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/email-confirmation?confirmation=${confirmationToken}`,
     );
-    console.log("strapiResponsestrapiResponsestrapiResponse", strapiResponse);
+
     if (!strapiResponse.ok) {
       let error = "";
       const contentType = strapiResponse.headers.get("content-type");

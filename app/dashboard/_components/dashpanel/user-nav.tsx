@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import { signOut } from "next-auth/react";
+import { logout } from "@/data/actions/auth-actions";
 
 export function UserNav({ user }) {
   return (
@@ -67,9 +67,7 @@ export function UserNav({ user }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="hover:cursor-pointer"
-          onClick={() => {
-            signOut();
-          }}
+          onClick={() => logout()}
         >
           <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
           Sign out

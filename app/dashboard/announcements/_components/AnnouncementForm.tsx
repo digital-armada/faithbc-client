@@ -2,29 +2,14 @@
 
 import { useRef, useEffect } from "react";
 import { useFormState } from "react-dom";
-import FormDateTimePicker from "@/components/ui/FormDateTimePicker";
-import FormInput from "@/components/ui/FormInput";
-import {
-  createNewAnnouncement,
-  deleteAnnouncement,
-} from "@/data/actions/announcement-actions";
-import formatDateTime from "@/lib/formatDateTime";
-import { TiTrash } from "react-icons/ti";
-import DashHeader from "../../_components/DashHeader";
+import { createNewAnnouncement } from "@/data/actions/announcement-actions";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-type AnnouncementFormProps = {
-  message: string;
-  date: string; // ISO 8601 date string
-};
-
-export default function AnnouncementForm({
-  announcements,
-}: {
-  announcements: AnnouncementFormProps[];
-}) {
+export default function AnnouncementForm() {
   const formRef = useRef(null);
   const [state, formAction] = useFormState(createNewAnnouncement, null);
-
   useEffect(() => {
     if (state?.data) {
       // If the submission was successful, reset the form
@@ -33,36 +18,52 @@ export default function AnnouncementForm({
   }, [state]);
 
   return (
-    <>
-      <DashHeader heading="Announcements" />
+    <div className="mb-10">
       <form ref={formRef} action={formAction}>
-        <FormInput
-          label="Announcement"
-          id="message"
-          name="message"
-          type="text"
-        />
-        <FormDateTimePicker
-          label="Select event date and time"
-          dateId="event-date"
-          dateName="event-date"
-        />
-        <button type="submit">Submit</button>
-      </form>
-
-      {state?.error && <p>Error: {state.error}</p>}
-
-      <div>
-        {announcements.map((announcement) => (
-          <div key={announcement.id} className="flex gap-4">
-            <div>{formatDateTime(announcement.attributes.date)}</div>
-            <div>{announcement.attributes.message}</div>
-            <button onClick={() => deleteAnnouncement(announcement.id)}>
-              <TiTrash />
-            </button>{" "}
+        <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
+          <div className="my-2 flex-1">
+            <Label
+              htmlFor="message"
+              className="text-sm font-medium leading-6 text-gray-900"
+            >
+              Announcement
+            </Label>
+            <div className="mt-2">
+              <Input
+                id="message"
+                name="message"
+                type="text"
+                className="w-full"
+                placeholder=" ... Enter announcement"
+              />
+            </div>
+            {state?.error && <p>{state.inputErrors?.message}</p>}
           </div>
-        ))}
-      </div>
-    </>
+
+          <div className="my-2">
+            <Label
+              htmlFor="event-date"
+              className="text-sm font-medium leading-6 text-gray-900"
+            >
+              Select date and time
+            </Label>
+            <div className="mt-2">
+              <Input
+                id="event-date"
+                name="event-date"
+                type="datetime-local"
+                className="w-full"
+              />
+            </div>
+            {state?.error && <p>{state.inputErrors?.date}</p>}
+          </div>
+
+          <Button type="submit" className="my-2">
+            Submit
+          </Button>
+        </div>
+        {/* {state?.error && <p>Error: {state.message}</p>} */}
+      </form>
+    </div>
   );
 }

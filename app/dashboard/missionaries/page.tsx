@@ -13,6 +13,7 @@ import { ContentLayout } from "../_components/dashpanel/content-layout";
 
 export default async function page() {
   const { data } = await getMissionaries();
+  console.log(data);
   const missionaries = data?.data?.map(({ attributes }) => {
     return { ...attributes };
   });

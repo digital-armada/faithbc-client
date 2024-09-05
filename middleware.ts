@@ -1,55 +1,34 @@
-import { NextResponse } from "next/server";
-import { auth, BASE_PATH } from "@/auth";
-import {
-  // DEFAULT_LOGIN_REDIRECT,
-  // apiAuthPrefix,
-  // authRoutes,
-  // publicRoutes,
-  dashPrefix,
-  DEFAULT_LOGIN_REDIRECT,
-} from "@/routes";
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-  // const isDashboardRoute = nextUrl.pathname.startsWith(dashPrefix);
+export async function middleware(req: NextRequest) {
+  const nextUrl = req.nextUrl;
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const isLoggedIn = !!token;
   const isDashboardRoute = nextUrl.pathname.startsWith("/dashboard");
-  console.log("isDashboardRoute", isDashboardRoute);
-  //
-  //   if (isDashboardRoute) {
-  //     if (isLoggedIn) {
-  //       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  //     }
-  //     return null;
-  //   }
-  //
-  if (!isLoggedIn && isDashboardRoute) {
-    let callbackUrl = nextUrl.pathname;
-    if (nextUrl.search) {
-      callbackUrl += nextUrl.search;
-    }
 
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-
-    return Response.redirect(
-      new URL(`/signin?callbackUrl=${encodedCallbackUrl}`, nextUrl),
-    );
+  if (isDashboardRoute && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/signin", req.url));
   }
 
-  // return null;
-});
-// const reqUrl = new URL(req.url);
-// if (!req.auth && reqUrl?.pathname == "/dashboard") {
-//   return NextResponse.redirect(
-//     new URL(
-//       `${BASE_PATH}/signin?callbackUrl=${encodeURIComponent(
-//         reqUrl?.pathname,
-//       )}`,
-//       req.url,
-//     ),
-//   );
-// }
+  // Additional checks for user confirmation and blocking status
+  //   if (token && isDashboardRoute) {
+  //     const { blocked, confirmed } = token;
+  //
+  //     if (blocked) {
+  //       return NextResponse.redirect(new URL("/blocked", req.url));
+  //     }
+  //
+  //     if (!confirmed) {
+  //       return NextResponse.redirect(
+  //         new URL("/confirmation/newrequest", req.url),
+  //       );
+  //     }
+  //   }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

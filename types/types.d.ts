@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type SideNavItem = {
   title: string;
   path: string;
@@ -18,4 +20,26 @@ export interface StringMap {
 
 export interface StringToBooleanMap {
   [key: string]: boolean;
+}
+
+// MENU TYPES
+export interface BaseMenuItem {
+  icon: ReactNode;
+  text: string;
+  link: string;
+}
+
+export interface RoleSpecificMenuItem extends BaseMenuItem {
+  roles: {
+    [key: string]: {
+      show: boolean;
+      asSubItem?: boolean;
+      subItems?: BaseMenuItem[];
+    };
+  };
+}
+
+export interface MenuSection {
+  title: string;
+  items: RoleSpecificMenuItem[];
 }

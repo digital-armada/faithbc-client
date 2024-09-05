@@ -2,11 +2,19 @@
 import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
+import { useEffect, useState } from "react";
 
 export default function AdminLayout({ children }) {
+  const [isMounted, setIsMounted] = useState(false);
   const sidebar = useSelector((state) => state.sidebar);
 
-  if (!sidebar) return null;
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null; // Avoid rendering anything until the component is mounted on the client
+  }
 
   return (
     <>
