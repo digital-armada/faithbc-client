@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getAddressCoordinates = async (address) => {
+const getAddressCoordinates = async (address: string) => {
   try {
     const response = await axios.get(
       "https://maps.googleapis.com/maps/api/geocode/json",
@@ -21,7 +21,7 @@ const getAddressCoordinates = async (address) => {
     }
   } catch (error) {
     console.error("Error fetching coordinates:", error);
-    return null;
+    throw error;
   }
 };
 

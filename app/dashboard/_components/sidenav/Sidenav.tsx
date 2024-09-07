@@ -5,7 +5,7 @@ import {
 } from "@/redux/features/sidebarSlice";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   TiArrowSortedDown,
   TiChevronLeft,
@@ -43,16 +43,16 @@ export default function Sidenav() {
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  }, [isSidebarCollapsed]);
+  }, [isSidebarCollapsed, handleOutsideClick]);
 
-  const handleOutsideClick = () => {
+  const handleOutsideClick = useCallback(() => {
     // If sidebar is expanded, collapse it
     if (!isSidebarCollapsed) {
       dispatch(setSidebarCollapsed(false));
     }
     // Close all active subitems
     setActiveItems({});
-  };
+  }, [isSidebarCollapsed, dispatch, setActiveItems]);
 
   const toggleMenu = (e) => {
     e.stopPropagation(); // Prevent event from bubbling up

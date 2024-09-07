@@ -17,10 +17,10 @@ export default function page() {
           <li>Communications</li>
           <li>Sunday School</li>
           <li>Youth Group</li>
-          <li>Women's Group</li>
-          <li>Men's Group</li>
+          <li>Women&apos;s Group</li>
+          <li>Men&apos;s Group</li>
           <li>Visitation</li>
-          <li>Kid's Club</li>
+          <li>Kid&apos;s Club</li>
         </ul>
       </div>
     </ContentLayout>

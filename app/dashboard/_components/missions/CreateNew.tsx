@@ -23,7 +23,6 @@ const INITIAL_STATE = {
 
 export default function CreateNew() {
   const [state, formAction] = useFormState(createNewMissions, INITIAL_STATE);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -33,7 +32,7 @@ export default function CreateNew() {
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-8">

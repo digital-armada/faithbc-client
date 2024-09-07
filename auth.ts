@@ -19,7 +19,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials, req) {
         // make sure there are credentials
-        console.log(credentials);
         if (!credentials || !credentials.identifier || !credentials.password) {
           console.log("no credentials");
           return null;
@@ -40,7 +39,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
           );
 
-          console.log(strapiResponse);
           if (!strapiResponse.ok) {
             // return error to signIn callback
             const contentType = strapiResponse.headers.get("content-type");
@@ -54,7 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // success
           const data = await strapiResponse.json();
-          console.log(data);
 
           // Fetch user role
           const userResponse = await fetch(
@@ -99,14 +96,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async jwt({ token, trigger, account, user, session }) {
-      // console.log("jwt callback", {
-      //   token,
-      //   trigger,
-      //   account,
-      //   user,
-      //   session,
-      // });
-
       // change username update
       if (trigger === "update" && session?.username) {
         token.name = session.username;
@@ -118,30 +107,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       if (account) {
-        // if (account.provider === "google") {
-        //   // we now know we are doing a sign in using GoogleProvider
-        //   try {
-        //     const strapiResponse = await fetch(
-        //       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/${account.provider}/callback?access_token=${account.access_token}`,
-        //       { cache: "no-cache" },
-        //     );
-        //     if (!strapiResponse.ok) {
-        //       const strapiError: StrapiErrorT = await strapiResponse.json();
-        //       // console.log('strapiError', strapiError);
-        //       throw new Error(strapiError.error.message);
-        //     }
-        //     const strapiLoginResponse: StrapiLoginResponseT =
-        //       await strapiResponse.json();
-        //     // customize token
-        //     // name and email will already be on here
-        //     token.strapiToken = strapiLoginResponse.jwt;
-        //     token.strapiUserId = strapiLoginResponse.user.id;
-        //     token.provider = account.provider;
-        //     token.blocked = strapiLoginResponse.user.blocked;
-        //   } catch (error) {
-        //     throw error;
-        //   }
-        // }
         if (account.provider === "credentials") {
           console.log(user);
           // for credentials, not google provider
@@ -177,15 +142,3 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/authError",
   },
 });
-
-// declare module "next-auth" {
-//   interface Session {
-//     accessToken?: string;
-//   }
-// }
-//
-// declare module "next-auth/jwt" {
-//   interface JWT {
-//     accessToken?: string;
-//   }
-// }

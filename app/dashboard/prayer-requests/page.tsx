@@ -10,20 +10,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getChurch } from "@/data/services/missionary-service";
+import { deletePrayerRequest } from "@/data/actions/prayer-actions";
+import DeleteRequest from "./_components/DeleteRequest";
 
 export default async function page() {
   const { data: user } = await getUserMeLoader();
-  const { data } = await getChurchPrayers();
-
+  const { data } = await getChurch();
   return (
     <ContentLayout title="Prayer Requests">
       <div>
-        <div className="mb-10">
-          {user.role.type === "admin" && <AddPrayerRequests />}
-        </div>
+        {user.role.type === "admin" && (
+          <div className="mb-10">
+            <AddPrayerRequests />
+          </div>
+        )}
         <div className="space-y-4">
           {data?.data.map((prayer) =>
-            prayer.attributes.prayeritem.map((item) => {
+            prayer.attributes.prayerrequests.map((item) => {
               return (
                 <>
                   <Card className="w-full">
@@ -36,6 +40,9 @@ export default async function page() {
                         Request: {item?.request}
                       </p>
                       {item?.outcome && <p>Outcome: {item?.outcome}</p>}
+                      {user.role.type === "admin" && (
+                        <DeleteRequest id={item.id} />
+                      )}
                     </CardContent>
                   </Card>
                 </>

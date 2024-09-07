@@ -56,7 +56,7 @@ export default function EventMap({ address }) {
                   position={position}
                   onCloseClick={() => setOpen(false)}
                 >
-                  <p>I'm in Hamburg</p>
+                  <p>I&apos;m in Hamburg</p>
                 </InfoWindow>
               )}
             </AdvancedMarker>

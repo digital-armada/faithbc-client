@@ -20,7 +20,7 @@ const FormDateTimePicker = ({
 
   useEffect(() => {
     if (props.onChange) props.onChange(value);
-  }, [value, props.onChange]);
+  }, [value, props, props.onChange]);
 
   const handleChange = (event) => {
     let newValue = event.target.value;

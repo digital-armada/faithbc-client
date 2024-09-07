@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 
 import {
   CardTitle,
@@ -13,22 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { getSession, signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { z } from "zod";
 
-import { ZodErrors } from "@/components/custom/ZodErrors";
-import { StrapiErrors } from "@/components/custom/StrapiErrors";
 import { SubmitButton } from "@/components/custom/SubmitButton";
 
-import { FormErrorsT } from "@/types/types";
 // import { useFormState } from "react-dom";
-import { loginUserAction, signinUserAction } from "@/data/actions/auth-actions";
-import { LoginSchema } from "@/schemas";
-import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import { auth } from "@/auth";
+import { loginUserAction } from "@/data/actions/auth-actions";
 // type FormErrorsT = {
 //   identifier?: undefined | string[];
 //   password?: undefined | string[];
@@ -48,13 +40,10 @@ const initialData = {
 };
 
 export default function SignInForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
-
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  console.log(error);
+  console.log(isPending);
   // const [formState, formAction] = useFormState(loginUserAction, INITIAL_STATE);
   // console.log(formState);
   const [data, setData] = useState(initialData);
@@ -113,8 +102,8 @@ export default function SignInForm() {
           }
 
           if (data?.success) {
-            console.log(data);
             setSuccess(data.success);
+            window.location.href = "/dashboard";
           }
         })
         .catch(() => setError("Something went wrong"));
@@ -193,7 +182,7 @@ export default function SignInForm() {
                 className="w-full"
                 text="Sign In"
                 loadingText="Loading"
-                // loading={loading}
+                loading={isPending}
               />
               {/* {formState?.message} */}
               {/* <StrapiErrors error={errors} /> */}

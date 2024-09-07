@@ -1,10 +1,16 @@
+import { fetchVideos } from "@/data/services/youtube-service";
 import DashHeader from "../_components/DashHeader";
+import SermonManagerClient from "./_components/SermonManagerClient";
+import { ContentLayout } from "../_components/dashpanel/content-layout";
 
-export default function page() {
+export default async function page() {
+  // const { videos } = await fetchVideos();
+  // console.log(videos);
   return (
     <>
-      <DashHeader heading="Sermon Manager" />
-      <div>Coming Soon</div>
+      <ContentLayout title="Sermon Manager">
+        <SermonManagerClient />
+      </ContentLayout>
     </>
   );
 }

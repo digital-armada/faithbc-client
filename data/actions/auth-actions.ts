@@ -27,7 +27,13 @@ const config = {
 };
 
 export const logout = async () => {
-  await signOut({ redirectTo: "/" });
+  try {
+    await signOut({ redirect: false }); // Avoid server-side redirection
+    return { success: true };
+  } catch (error) {
+    console.error("Logout error:", error);
+    return { success: false, error: "Failed to sign out" };
+  }
 };
 
 export async function signinUserAction({ data }) {
@@ -162,7 +168,9 @@ export async function loginUserAction(
     await signIn("credentials", {
       identifier,
       password,
-      redirectTo: callbackUrl || "/dashboard",
+      // redirectTo: callbackUrl || "/dashboard",
+      redirect: false, // Handle redirect manually for more control
+      callbackUrl: callbackUrl || "/dashboard",
     });
     return { success: true };
   } catch (error) {

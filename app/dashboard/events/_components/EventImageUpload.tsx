@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { uploadImageAction } from "@/data/actions/file-actions";
 import { getStrapiURL } from "@/lib/utils";
+import Image from "next/image";
 
 interface EventImageUploadProps {
   onImageUploaded: (imageId: string) => void;
@@ -71,7 +72,7 @@ export function EventImageUpload({
       />
       {isUploading && <p>Uploading...</p>}
       {previewUrl && (
-        <img
+        <Image
           src={previewUrl}
           alt="Preview"
           style={{ maxWidth: "200px", marginTop: "10px" }}

@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 export async function createNewMissions(prevState: any, formData: FormData) {
   const name = formData.get("name");
   const location = formData.get("location");
+
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");

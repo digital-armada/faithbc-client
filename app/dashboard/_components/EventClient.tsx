@@ -27,6 +27,7 @@ import {
   getMinutes,
   startOfDay,
 } from "date-fns";
+import Image from "next/image";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -237,7 +238,7 @@ function Meeting({ meeting }) {
   return (
     <Link href={`/events/${encodeURIComponent(meeting?.slug)}`}>
       <li className="group flex items-center space-x-4 rounded-xl px-4 py-2 focus-within:bg-gray-100 hover:bg-gray-200">
-        <img
+        <Image
           src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${meeting.imageUrl}`}
           alt=""
           className="h-10 w-10 flex-none rounded-full object-cover"
