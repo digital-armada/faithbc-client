@@ -30,11 +30,12 @@ export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const router = useRouter();
   const session = useSession();
-  const userRole = (session?.data?.user?.role as Role) || "member";
+  const userRole = (session?.data?.user as { role?: Role })?.role || "member";
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const renderIcon = (iconName: string) => {
     const IconComponent = Icons[iconName as keyof typeof Icons];
+    // @ts-ignore
     return IconComponent ? <IconComponent className="mr-2 h-4 w-4" /> : null;
   };
 

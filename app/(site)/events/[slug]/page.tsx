@@ -10,11 +10,15 @@ import Markdown from "react-markdown";
 import { redirect } from "next/navigation";
 import RenderTipTap from "../_components/RenderTipTap";
 
-export default async function page({ params }) {
+export default async function page({
+  params,
+}: {
+  params: { id?: string; slug?: string };
+}) {
   const id = params?.id;
   const slug = params?.slug;
 
-  const data = await getEventSlug(slug);
+  const data = await getEventSlug(slug as string);
   const address = data?.venAdd;
 
   const formats = data?.featuredImage?.formats;
@@ -80,7 +84,7 @@ export default async function page({ params }) {
   );
 }
 
-const EventDetails = ({ data }) => {
+const EventDetails = ({ data }: { data: any }) => {
   return (
     <div className="w-full space-y-8 pb-8 text-gray-700">
       <div>

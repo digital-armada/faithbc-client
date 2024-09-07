@@ -102,7 +102,7 @@ export default function SignInForm() {
           }
 
           if (data?.success) {
-            setSuccess(data.success);
+            setSuccess(data.success ? "Login successful" : "");
             window.location.href = "/dashboard";
           }
         })
