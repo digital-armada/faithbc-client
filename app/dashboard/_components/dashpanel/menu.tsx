@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { CollapseMenuButton } from "./collapse-menu-button";
 import { logout } from "@/data/actions/auth-actions";
-import { menuItems } from "../Sidenav/MenuItems";
+import { menuItems } from "@/app/dashboard/_components/Sidenav/MenuItems";
 
 type Role = "member" | "admin" | "ministry";
 
