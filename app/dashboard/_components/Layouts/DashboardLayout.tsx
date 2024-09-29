@@ -1,12 +1,16 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { useSelector } from "react-redux";
-import Sidebar from "./Sidebar";
+import SidebarContainer from "../dashpanel/SidebarContainer";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "@/hooks/useRedux";
 
-export default function AdminLayout({ children }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isMounted, setIsMounted] = useState(false);
-  const sidebar = useSelector((state) => state.sidebar);
+  const sidebar = useAppSelector((state) => state.sidebar);
 
   useEffect(() => {
     setIsMounted(true);
@@ -18,7 +22,7 @@ export default function AdminLayout({ children }) {
 
   return (
     <>
-      <Sidebar />
+      <SidebarContainer />
       <main
         className={cn(
           "min-h-[calc(100vh)] bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900",

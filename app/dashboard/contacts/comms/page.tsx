@@ -3,7 +3,7 @@ import PageHeader from "../../_components/side-nav/page-header";
 import CommsDisplay from "../../_components/CommsDisplay";
 import CommsForm from "../../_components/CommsForm";
 import DashHeader from "../../_components/DashHeader";
-import { ContentLayout } from "../../_components/dashpanel/content-layout";
+import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper";
 
 export default function page() {
   return (

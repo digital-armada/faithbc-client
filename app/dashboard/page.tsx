@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ContentLayout } from "./_components/dashpanel/content-layout";
+import { ContentLayout } from "./_components/Layouts/DashboardContentWrapper";
 import { getBirthdayUsers } from "@/data/services/getUsers";
 import UpcomingBirthdays from "@/app/dashboard/_components/widgets/upcomingBirthdays";
 import Announcements from "@/app/dashboard/_components/widgets/announcements";

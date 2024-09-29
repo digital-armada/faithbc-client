@@ -1,5 +1,5 @@
 import BreadCrumbs from "../Breadcrumb";
-import { Navbar } from "./navbar";
+import { TopNavContainer } from "../dashpanel/TopNavContainer";
 
 interface ContentLayoutProps {
   title: string;
@@ -9,7 +9,7 @@ interface ContentLayoutProps {
 export function ContentLayout({ title, children }: ContentLayoutProps) {
   return (
     <div>
-      <Navbar title={title} />
+      <TopNavContainer title={title} />
       <div className="container px-4 pb-8 pt-8 sm:px-8">
         <BreadCrumbs />
         <div className="rounded-md bg-white p-4 shadow-md">{children}</div>

@@ -1,5 +1,5 @@
-import AdminLayout from "./_components/dashpanel/AdminLayout";
+import DashboardLayout from "./_components/Layouts/DashboardLayout";
 
-export default function Layout({ children }) {
-  return <AdminLayout>{children}</AdminLayout>;
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

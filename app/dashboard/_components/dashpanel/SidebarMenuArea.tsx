@@ -16,7 +16,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { CollapseMenuButton } from "./collapse-menu-button";
+import { SidebarCollapsibleButton } from "./SidebarCollapsibleButton";
 import { logout } from "@/data/actions/auth-actions";
 import { menuItems } from "@/app/dashboard/_components/Sidenav/MenuItems";
 
@@ -81,7 +81,7 @@ export function Menu({ isOpen }: MenuProps) {
         isActive(subItem.link),
       );
       return (
-        <CollapseMenuButton
+        <SidebarCollapsibleButton
           key={item.text}
           icon={item.icon}
           label={item.text}

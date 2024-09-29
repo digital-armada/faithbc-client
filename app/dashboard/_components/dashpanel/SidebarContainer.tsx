@@ -1,15 +1,16 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
-import { SidebarToggle } from "./sidebar-toggle";
+import { SidebarToggle } from "./SidebarToggle";
 import { Button } from "@/components/ui/button";
-import { PanelsTopLeft } from "lucide-react";
 import Link from "next/link";
-import { Menu } from "./menu";
+import { Menu } from "./SidebarMenuArea";
 import Image from "next/image";
+import { useAppSelector } from "@/hooks/useRedux";
 
-export default function Sidebar() {
-  const sidebar = useSelector((state) => state.sidebar.isCollapsed);
+export default function SidebarContainer() {
+  const sidebar = useAppSelector((state) => state.sidebar.isCollapsed);
+
   return (
     <>
       <aside
@@ -18,7 +19,7 @@ export default function Sidebar() {
           sidebar === false ? "w-[90px]" : "w-72",
         )}
       >
-        <SidebarToggle isOpen={sidebar?.isCollapsed} />
+        <SidebarToggle isOpen={sidebar} />
         <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
           <Button
             className={cn(

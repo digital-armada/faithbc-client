@@ -1,7 +1,7 @@
 import { getChurchPrayers } from "@/data/services/prayerItem-service";
 import AddPrayerRequests from "./_components/AddPrayerRequests";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import { ContentLayout } from "../_components/dashpanel/content-layout";
+import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
 import {
   Card,
   CardContent,

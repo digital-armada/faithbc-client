@@ -43,7 +43,7 @@ interface CollapseMenuButtonProps {
   onToggle: () => void;
 }
 
-export function CollapseMenuButton({
+export function SidebarCollapsibleButton({
   icon,
   label,
   active,

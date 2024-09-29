@@ -1,5 +1,5 @@
 import DashHeader from "../../_components/DashHeader";
-import { ContentLayout } from "../../_components/dashpanel/content-layout";
+import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper";
 import FormEvent from "../_components/FormEvent";
 
 export default function page() {

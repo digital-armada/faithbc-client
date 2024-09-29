@@ -1,7 +1,7 @@
 import { getMissionaries } from "@/data/services/missionary-service";
 import Missions from "../_components/Missions";
 
-import { ContentLayout } from "../_components/dashpanel/content-layout";
+import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
 
 export default async function page() {
   const { data } = await getMissionaries();

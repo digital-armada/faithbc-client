@@ -1,4 +1,4 @@
-import { ContentLayout } from "../../_components/dashpanel/content-layout";
+import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper";
 import FormRegisterUser from "../../_components/FormRegisterUser";
 
 export default function page() {

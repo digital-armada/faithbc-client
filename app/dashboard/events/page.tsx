@@ -1,6 +1,6 @@
 import { getDashEvents } from "@/data/events";
 import EventClient from "../_components/EventClient";
-import { ContentLayout } from "../_components/dashpanel/content-layout";
+import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
 import { DataTable } from "./_components/DataTable";
 
 export default async function page() {

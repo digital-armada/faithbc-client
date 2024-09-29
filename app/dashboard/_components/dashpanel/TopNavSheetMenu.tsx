@@ -8,9 +8,9 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "./menu";
+import { Menu } from "./SidebarMenuArea";
 
-export function SheetMenu() {
+export function TopNavSheetMenu() {
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>

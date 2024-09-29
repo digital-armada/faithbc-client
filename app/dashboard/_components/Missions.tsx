@@ -1,5 +1,5 @@
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import CreateNew from "./missions/CreateNew";
+import CreateNew from "../missionaries/_components/CreateNew";
 import MissionsMap from "./MissionsMap";
 import Image from "next/image";
 
