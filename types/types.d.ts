@@ -22,24 +22,79 @@ export interface StringToBooleanMap {
   [key: string]: boolean;
 }
 
-// MENU TYPES
-export interface BaseMenuItem {
-  icon: ReactNode;
-  text: string;
-  link: string;
-}
+// src/types/types.ts or lib/types/types.ts
 
-export interface RoleSpecificMenuItem extends BaseMenuItem {
-  roles: {
-    [key: string]: {
-      show: boolean;
-      asSubItem?: boolean;
-      subItems?: BaseMenuItem[];
+export interface Speaker {
+  id: string;
+  attributes: {
+    speaker: string;
+    sermons?: {
+      data: Sermon[];
     };
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
   };
 }
 
-export interface MenuSection {
+export interface Sermon {
+  id: string;
+  attributes: {
+    name: string;
+    date: string;
+    audio?: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+    slug: string;
+    youtube?: string;
+    verse?: string;
+    speaker?: {
+      data: {
+        attributes: Speaker;
+      };
+    };
+    series?: {
+      data: {
+        attributes: Series;
+      };
+    };
+    service_type?:
+      | "Sunday Morning"
+      | "Sunday Evening"
+      | "Wednesday Evening"
+      | "Friday Youth"
+      | "Sunday School"
+      | "Special Events";
+    youtubeId?: string;
+    description?: string;
+    imageUrl?: string;
+  };
+}
+
+// Define the types for the API response
+export interface EventAttributes {
+  slug: string;
   title: string;
-  items: RoleSpecificMenuItem[];
+  featuredImage?: {
+    data?: {
+      attributes?: {
+        formats?: {
+          thumbnail?: {
+            url: string;
+          };
+        };
+      };
+    };
+  };
+  startDate: string; // Assuming dates are strings in the API response
+  endDate?: string;
+}
+
+export interface Event {
+  id: number;
+  attributes: EventAttributes;
 }

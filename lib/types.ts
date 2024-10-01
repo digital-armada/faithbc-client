@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 export type SideNavItem = {
-    title: string;
-    path: string;
-    icon?: JSX.Element;
-    submenu?: boolean;
-    subMenuItems?: SideNavItem[];
+  title: string;
+  path: string;
+  icon?: ReactNode;
+  submenu?: boolean;
+  subMenuItems?: SideNavItem[];
 };

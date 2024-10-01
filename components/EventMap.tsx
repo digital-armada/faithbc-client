@@ -10,8 +10,10 @@ import {
 
 import getAddressCoordinates from "@/lib/getAddressCoordinates";
 
-export default function EventMap({ address }) {
-  const [latlng, setLatlng] = useState();
+export default function EventMap({ address }: { address: string }) {
+  type Coordinates = { latitude: number; longitude: number };
+
+  const [latlng, setLatlng] = useState<Coordinates | undefined>(undefined);
 
   useEffect(() => {
     const getCoordinates = async () => {
@@ -23,13 +25,13 @@ export default function EventMap({ address }) {
     getCoordinates();
   }, [address]);
 
-  const position = latlng
+  const position: google.maps.LatLngLiteral | null = latlng
     ? { lat: latlng.latitude, lng: latlng.longitude }
     : null;
 
   const [open, setOpen] = useState(false);
   return (
-    <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API}>
+    <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API as string}>
       <div className="h-80">
         {position ? (
           <Map

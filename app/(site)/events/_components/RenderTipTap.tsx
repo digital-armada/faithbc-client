@@ -2,7 +2,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-const RenderTipTap = ({ content }) => {
+const RenderTipTap = ({ content }: { content: string }) => {
   const editor = useEditor({
     extensions: [StarterKit],
     content: content,

@@ -1,4 +1,5 @@
 "use client";
+import { useAppSelector } from "@/hooks/useRedux";
 import {
   playPause,
   setActiveSermon,
@@ -9,15 +10,20 @@ import {
   setNewCurrentProgress,
   setVolume,
 } from "@/redux/features/playerSlice";
-import { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { debounce } from "lodash";
 
-export default function Audio({ src, activeSermon }) {
+export default function Audio({
+  src,
+  activeSermon,
+}: {
+  src: string;
+  activeSermon: any;
+}) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { isReady, isPlaying, volume, newCurrentProgress } = useSelector(
+  const { isReady, isPlaying, volume, newCurrentProgress } = useAppSelector(
     (state) => state.player,
   );
 
@@ -52,27 +58,32 @@ export default function Audio({ src, activeSermon }) {
     if (activeSermon) {
       const audioElement = audioRef.current; // Create a local variable
       const playAudio = () => {
-        audioElement.play();
-        dispatch(playPause(true));
+        if (audioElement) {
+          // Add this check to ensure it's not null
+          audioElement.play();
+          dispatch(playPause(true));
+        }
       };
 
       // Check if the audio can be played without violating autoplay policies
-      if (audioRef.current?.paused) {
-        audioRef.current?.play().catch((error) => {
-          // If autoplay is not allowed, attempt to play the audio on user interaction
+      if (audioElement?.paused) {
+        audioElement.play().catch((error) => {
           if (error.name === "NotAllowedError") {
-            audioRef.current?.addEventListener("play", playAudio);
+            audioElement?.addEventListener("play", playAudio);
           }
         });
       } else {
-        // If the audio is already playing, dispatch playPause(true)
         dispatch(playPause(true));
       }
 
       return () => {
-        audioElement.removeEventListener("play", playAudio); // Use the local variable
+        if (audioElement) {
+          audioElement.removeEventListener("play", playAudio); // Use the local variable
+        }
       };
     }
+
+    return () => {}; // Add an empty return function for when activeSermon is false
   }, [activeSermon, dispatch]);
 
   // Add ability to control play/pause from Redux state

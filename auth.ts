@@ -85,54 +85,54 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
 
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      if (!user.confirmed) {
-        // Redirect to an email confirmation page
-        return "/confirmation/newrequest";
-      }
-
-      return true;
-    },
-
-    async jwt({ token, trigger, account, user, session }) {
-      // change username update
-      if (trigger === "update" && session?.username) {
-        token.name = session.username;
-      }
-
-      // change password update
-      if (trigger === "update" && session?.strapiToken) {
-        token.strapiToken = session.strapiToken;
-      }
-
-      if (account) {
-        if (account.provider === "credentials") {
-          console.log(user);
-          // for credentials, not google provider
-          // name and email are taken care of by next-auth or authorize
-          token.strapiToken = user.strapiToken;
-          token.strapiUserId = user.strapiUserId;
-          token.provider = account.provider;
-          token.blocked = user.blocked;
-          token.confirmed = user.confirmed;
-          token.role = user.role;
-        }
-      }
-      // console.log(token, trigger, account, user, session);
-      return token;
-    },
-    async session({ token, session }) {
-      session.strapiToken = token.strapiToken;
-      session.provider = token.provider;
-      session.user.strapiUserId = token.strapiUserId;
-      session.user.blocked = token.blocked;
-      session.user.confirmed = token.confirmed;
-      session.user.role = token.role;
-
-      return session;
-    },
-  },
+  //   callbacks: {
+  //     async signIn({ user, account, profile }) {
+  //       if (!user.confirmed) {
+  //         // Redirect to an email confirmation page
+  //         return "/confirmation/newrequest";
+  //       }
+  //
+  //       return true;
+  //     },
+  //
+  //     async jwt({ token, trigger, account, user, session }) {
+  //       // change username update
+  //       if (trigger === "update" && session?.username) {
+  //         token.name = session.username;
+  //       }
+  //
+  //       // change password update
+  //       if (trigger === "update" && session?.strapiToken) {
+  //         token.strapiToken = session.strapiToken;
+  //       }
+  //
+  //       if (account) {
+  //         if (account.provider === "credentials") {
+  //           console.log(user);
+  //           // for credentials, not google provider
+  //           // name and email are taken care of by next-auth or authorize
+  //           token.strapiToken = user.strapiToken;
+  //           token.strapiUserId = user.strapiUserId;
+  //           token.provider = account.provider;
+  //           token.blocked = user.blocked;
+  //           token.confirmed = user.confirmed;
+  //           token.role = user.role;
+  //         }
+  //       }
+  //       // console.log(token, trigger, account, user, session);
+  //       return token;
+  //     },
+  //     async session({ token, session }) {
+  //       session.strapiToken = token.strapiToken;
+  //       session.provider = token.provider;
+  //       session.user.strapiUserId = token.strapiUserId;
+  //       session.user.blocked = token.blocked;
+  //       session.user.confirmed = token.confirmed;
+  //       session.user.role = token.role;
+  //
+  //       return session;
+  //     },
+  //   },
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   basePath: BASE_PATH,

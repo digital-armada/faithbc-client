@@ -1,7 +1,8 @@
 "use client";
-import { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setNewCurrentProgress } from "@/redux/features/playerSlice";
+import { useAppSelector } from "@/hooks/useRedux";
 
 interface ProgressCSSProps extends React.CSSProperties {
   "--progress-width": number;
@@ -9,7 +10,7 @@ interface ProgressCSSProps extends React.CSSProperties {
 }
 
 const AudioProgressBar = () => {
-  const { duration, currentProgress, buffered } = useSelector(
+  const { duration, currentProgress, buffered } = useAppSelector(
     (state) => state.player,
   );
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const AudioProgressBar = () => {
     };
   }, [progressBarWidth, bufferedWidth]);
 
-  const handleProgressChange = (e) => {
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseInt(e.currentTarget.value);
     // dispatch(setNewCurrentProgress(newTime)); // Update Redux state
 
@@ -43,13 +44,12 @@ const AudioProgressBar = () => {
   //     setSeekingProgress(parseInt(e.currentTarget.value)); // Update on start drag
   // };
 
-  const handleMouseUp = (e) => {
-    // const newTime = parseInt(e.currentTarget.value);
+  const handleMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
     dispatch(setNewCurrentProgress(seekingProgress)); // Update Redux state
   };
 
   const handleTouchStart = useCallback(
-    (e) => {
+    (e: React.TouchEvent<HTMLInputElement>) => {
       e.preventDefault();
       const rect = e.currentTarget.getBoundingClientRect();
       const touchX = e.touches[0].clientX - rect.left;
@@ -62,7 +62,7 @@ const AudioProgressBar = () => {
   );
 
   const handleTouchMove = useCallback(
-    (e) => {
+    (e: React.TouchEvent<HTMLInputElement>) => {
       // e.preventDefault();
       if (isDragging) {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -75,7 +75,7 @@ const AudioProgressBar = () => {
     [duration, isDragging],
   );
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLInputElement>) => {
     dispatch(setNewCurrentProgress(seekingProgress));
   };
 

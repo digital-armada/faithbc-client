@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { getStrapiURL } from "@/lib/utils";
 import { auth } from "@/auth";
 import qs from "qs";

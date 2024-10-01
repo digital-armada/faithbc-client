@@ -15,7 +15,7 @@ export default async function Page() {
                 <ul
                     role='list'
                     className='flex flex-col divide-y divide-gray-700/10 '>
-                    {data.map(statement => {
+                    {data.map((statement: any) => {
                         return (
                             <Link
                                 key={statement.id}

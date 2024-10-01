@@ -3,9 +3,10 @@ import IconButton from "./IconButton";
 import { CgSpinner } from "react-icons/cg";
 import { MdPause, MdPlayArrow } from "react-icons/md";
 import { playPause } from "@/redux/features/playerSlice";
+import { useAppSelector } from "@/hooks/useRedux";
 
 export default function PlayAndPause() {
-  const { activeSermon, isPlaying, isReady } = useSelector(
+  const { activeSermon, isPlaying, isReady } = useAppSelector(
     (state) => state.player,
   );
   const dispatch = useDispatch();

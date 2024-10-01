@@ -2,10 +2,23 @@ import More from "./ui/more";
 import { getSermons } from "@/data/sermons";
 import HomeSermonCard from "./HomeSermonCard";
 import HeadingTwo from "./ui/headingtwo";
+import { Sermon } from "@/types/types";
+
+interface SermonData {
+  data: Sermon[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
 
 export default async function HomeSermonWidget() {
   const data = await getSermons();
-  const sermons = data.data.slice(0, 4);
+  const sermons: Sermon[] = data.data.slice(0, 4);
 
   console.log(data);
 
@@ -22,7 +35,7 @@ export default async function HomeSermonWidget() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {sermons?.map((sermon) => {
+          {sermons?.map((sermon: Sermon) => {
             return <HomeSermonCard sermon={sermon} key={sermon.id} />;
           })}
         </div>

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client";
 
 import { formatDistance } from "date-fns";
@@ -8,9 +10,11 @@ import { useSelector } from "react-redux";
 import { IoTodayOutline } from "react-icons/io5";
 import Image from "next/image";
 import Placeholder from "@/public/image.png";
+import { useAppSelector } from "@/hooks/useRedux";
+import { Sermon } from "@/types/types";
 
-export default function SermonItem({ sermon }) {
-  const { activeSermon, isPlaying } = useSelector((state) => state.player);
+export default function SermonItem({ sermon }: { sermon: Sermon }) {
+  const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
   return (
     // CONTAINER
     <div key={sermon.id} className="py-8 text-gray-700 sm:flex">
@@ -110,7 +114,7 @@ export default function SermonItem({ sermon }) {
                   </a>
                 </div>
               )}
-              <button
+              {/* <button
                 onClick={() =>
                   handleDownload(
                     process.env.NEXT_PUBLIC_STRAPI_URL +
@@ -120,7 +124,7 @@ export default function SermonItem({ sermon }) {
                 className="flex items-center gap-2"
               >
                 <IoMdDownload /> Download
-              </button>
+              </button> */}
             </div>
             <div>
               {formatDistance(new Date(sermon?.attributes?.date), new Date(), {

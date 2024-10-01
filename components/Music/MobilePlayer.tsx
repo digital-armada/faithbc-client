@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { IoIosArrowDown } from "react-icons/io";
 import AudioProgressBar from "../AudioPlayer/AudioProgressBar";
 import { useDispatch, useSelector } from "react-redux";

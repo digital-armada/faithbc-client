@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default async function HomeEvents() {
   const data = await getLatestEvents();
-  const events = data.data.slice(0, 4);
+  const events: Event[] = data.data.slice(0, 4);
   console.log("events", events.length);
 
   // const notifications = events.filter(
@@ -107,4 +107,27 @@ export default async function HomeEvents() {
       </div>
     </section>
   );
+}
+
+interface Event {
+  id: string;
+  attributes: {
+    eventType?: "notification" | "event" | null;
+    title: string;
+    startDate: string;
+    endDate: string;
+    slug?: string;
+    featuredImage?: {
+      data?: {
+        attributes?: {
+          formats?: {
+            medium?: {
+              url: string;
+            };
+          };
+        };
+      };
+    };
+    venName?: string;
+  };
 }

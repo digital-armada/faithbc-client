@@ -2,9 +2,10 @@ import { setVolume } from "@/redux/features/playerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "./IconButton";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
+import { useAppSelector } from "@/hooks/useRedux";
 
 export default function VolumeInput() {
-  const { volume } = useSelector((state) => state.player);
+  const { volume } = useAppSelector((state) => state.player);
   const dispatch = useDispatch();
 
   const handleMuteUnmute = () => {

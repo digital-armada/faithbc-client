@@ -13,7 +13,6 @@ export async function createNewMissions(prevState: any, formData: FormData) {
     if (!session?.strapiToken) throw new Error("No auth token found");
 
     const payload = { data: { name, location } };
-    // console.log(payload);
     const response = await mutateData("POST", "/api/missionaries", payload);
 
     if (response.data) {
@@ -26,6 +25,13 @@ export async function createNewMissions(prevState: any, formData: FormData) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in Missionary:", error);
-    return { error: error.message || "An error occurred" };
+
+    if (error instanceof Error) {
+      // Check if 'error' is an instance of Error and has a 'message' property
+      return { error: error.message || "An error occurred" };
+    } else {
+      // Handle case where error might not be an instance of Error
+      return { error: "An unexpected error occurred" };
+    }
   }
 }

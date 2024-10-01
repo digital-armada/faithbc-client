@@ -1,21 +1,22 @@
-import Menu from '@/components/Menu/Menu';
-import DesktopAudioWrapper from '@/components/Music/DesktopAudioWrapper';
-import Providers from '@/lib/Providers';
+import Menu from "@/components/Menu/Menu";
+import DesktopAudioWrapper from "@/components/Music/DesktopAudioWrapper";
+import Providers from "@/lib/Providers";
+import React from "react";
 
 export default function Layout({
-    children, // will be a page or nested layout
+  children, // will be a page or nested layout
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <div className='noise min-h-screen pb-20'>
-            <Providers>
-                <Menu />
-                <div>
-                    {children}
-                    <DesktopAudioWrapper />
-                </div>
-            </Providers>
+  return (
+    <div className="noise min-h-screen pb-20">
+      <Providers>
+        <Menu />
+        <div>
+          {children}
+          <DesktopAudioWrapper />
         </div>
-    );
+      </Providers>
+    </div>
+  );
 }

@@ -1,5 +1,4 @@
 export function ZodErrors({ error }: { error: string[] | undefined }) {
-  console.log(error);
   if (!error) return null;
   return error.map((err: string, index: number) => (
     <div

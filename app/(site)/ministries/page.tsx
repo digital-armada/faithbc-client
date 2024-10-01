@@ -132,8 +132,8 @@ export default function ministries() {
     },
   };
 
-  const compareDates = (date, day) => {
-    const getCurrentDay = () => {
+  const compareDates = (date: string, day: string): boolean => {
+    const getCurrentDay = (): string => {
       const days = [
         "Sunday",
         "Monday",
@@ -161,12 +161,13 @@ export default function ministries() {
       return false;
     }
 
-    let checkTime;
+    let checkTime: number | undefined;
     if (serviceDate.includes("pm")) {
       checkTime = parseInt(serviceDate.split(":")[0]) + 12;
     }
 
-    if (checkTime == currentHour && currentDay == day) return true;
+    if (checkTime === currentHour && currentDay === day) return true;
+    return false;
   };
 
   return (

@@ -1,31 +1,38 @@
-'use client';
-import { FaPauseCircle, FaPlay, FaPlayCircle } from 'react-icons/fa';
+"use client";
+import { Sermon } from "@/types/types";
+import { FaPauseCircle, FaPlay, FaPlayCircle } from "react-icons/fa";
 
 const PlayPause = ({
-    isPlaying,
-    activeSermon,
-    sermon,
-    handlePause,
-    handlePlay,
+  isPlaying,
+  activeSermon,
+  sermon,
+  handlePause,
+  handlePlay,
+}: {
+  isPlaying: boolean;
+  activeSermon: Sermon;
+  sermon: Sermon;
+  handlePause: () => void;
+  handlePlay: () => void;
 }) => {
-    return (
-        <>
-            <div className='flex items-center gap-2 cursor-pointer'>
-                {isPlaying &&
-                activeSermon?.attributes?.name === sermon?.attributes?.name ? (
-                    <FaPauseCircle
-                        className='text-gray-600 text-2xl'
-                        onClick={handlePause}
-                    />
-                ) : (
-                    <FaPlayCircle
-                        onClick={handlePlay}
-                        className='text-gray-600 text-2xl'
-                    />
-                )}
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="flex cursor-pointer items-center gap-2">
+        {isPlaying &&
+        activeSermon?.attributes?.name === sermon?.attributes?.name ? (
+          <FaPauseCircle
+            className="text-2xl text-gray-600"
+            onClick={handlePause}
+          />
+        ) : (
+          <FaPlayCircle
+            onClick={handlePlay}
+            className="text-2xl text-gray-600"
+          />
+        )}
+      </div>
+    </>
+  );
 };
 
 export default PlayPause;

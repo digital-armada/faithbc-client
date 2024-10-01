@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client";
 
 import InfiniteScroll from "@/components/ui/InfiniteScroll";

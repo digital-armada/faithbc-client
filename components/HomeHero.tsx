@@ -1,8 +1,7 @@
-import HomeSermonWidget from "./HomeSermonWidget";
 import More from "./ui/more";
 
-function escapeHtml(text) {
-  const map = {
+function escapeHtml(text: string): string {
+  const map: { [key: string]: string } = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -10,7 +9,7 @@ function escapeHtml(text) {
     "'": "&#039;",
   };
 
-  return text.replace(/[&<>"']/g, (m) => map[m]);
+  return text.replace(/[&<>"']/g, (m: string) => map[m]);
 }
 
 const text = `

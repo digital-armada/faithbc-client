@@ -1,7 +1,8 @@
+// @ts-nocheck
 "use client";
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { BaseSyntheticEvent, useState } from "react";
 import { useSession } from "next-auth/react";
 export default function Sms({ data }) {
   const [phone, setPhone] = useState("");
