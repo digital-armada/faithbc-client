@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { playPause } from "@/redux/features/playerSlice";
@@ -51,11 +49,9 @@ export default function DesktopAudioWrapper() {
             y: "100%", // You can customize the exit animation here
           }}
         >
-          <AudioPlayer
-            key={activeSermon?.id}
-            activeSermon={activeSermon}
-            isPlaying={isPlaying}
-          />
+          {activeSermon && (
+            <AudioPlayer key={activeSermon?.id} activeSermon={activeSermon} />
+          )}
         </motion.div>
       )}
       <motion.div

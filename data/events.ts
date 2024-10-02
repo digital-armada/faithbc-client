@@ -5,7 +5,7 @@ import qs from "qs";
 export async function getEventSlug(slug: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/events/${slug}?populate=*`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/events/${slug}?populate=*`,
       {
         next: { revalidate: 60 },
       },
@@ -146,7 +146,7 @@ export async function getDashEvents({ sort = ["startDate:desc"] } = {}) {
 // export async function getDashEvents() {
 //   try {
 //     const res = await fetch(
-//       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/events?populate=*&sort=createdAt:desc`,
+//       `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?populate=*&sort=createdAt:desc`,
 //       {
 //         next: { revalidate: 60 },
 //       },
@@ -166,7 +166,7 @@ export async function getLatestEvents() {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/events?populate=*&sort=createdAt:desc&filters[startDate][$gte]=${currentDate}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?populate=*&sort=createdAt:desc&filters[startDate][$gte]=${currentDate}`,
       {
         next: { revalidate: 60 },
       },
@@ -186,7 +186,7 @@ export async function getInfiniteEvents({
   // search = ''
 }) {
   try {
-    let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/events?populate=*&sort=startDate:desc&pagination[page]=${page}`;
+    let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?populate=*&sort=startDate:desc&pagination[page]=${page}`;
 
     // if (search && search.trim()) {
     //     url += `&filters[name][$contains]=${encodeURIComponent(search)}`;

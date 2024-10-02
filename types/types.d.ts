@@ -98,3 +98,58 @@ export interface Event {
   id: number;
   attributes: EventAttributes;
 }
+
+interface Address {
+  // Define the structure of the address component
+  // For example:
+  street?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
+interface WWCCCheck {
+  // Define the structure of the WWCC check component
+  // For example:
+  number?: string;
+  expiryDate?: string;
+  verified?: boolean;
+}
+
+export interface User {
+  id: string;
+  attributes: {
+    username: string;
+    email: string;
+    provider?: string;
+    confirmed: boolean;
+    blocked: boolean;
+    contactNumber?: string;
+    address?: Address;
+    dateOfBirth?: string; // Assuming the date is returned as a string
+    firstName?: string;
+    lastName?: string;
+    role?: {
+      data: {
+        attributes: Role;
+      };
+    };
+    commgroups?: {
+      data: Array<{
+        attributes: Commgroup;
+      }>;
+    };
+    image?: {
+      data: {
+        attributes: {
+          url: string;
+          // Add other relevant image attributes
+        };
+      };
+    };
+    wwcc_check?: WWCCCheck;
+    createdAt: string;
+    updatedAt: string;
+  };
+}

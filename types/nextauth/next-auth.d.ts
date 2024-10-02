@@ -12,6 +12,8 @@ declare module "next-auth" {
     strapiToken?: string;
     provider?: "google" | "credentials";
     user: User;
+    confirmed?: boolean;
+    role?: string;
   }
 
   /**
@@ -23,6 +25,8 @@ declare module "next-auth" {
     strapiUserId?: number;
     strapiToken?: string;
     blocked?: boolean;
+    confirmed?: boolean;
+    role?: string;
   }
 }
 
@@ -33,5 +37,7 @@ declare module "next-auth/jwt" {
     blocked?: boolean;
     strapiToken?: string;
     provider?: "credentials" | "google";
+    confirmed?: boolean;
+    role?: string;
   }
 }

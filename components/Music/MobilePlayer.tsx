@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { IoIosArrowDown } from "react-icons/io";
 import AudioProgressBar from "../AudioPlayer/AudioProgressBar";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,13 +6,10 @@ import { MusicItem } from "./MusicItem";
 import PlayAndPause from "../AudioPlayer/PlayAndPause";
 import VolumeInput from "../AudioPlayer/VolumeInput";
 import Image from "next/image";
+import { useAppSelector } from "@/hooks/useRedux";
 
-export default function MobilePlayer({
-  toggleMiniPlayer,
-  activeSermon,
-  audioRef,
-}) {
-  const { duration, currentProgress } = useSelector((state) => state.player);
+export default function MobilePlayer({ toggleMiniPlayer, activeSermon }) {
+  const { duration, currentProgress } = useAppSelector((state) => state.player);
 
   function formatDurationDisplay(duration: number) {
     const min = Math.floor(duration / 60);

@@ -3,6 +3,7 @@ import { StrapiLoginResponseT } from "@/types/strapi/User";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
+import { User } from "./types/types";
 
 export const BASE_PATH = "/api/auth";
 
@@ -23,10 +24,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("no credentials");
           return null;
         }
-
         try {
           const strapiResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`,
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`,
             {
               method: "POST",
               headers: {
@@ -55,7 +55,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Fetch user role
           const userResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me?populate=role`,
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/me?populate=role`,
             {
               method: "GET",
               headers: {
@@ -66,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           const userData = await userResponse.json();
-          // console.log(userData);
+          console.log(userData);
           return {
             name: data.user.username,
             email: data.user.email,
@@ -85,54 +85,52 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
 
-  //   callbacks: {
-  //     async signIn({ user, account, profile }) {
-  //       if (!user.confirmed) {
-  //         // Redirect to an email confirmation page
-  //         return "/confirmation/newrequest";
-  //       }
-  //
-  //       return true;
-  //     },
-  //
-  //     async jwt({ token, trigger, account, user, session }) {
-  //       // change username update
-  //       if (trigger === "update" && session?.username) {
-  //         token.name = session.username;
-  //       }
-  //
-  //       // change password update
-  //       if (trigger === "update" && session?.strapiToken) {
-  //         token.strapiToken = session.strapiToken;
-  //       }
-  //
-  //       if (account) {
-  //         if (account.provider === "credentials") {
-  //           console.log(user);
-  //           // for credentials, not google provider
-  //           // name and email are taken care of by next-auth or authorize
-  //           token.strapiToken = user.strapiToken;
-  //           token.strapiUserId = user.strapiUserId;
-  //           token.provider = account.provider;
-  //           token.blocked = user.blocked;
-  //           token.confirmed = user.confirmed;
-  //           token.role = user.role;
-  //         }
-  //       }
-  //       // console.log(token, trigger, account, user, session);
-  //       return token;
-  //     },
-  //     async session({ token, session }) {
-  //       session.strapiToken = token.strapiToken;
-  //       session.provider = token.provider;
-  //       session.user.strapiUserId = token.strapiUserId;
-  //       session.user.blocked = token.blocked;
-  //       session.user.confirmed = token.confirmed;
-  //       session.user.role = token.role;
-  //
-  //       return session;
-  //     },
-  //   },
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (!user.confirmed) {
+        // Redirect to an email confirmation page
+        return "/confirmation/newrequest";
+      }
+
+      return true;
+    },
+
+    async jwt({ token, trigger, account, user, session }) {
+      // change username update
+      if (trigger === "update" && session?.username) {
+        token.name = session.username;
+      }
+
+      // change password update
+      if (trigger === "update" && session?.strapiToken) {
+        token.strapiToken = session.strapiToken;
+      }
+      if (account) {
+        if (account.provider === "credentials") {
+          // for credentials, not google provider
+          // name and email are taken care of by next-auth or authorize
+          token.strapiToken = user.strapiToken;
+          token.strapiUserId = user.strapiUserId;
+          token.provider = account.provider;
+          token.blocked = user.blocked;
+          token.confirmed = user.confirmed;
+          token.role = user.role;
+        }
+      }
+      // console.log(token, trigger, account, user, session);
+      return token;
+    },
+    async session({ token, session }) {
+      session.strapiToken = token.strapiToken;
+      session.provider = token.provider;
+      session.user.strapiUserId = token.strapiUserId;
+      session.user.blocked = token.blocked;
+      session.user.confirmed = token.confirmed;
+      session.user.role = token.role;
+
+      return session;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   basePath: BASE_PATH,

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 
 import { formatDistance } from "date-fns";
@@ -15,6 +13,11 @@ import { Sermon } from "@/types/types";
 
 export default function SermonItem({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
+
+  if (!sermon) {
+    return null; // or render a fallback UI here
+  }
+
   return (
     // CONTAINER
     <div key={sermon.id} className="py-8 text-gray-700 sm:flex">
@@ -60,22 +63,24 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
             <div className="font-body text-2xl font-semibold">
               {sermon?.attributes?.name}
             </div>
-            <MusicItem
-              key={sermon.id}
-              sermon={sermon}
-              isPlaying={isPlaying}
-              activeSermon={activeSermon}
-              data={sermon}
-            />
+            {activeSermon && (
+              <MusicItem
+                key={sermon.id}
+                sermon={sermon}
+                isPlaying={isPlaying}
+                activeSermon={activeSermon}
+                data={sermon}
+              />
+            )}
           </div>
           <div className="flex flex-col flex-wrap gap-2 text-[11px] sm:flex-row">
-            {sermon?.attributes?.speaker?.data?.attributes?.speaker && (
+            {/* {sermon?.attributes?.speaker?.data?.attributes?.speaker && (
               <div className="flex items-center gap-1">
                 <IoMdMicrophone />
 
                 {sermon?.attributes?.speaker?.data?.attributes?.speaker}
               </div>
-            )}
+            )} */}
             {sermon?.attributes?.service_type && (
               <>
                 <span className="hidden sm:inline-block">&bull;</span>

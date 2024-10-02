@@ -1,15 +1,18 @@
-// @ts-nocheck
-
 import { getStrapiURL } from "@/lib/utils";
 import { auth } from "@/auth";
 import qs from "qs";
+
+interface GetAnnouncementsOptions {
+  limit?: number | null;
+  sort?: string[];
+  includesPast?: boolean;
+}
 
 export async function getAnnouncements({
   limit = null,
   sort = ["date:desc"],
   includesPast = false,
-  // showBeforeToday = false,
-} = {}) {
+}: GetAnnouncementsOptions = {}) {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to beginning of the day
 

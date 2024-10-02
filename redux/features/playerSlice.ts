@@ -26,9 +26,8 @@ const playerSlice = createSlice({
       } else {
         state.isActive = true;
         // Check if it's a new sermon
-        // @ts-ignore
 
-        if (state.activeSermon.id == action.payload.sermon.id) {
+        if (state.activeSermon?.id == action.payload.sermon.id) {
           // Reset the currentProgress and newCurrentProgress to 0
           state.currentProgress = 0;
           state.newCurrentProgress = 0;

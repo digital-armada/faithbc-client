@@ -60,52 +60,52 @@
 //         // throw new Error('Failed to fetch users');
 //     }
 // }
-//
+
 // export async function createNewUser(formData: FormData) {
-//     const session = await auth();
-//     const accessToken = session?.accessToken;
+//   const session = await auth();
+//   const accessToken = session?.accessToken;
 //
-//     // Get form data
-//     const email = formData.get('email');
-//     const username = formData.get('username');
-//     const password = formData.get('password');
-//     const firstName = formData.get('firstName');
-//     const lastName = formData.get('lastName');
-//     const contactNumber = formData.get('contactNumber');
-//     const dateOfBirth = formData.get('dateOfBirth');
+//   // Get form data
+//   const email = formData.get("email");
+//   const username = formData.get("username");
+//   const password = formData.get("password");
+//   const firstName = formData.get("firstName");
+//   const lastName = formData.get("lastName");
+//   const contactNumber = formData.get("contactNumber");
+//   const dateOfBirth = formData.get("dateOfBirth");
 //
-//     try {
-//         const res = await axios.post(
-//             `${process.env.NEXT_PUBLIC_API_URL}/auth/local/register`,
-//             {
-//                 email,
-//                 username,
-//                 password,
-//                 firstName,
-//                 lastName,
-//                 contactNumber,
-//                 dateOfBirth,
-//             },
-//             {
-//                 headers: {
-//                     Authorization: `Bearer ${accessToken}`,
-//                 },
-//             }
-//         );
+//   try {
+//     const res = await axios.post(
+//       `${process.env.NEXT_PUBLIC_API_URL}/auth/local/register`,
+//       {
+//         email,
+//         username,
+//         password,
+//         firstName,
+//         lastName,
+//         contactNumber,
+//         dateOfBirth,
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//       },
+//     );
 //
-//         if (res.status !== 200) {
-//             throw new Error('Failed to create user');
-//         }
-//
-//         // Optionally, revalidate cache for a specific path
-//         revalidatePath('/dashboard/contacts');
-//
-//         return {
-//             message: `User ${res.data.user.username} created successfully`,
-//         };
-//     } catch (error) {
-//         return { message: 'Failed to create user' };
+//     if (res.status !== 200) {
+//       throw new Error("Failed to create user");
 //     }
+//
+//     // Optionally, revalidate cache for a specific path
+//     revalidatePath("/dashboard/contacts");
+//
+//     return {
+//       message: `User ${res.data.user.username} created successfully`,
+//     };
+//   } catch (error) {
+//     return { message: "Failed to create user" };
+//   }
 // }
 
 // export async function deleteUser(id) {

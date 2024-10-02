@@ -1,7 +1,7 @@
 export async function GET() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/sermons?pagination[limit]=4&populate=*&sort=date:desc`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?pagination[limit]=4&populate=*&sort=date:desc`,
       {
         next: { revalidate: 10 }, // Revalidate every 60 seconds
       },

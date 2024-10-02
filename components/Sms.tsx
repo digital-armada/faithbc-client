@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import axios from "axios";
@@ -15,7 +14,7 @@ export default function Sms({ data }) {
   // console.log(mobileNumbers);
 
   const { data: session, status } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = session?.strapiToken;
 
   const sendMessage = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
@@ -34,7 +33,7 @@ export default function Sms({ data }) {
   const handleGroupClick = async (id) => {
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/commgroups/${id}?populate=*`,
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/commgroups/${id}?populate=*`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

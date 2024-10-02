@@ -1,8 +1,6 @@
-// @ts-nocheck
-
 "use server";
 
-import { unknown, z } from "zod";
+import { z } from "zod";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -86,9 +84,21 @@ export async function signinUserAction({ data }) {
   }
 }
 
+interface RegisterUserProps {
+  username: string;
+  password: string;
+  email: string;
+}
 export async function registerUserAction(prevState: any, formData: FormData) {
   console.log("registerUserAction", formData);
-  const responseData = await registerUserService(formData);
+
+  const userData: RegisterUserProps = {
+    username: formData.get("username") as string,
+    password: formData.get("password") as string,
+    email: formData.get("email") as string,
+  };
+
+  const responseData = await registerUserService(userData);
 
   if (!responseData) {
     return {
@@ -220,7 +230,7 @@ const formSchema = z.object({
 });
 
 export default async function ConfirmationNewRequest(
-  prevState: ConfirmationNewRequestFormStateT,
+  // prevState: ConfirmationNewRequestFormStateT,
   formData: FormData,
 ) {
   const validatedFields = formSchema.safeParse({

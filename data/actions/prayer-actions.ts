@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use server";
 
 import { auth } from "@/auth";
@@ -75,7 +73,8 @@ export async function deletePrayerRequest(id: number) {
 
     const updatedPrayerItems =
       existingData.data.attributes.prayerrequests.filter(
-        (item: any) => item.id !== id.id,
+        (item: any) => item.id !== id,
+        // (item: any) => item.id !== id.id,
       );
 
     const payload = {

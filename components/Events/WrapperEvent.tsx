@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 
 import InfiniteScroll from "@/components/ui/InfiniteScroll";
@@ -37,12 +35,14 @@ export default function WrapperEvent({ initialEvents }) {
     })
     .sort(
       (a, b) =>
-        new Date(a?.attributes?.startDate) - new Date(b?.attributes?.startDate),
+        new Date(a?.attributes?.startDate).getTime() -
+        new Date(b?.attributes?.startDate).getTime(),
     );
 
-  console.log(initialEvents);
-  console.log(upcomingEvents);
-  //////////////////////////////
+  /**
+   * The error you're encountering is due to TypeScript's type checking, which expects the operands of the subtraction operation to be of type number, bigint, or enum. When you subtract two Date objects, TypeScript doesn't automatically convert them to numbers (timestamps).To fix this, you need to explicitly convert the Date objects to their timestamp values (which are numbers) before performing the subtraction. You can do this using the getTime method of the Date object.
+   */
+
   const thisMonthEvents = initialEvents.filter((event) => {
     const eventDate = new Date(event.attributes.startDate);
     return (

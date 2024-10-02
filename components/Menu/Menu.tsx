@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 
 import Image from "next/image";
@@ -31,10 +29,11 @@ const menuLinks = [
 ];
 
 export default function Menu() {
-  const container = useRef(); // The parent container for GSAP
+  const container = useRef<HTMLDivElement>(null); // The parent container for GSAP
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const tl = useRef();
+
+  const tl = useRef<gsap.core.Timeline | null>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -64,15 +63,15 @@ export default function Menu() {
 
   useEffect(() => {
     if (isMenuOpen) {
-      tl.current.play();
+      tl.current?.play();
     } else {
-      tl.current.reverse();
+      tl.current?.reverse();
     }
   }, [isMenuOpen]);
 
   return (
     <div className="px-4 pt-2" ref={container}>
-      <div className="menu-bar z-1 container left-0 top-0 flex w-full items-center justify-between border-b-[1px] border-solid border-gray-800">
+      <div className="menu-bar z-1 container left-0 top-0 flex w-full items-center justify-between border-b border-solid border-gray-800/20">
         <div>
           <Link href="/">
             <Image

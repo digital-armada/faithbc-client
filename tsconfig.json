@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "strict": false, // Disable all strict type checking
-    "noImplicitAny": false, // Allow implicit any types
+    "strict": false, // put back to true when ready
+    "noImplicitAny": false, /// put back to true when ready
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -9,8 +9,9 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "noEmitOnError": false, // Allow emitting files even if there are errors
-    "noEmit": false, // Allow TypeScript to emit compiled files
+    "noEmitOnError": false,
+
+    "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -36,43 +37,3 @@
   ],
   "exclude": ["node_modules"]
 }
-
-// {
-//   "compilerOptions": {
-//     "strict": false, // put back to true when ready
-//     "noImplicitAny": false, /// put back to true when ready
-//     "strictNullChecks": true,
-//     "noImplicitReturns": true,
-//     "noImplicitThis": true,
-//     "alwaysStrict": true,
-//     "lib": ["dom", "dom.iterable", "esnext"],
-//     "allowJs": true,
-//     "skipLibCheck": true,
-//     "noEmitOnError": false,
-//
-//     "noEmit": true,
-//     "esModuleInterop": true,
-//     "module": "esnext",
-//     "moduleResolution": "bundler",
-//     "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     "jsx": "preserve",
-//     "incremental": true,
-//     "plugins": [
-//       {
-//         "name": "next"
-//       }
-//     ],
-//     "paths": {
-//       "@/*": ["./*"]
-//     }
-//   },
-//   "include": [
-//     "next-env.d.ts",
-//     "**/*.ts",
-//     "**/*.tsx",
-//     ".next/types/**/*.ts",
-//     "app/api/auth/[...nextauth]/.authOptions.ts"
-//   ],
-//   "exclude": ["node_modules"]
-// }

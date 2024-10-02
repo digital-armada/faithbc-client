@@ -12,27 +12,6 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (m: string) => map[m]);
 }
 
-const text = `
-  We are an Independent Baptist church built upon the firm foundation
-  of God's inerrant Word and believe the KJV is the most faithful
-  English translation, and it is our sole source for truth and wisdom.
-
-  At our church, we worship the Lord through biblical preaching,
-  teaching, hymns, and vibrant ministries for all ages - children,
-  teens, and adults. Our services, available in both English and
-  Arabic, are reverent and God-honoring as we seek to glorify Him in
-  all we do.
-
-  Whether you are a lifelong believer or simply seeking answers about
-  the Christian faith, we invite you to join us for worship and bible
-  study. Our church family is committed to proclaiming the truth of
-  Scripture and sharing the life-changing gospel of Jesus Christ.
-
-  We look forward to welcoming you in person soon!
-`;
-
-const escapedText = escapeHtml(text);
-
 export default function HomeHero() {
   return (
     <section>

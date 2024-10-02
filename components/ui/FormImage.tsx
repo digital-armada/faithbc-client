@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 import React from "react";
 import { useFormState } from "react-dom";
@@ -28,14 +26,14 @@ export function ImageUploadForm({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="">
-        <ImagePicker
+        {/* <ImagePicker
           id="image"
           name="image"
           label={label}
           defaultValue={currentImageUrl || ""}
         />
         <ZodErrors error={formState.zodErrors?.image} />
-        <StrapiErrors error={formState.strapiErrors} />
+        <StrapiErrors error={formState.strapiErrors} /> */}
       </div>
       <div className="flex justify-end">
         <SubmitButton text={submitText} loadingText="Saving Image" />

@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use server";
 
 import { auth } from "@/auth";
@@ -39,6 +38,7 @@ export async function createEvent(formData) {
     const payload = {
       data: {
         title,
+        featuredImage,
         content,
         slug: validatedSlug,
         startDate,
@@ -112,6 +112,7 @@ export async function updateEvent(formData) {
         venName,
         venAdd,
         internal: internal === "on" || internal === true,
+        featuredImage,
       },
     };
 
