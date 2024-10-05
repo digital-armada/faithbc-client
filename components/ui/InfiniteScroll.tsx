@@ -27,6 +27,7 @@ const InfiniteScroll = <T,>({
     if (loading) return;
 
     setLoading(true);
+
     try {
       const newData = await fetchData({ page: page + 1 });
       setData((prevData) => [...prevData, ...newData]);

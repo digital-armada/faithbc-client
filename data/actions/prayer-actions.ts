@@ -17,7 +17,7 @@ export async function createNewChurchPrayerRequest(formData: FormData) {
       "GET",
       "/api/missionaries/1?populate=*",
     );
-    console.log(existingData);
+
     if (!existingData.data) {
       throw new Error("Failed to fetch existing data");
     }

@@ -25,11 +25,12 @@ export default function EventMap({ address }: { address: string }) {
     getCoordinates();
   }, [address]);
 
-  const position: google.maps.LatLngLiteral | null = latlng
+  const position = latlng
     ? { lat: latlng.latitude, lng: latlng.longitude }
     : null;
 
   const [open, setOpen] = useState(false);
+
   return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API as string}>
       <div className="h-80">
@@ -58,7 +59,7 @@ export default function EventMap({ address }: { address: string }) {
                   position={position}
                   onCloseClick={() => setOpen(false)}
                 >
-                  <p>I&apos;m in Hamburg</p>
+                  <p>Missionary</p>
                 </InfoWindow>
               )}
             </AdvancedMarker>

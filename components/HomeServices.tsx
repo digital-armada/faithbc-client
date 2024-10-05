@@ -72,8 +72,8 @@ export default function HomeServices() {
     },
   };
 
-  const compareDates = (date: string, day: string): boolean => {
-    const getCurrentDay = (): string => {
+  const compareDates = (date, day) => {
+    const getCurrentDay = () => {
       const days = [
         "Sunday",
         "Monday",
@@ -85,24 +85,34 @@ export default function HomeServices() {
       ];
       const currentDate = new Date();
       const currentDayIndex = currentDate.getDay();
-      return days[currentDayIndex];
+      const currentDay = days[currentDayIndex];
+      return currentDay;
     };
 
     const currentDay = getCurrentDay();
     const currentHour = new Date().getHours();
 
-    if (!date) {
+    const serviceDate = date.toString();
+    if (
+      serviceDate === "" ||
+      serviceDate === null ||
+      serviceDate === undefined
+    ) {
       return false;
     }
 
-    let checkTime: number;
-    if (date.includes("pm")) {
-      checkTime = parseInt(date.split(":")[0]) + 12;
+    let checkTime;
+    if (serviceDate.includes("pm")) {
+      checkTime = parseInt(serviceDate.split(":")[0]) + 12;
     } else {
-      checkTime = parseInt(date.split(":")[0]);
+      checkTime = parseInt(serviceDate.split(":")[0]);
     }
 
-    return checkTime === currentHour && currentDay === day;
+    if (checkTime === currentHour && currentDay === day) {
+      return true;
+    }
+
+    return false;
   };
 
   return (
@@ -160,14 +170,13 @@ export default function HomeServices() {
                           {session.description}
                         </p>
                       )}
-                      {/* FIXME: Add Arabic language support */}
-                      {/* {session?.language === "arabic" ? (
+                      {session.language === "arabic" ? (
                         <span className="rounded border-[1px] border-black px-1 py-0 text-sm font-light">
                           العربية
                         </span>
                       ) : (
                         ""
-                      )} */}
+                      )}
                     </div>
                   </li>
                 ))}

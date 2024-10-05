@@ -40,6 +40,7 @@ export async function getChurchPrayers() {
     return { ok: false, data: null, error: error };
   }
 }
+
 export async function getPrayers() {
   const baseUrl = getStrapiURL();
   const url = new URL("/api/prayeritems?populate=*", baseUrl);

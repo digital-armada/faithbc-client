@@ -4,6 +4,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "faithbc-strapi-s3-bucket.s3.ap-southeast-2.amazonaws.com",
+        port: "",
+      },
+      {
+        protocol: "https",
         hostname: "api.faithbc.org.au",
         port: "",
       },
@@ -21,7 +26,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
     ignoreBuildErrors: false,

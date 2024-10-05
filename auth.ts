@@ -121,6 +121,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ token, session }) {
+      console.log("token", token);
       session.strapiToken = token.strapiToken;
       session.provider = token.provider;
       session.user.strapiUserId = token.strapiUserId;

@@ -7,6 +7,7 @@ const RenderTipTap = ({ content }: { content: string }) => {
     extensions: [StarterKit],
     content: content,
     editable: false,
+    immediatelyRender: false,
   });
 
   return <EditorContent editor={editor} />;

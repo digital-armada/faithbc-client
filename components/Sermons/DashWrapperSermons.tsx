@@ -4,7 +4,7 @@ import SermonItem from "./SermonItem";
 import { getInfiniteSermons } from "@/data/sermons";
 import PageHeader from "../ui/PageHeader";
 
-export default function WrapperSermons({ initialSermons }) {
+export default function DashWrapperSermons({ initialSermons }) {
   const fetchData = async ({ page }) => {
     const { data } = await getInfiniteSermons({ page });
     return data;
@@ -17,7 +17,6 @@ export default function WrapperSermons({ initialSermons }) {
   return (
     <section>
       <div className="container text-gray-700">
-        <PageHeader heading="Sermons" />{" "}
         <InfiniteScroll
           initialData={initialSermons}
           fetchData={fetchData}

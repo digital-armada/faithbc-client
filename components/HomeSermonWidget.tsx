@@ -1,5 +1,5 @@
 import More from "./ui/more";
-import { getSermons } from "@/data/sermons";
+import { getLatestFourSermons } from "@/data/sermons";
 import HomeSermonCard from "./HomeSermonCard";
 import HeadingTwo from "./ui/headingtwo";
 import { Sermon } from "@/types/types";
@@ -17,7 +17,7 @@ interface SermonData {
 }
 
 export default async function HomeSermonWidget() {
-  const data = await getSermons();
+  const data = await getLatestFourSermons();
   const sermons: Sermon[] = data.data.slice(0, 4);
 
   console.log(data);

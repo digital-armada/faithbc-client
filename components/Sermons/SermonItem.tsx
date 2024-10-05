@@ -14,6 +14,7 @@ import { Sermon } from "@/types/types";
 export default function SermonItem({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
 
+  console.log("activeSermon", activeSermon);
   if (!sermon) {
     return null; // or render a fallback UI here
   }
@@ -122,8 +123,7 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
               {/* <button
                 onClick={() =>
                   handleDownload(
-                    process.env.NEXT_PUBLIC_STRAPI_URL +
-                      sermon?.attributes?.audio?.data?.attributes?.url,
+                    sermon?.attributes?.audio?.data?.attributes?.url,
                   )
                 }
                 className="flex items-center gap-2"

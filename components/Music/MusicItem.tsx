@@ -15,7 +15,7 @@ export const MusicItem = ({
   activeSermon: Sermon;
   data: any;
 }) => {
-  // console.log('sermon', sermon);
+  // console.log("sermon", sermon);
   // console.log('activeSermon', activeSermon);
   // console.log('data', data);
 

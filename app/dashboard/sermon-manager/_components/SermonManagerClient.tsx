@@ -1,145 +1,126 @@
+// @ts-nocheck
 "use client";
-import { useState, useEffect, useCallback } from "react";
+
+import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
-import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { fetchVideos } from "@/data/services/youtube-service";
+import { getSermonsByYoutubeIds } from "@/data/sermons";
 
 export default function VideoList() {
-  const [videos, setVideos] = useState([]);
-  const [nextPageToken, setNextPageToken] = useState("");
-  const [prevPageToken, setPrevPageToken] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isConverting, setIsConverting] = useState(""); // Track the video being converted
   const router = useRouter();
   const searchParams = useSearchParams();
   const session = useSession();
-  console.log(session);
-  const fetchVideos = useCallback(
-    async (token = "") => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/youtube?pageToken=${token}`);
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        setVideos(data.videos);
-        setNextPageToken(data.nextPageToken);
-        setPrevPageToken(data.prevPageToken);
-        router.push(`?page=${token}`, { scroll: false });
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  const queryClient = useQueryClient();
+
+  const pageToken = searchParams.get("pageToken") || "";
+
+  const fetchVideosAndCheckSermons = useCallback(async ({ queryKey }) => {
+    const [_, token] = queryKey;
+    const res = await fetchVideos(token);
+    const videoIds = res.videos.map((video) => video.id);
+    const sermons = await getSermonsByYoutubeIds(videoIds);
+
+    const videosWithSermonStatus = res.videos.map((video) => ({
+      ...video,
+      isConverted: !!sermons[video.id],
+      sermonId: sermons[video.id],
+    }));
+
+    return {
+      videos: videosWithSermonStatus,
+      nextPageToken: res.nextPageToken || "",
+      prevPageToken: res.prevPageToken || "",
+    };
+  }, []);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["videos", pageToken],
+    queryFn: fetchVideosAndCheckSermons,
+    keepPreviousData: true,
+  });
+
+  const convertMutation = useMutation({
+    mutationFn: (video) =>
+      axios.post(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/customroutes/convert-sermon`,
+        { videoId: video.id },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.data?.strapiToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+      ),
+    onSuccess: (response, video) => {
+      queryClient.setQueryData(["videos", pageToken], (oldData) => ({
+        ...oldData,
+        videos: oldData.videos.map((v) =>
+          v.id === video.id
+            ? { ...v, isConverted: true, sermonId: response.data.sermon.id }
+            : v,
+        ),
+      }));
     },
-    [router],
-  );
-  console.log("fetchVideos", fetchVideos);
-  useEffect(() => {
-    const pageToken = searchParams.get("page") || "";
-    fetchVideos(pageToken);
-  }, [searchParams, fetchVideos]);
+  });
 
-  //   const handleConvert = async (video) => {
-  //     setIsConverting(video.id); // Track the video being converted
-  //     try {
-  //       const response = await fetch(`/api/convert`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           videoId: video.id,
-  //           title: video.title,
-  //         }),
-  //       });
-  //
-  //       if (!response.ok) throw new Error("Failed to convert video");
-  //       console.log(`Video ${video.id} converted successfully`);
-  //       // After conversion, refetch the current page to update the list
-  //       fetchVideos(searchParams.get("page") || "");
-  //     } catch (error) {
-  //       console.error("Error converting video:", error);
-  //     } finally {
-  //       setIsConverting(""); // Reset conversion tracking
-  //     }
-  //   };
+  const handleConvert = (video) => {
+    convertMutation.mutate(video);
+  };
 
-  // THE BOTTOM ONE IS THE ONE THAT I WAS USING
+  const handlePageChange = (newToken) => {
+    router.push(`?pageToken=${newToken}`, { scroll: false });
+  };
 
-  //   const handleConvert = async (videoId) => {
-  //     console.log(typeof videoId);
-  //     try {
-  //       const response = await axios.post(
-  //         // `${process.env.NEXT_PUBLIC_STRAPI_URL}/convert-sermon`,
-  //         `http://localhost:1337/api/customroutes/convert-sermon`,
-  //         { videoId },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${session?.data?.strapiToken}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //         },
-  //       );
-  //       console.log(response);
-  //       const result = await response.json();
-  //       if (!response.ok) {
-  //         throw new Error(result.message || "Conversion failed.");
-  //       }
-  //
-  //       console.log("Sermon created:", result.sermon);
-  //     } catch (error) {
-  //       console.error("Error creating sermon:", error);
-  //     }
-  //   };
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <h1>My YouTube Videos</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <ul>
-            {/* {videos.map((video) => (
-              <li key={video.id}>
-                <h3>{video.title}</h3>
-                <p>
-                  Published: {new Date(video.publishedAt).toLocaleDateString()}
-                </p>
-                <Image src={video.thumbnails.default.url} alt={video.title} />
-                {video.isConverted ? (
-                  <span>Already converted</span>
-                ) : (
-                  <button
-                    onClick={() => handleConvert(video.id)}
-                    disabled={isConverting === video.id} // Disable button during conversion
-                  >
-                    {isConverting === video.id
-                      ? "Converting..."
-                      : "Convert to Sermon"}
-                  </button>
-                )}
-              </li>
-            ))} */}
-          </ul>
-          <div>
-            <button
-              onClick={() => fetchVideos(prevPageToken)}
-              disabled={!prevPageToken || isLoading}
-            >
-              Previous Page
-            </button>
-            <button
-              onClick={() => fetchVideos(nextPageToken)}
-              disabled={!nextPageToken || isLoading}
-            >
-              Next Page
-            </button>
-          </div>
-        </>
-      )}
+      <ul>
+        {data.videos.map((video) => (
+          <li key={video.id}>
+            <h3>{video.title}</h3>
+            <p>Published: {new Date(video.publishTime).toLocaleDateString()}</p>
+            <Image
+              src={video.thumbnailUrl.url}
+              alt={video.title}
+              width={video.thumbnailUrl.width}
+              height={video.thumbnailUrl.height}
+            />
+            {video.isConverted ? (
+              <span>Already converted (Sermon ID: {video.sermonId})</span>
+            ) : (
+              <button
+                onClick={() => handleConvert(video)}
+                disabled={convertMutation.isLoading}
+              >
+                {convertMutation.isLoading
+                  ? "Converting..."
+                  : "Convert to Sermon"}
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+      <div>
+        <button
+          onClick={() => handlePageChange(data.prevPageToken)}
+          disabled={!data.prevPageToken || isLoading}
+        >
+          Previous Page
+        </button>
+        <button
+          onClick={() => handlePageChange(data.nextPageToken)}
+          disabled={!data.nextPageToken || isLoading}
+        >
+          Next Page
+        </button>
+      </div>
     </div>
   );
 }

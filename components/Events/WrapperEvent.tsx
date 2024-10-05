@@ -8,20 +8,16 @@ import PageHeader from "../ui/PageHeader";
 // import formatDateRange from "@/lib/formatDate";
 
 export default function WrapperEvent({ initialEvents }) {
-  //////////////////////////////
   const fetchData = async ({ page }) => {
     const { data } = await getInfiniteEvents({ page });
     return data;
   };
-  //////////////////////////////
 
   const renderItem = (event, index) => <EventItem key={index} event={event} />;
   const today = new Date();
   const currentMonth = format(today, "MMMM");
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-
-  //////////////////////////////
 
   const upcomingEvents = initialEvents
     .filter((event) => {
@@ -56,7 +52,7 @@ export default function WrapperEvent({ initialEvents }) {
     const eventDate = new Date(event.attributes.startDate);
     return isBefore(eventDate, tomorrow) && !isSameDay(eventDate, today);
   });
-  console.log(pastEvents);
+
   return (
     <section>
       <div className="container">

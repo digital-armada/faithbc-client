@@ -33,7 +33,14 @@ export const menuItems = [
         icon: <TiVideoOutline />,
         roles: {
           member: { show: false },
-          admin: { show: true },
+          admin: {
+            show: true,
+            asSubItem: true,
+            subItems: [
+              { text: "Sermons", link: "/dashboard/sermon-manager/sermons" },
+              { text: "Youtube", link: "/dashboard/sermon-manager/youtube" },
+            ],
+          },
           ministry: { show: true },
         },
       },

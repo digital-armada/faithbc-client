@@ -10,46 +10,32 @@ import Markdown from "react-markdown";
 import { redirect } from "next/navigation";
 import RenderTipTap from "../_components/RenderTipTap";
 
-export default async function page({
-  params,
-}: {
-  params: { id?: string; slug?: string };
-}) {
+export default async function page({ params }: { params: { id: number } }) {
   const id = params?.id;
-  const slug = params?.slug;
 
-  const data = await getEventSlug(slug as string);
-  const address = data?.venAdd;
-
-  const formats = data?.featuredImage?.formats;
-
-  const sizes = ["medium", "small", "thumbnail"];
-  sizes.reverse();
-
-  const imgSrc = sizes.reduce((url, size) => {
-    if (formats[size]) {
-      url = `${process.env.NEXT_PUBLIC_STRAPI_URL}${formats[size].url}`;
-    }
-    return url;
-  }, "");
+  const { data } = await getEventSlug(id);
+  console.log("data", data);
+  const d = data?.attributes;
+  const address = d?.venAdd;
+  const formats = d?.featuredImage?.data.attributes.url;
 
   return (
     <section>
       <div className="container min-h-screen">
         <div className="relative mb-10 h-80 w-full">
-          {data?.featuredImage ? (
+          {d.featuredImage ? (
             <>
               <Image
-                src={imgSrc}
-                alt={data?.title}
+                src={formats}
+                alt={d?.title}
                 fill
                 objectFit="cover"
                 className="rounded-md blur-lg"
                 quality={10}
               />
               <Image
-                src={imgSrc}
-                alt={data?.title}
+                src={formats}
+                alt={d?.title}
                 fill
                 objectFit="contain"
                 className="rounded-md"
@@ -59,7 +45,7 @@ export default async function page({
             ""
           )}
         </div>
-        <HeadingTwo heading={data?.title} />
+        <HeadingTwo heading={d?.title} />
 
         <div className="mt-10 gap-6 sm:flex">
           {address ? (
@@ -85,6 +71,8 @@ export default async function page({
 }
 
 const EventDetails = ({ data }: { data: any }) => {
+  const d = data?.attributes;
+  console.log("asdasdasd", d.content);
   return (
     <div className="w-full space-y-8 pb-8 text-gray-700">
       <div>
@@ -92,9 +80,7 @@ const EventDetails = ({ data }: { data: any }) => {
         <div className="flex items-center gap-3">
           <IoMdCalendar className="text-2xl" />
 
-          <p className="text-md">
-            {formatDateRange(data?.startDate, data?.endDate)}
-          </p>
+          <p className="text-md">{formatDateRange(d?.startDate, d?.endDate)}</p>
         </div>
       </div>
       <div>
@@ -102,13 +88,14 @@ const EventDetails = ({ data }: { data: any }) => {
         <div className="flex items-start gap-3">
           <IoMdMap className="text-2xl" />
           <div>
-            <div className="text-md">{data?.venName}</div>
-            <div className="text-xs font-light">{data?.venAdd}</div>
+            <div className="text-md">{d?.venName}</div>
+            <div className="text-xs font-light">{d?.venAdd}</div>
           </div>
         </div>
       </div>
       <h3 className="mt-10 text-lg font-bold text-gray-700">Additional Info</h3>
-      <RenderTipTap content={data?.content} />
+
+      <RenderTipTap content={d?.content} />
     </div>
   );
 };
