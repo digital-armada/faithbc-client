@@ -9,8 +9,7 @@ async function page() {
   console.log(data);
   return (
     <ContentLayout title="Sermons">
-      ok
-      {/* <DataTable data={data} columns={columns} /> */}
+      <DataTable data={data} columns={columns} />
     </ContentLayout>
   );
 }

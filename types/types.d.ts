@@ -25,7 +25,7 @@ export interface StringToBooleanMap {
 // src/types/types.ts or lib/types/types.ts
 
 export interface Speaker {
-  id: string;
+  id: number;
   attributes: {
     speaker: string;
     sermons?: {

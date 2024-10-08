@@ -47,6 +47,8 @@ export async function fetchVideos(
       pageToken: pageToken,
     });
 
+    // console.log("response server", response.data.items[0].snippet);
+
     const videos = response.data.items.map((item) => ({
       id: item.contentDetails.videoId,
       title: item.snippet.title,

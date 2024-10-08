@@ -31,8 +31,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getSermons } from "@/data/sermons";
+import { Sermon } from "@/types/types";
 
 interface DataTableProps<TData, TValue> {
+  data: Sermon[];
   columns: ColumnDef<TData, TValue>[];
 }
 
