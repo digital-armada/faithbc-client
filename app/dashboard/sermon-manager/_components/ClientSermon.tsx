@@ -1,9 +1,11 @@
+// @ts-nocheck
 "use client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { updateSermon } from "@/data/actions/sermon-actions";
+import FileUploader from "./FileUploader";
 
 // Uncomment and define your form schema if needed
 // const formSchema = z.object({
@@ -104,7 +106,7 @@ export default function ClientSermon({ sermon, speakers, series }) {
         <div>
           <label>Sermon Title</label>
           <input {...register("name")} />
-          {errors.name && <span>{errors.name.message}</span>}
+          {errors.name && <span>{errors?.name?.message}</span>}
         </div>
 
         <div>
@@ -176,11 +178,15 @@ export default function ClientSermon({ sermon, speakers, series }) {
         )}
 
         {/* Audio File Input */}
-        <div>
+        {/* <div>
           <label>Upload New Audio File</label>
           <input type="file" accept="audio/*" onChange={handleAudioChange} />
-        </div>
-
+        </div> */}
+        <FileUploader
+          allowedTypes={["audio/mpeg", "audio/ogg", "audio/wav"]}
+          onUpload={(result) => console.log("Audio uploaded:", result)}
+          multiple={false}
+        />
         {/* Display selected audio file name */}
         {audioFile && <p>Selected File: {audioFile.name}</p>}
 

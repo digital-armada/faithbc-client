@@ -4,6 +4,7 @@ import { mutateData } from "../services/mutate-data";
 import { revalidatePath } from "next/cache";
 
 export async function updateSermon(payload) {
+  console.log("updateSermon payload:", payload);
   // Prepare data for update
   const dataToUpdate = {
     ...payload,
