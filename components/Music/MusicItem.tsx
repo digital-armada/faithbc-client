@@ -17,7 +17,7 @@ export const MusicItem = ({
 }) => {
   // console.log("sermon", sermon);
   // console.log('activeSermon', activeSermon);
-  // console.log('data', data);
+  // console.log("data", data)
 
   const dispatch = useDispatch();
 

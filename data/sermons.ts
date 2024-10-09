@@ -93,12 +93,11 @@ export async function getSermon(id: string) {
 export async function getLatestFourSermons() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?pagination[limit]=4&populate=*&sort=date:desc`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?pagination[limit]=4&sort=date:desc&[populate]=*`,
       {
         next: { revalidate: 60 },
       },
     );
-    console.log(res);
     if (res.status !== 200) {
       throw new Error("Failed to fetch sermons");
     }
@@ -148,7 +147,6 @@ export async function getInfiniteSermons({ page = 1, search = "" }) {
     if (res.status !== 200) {
       throw new Error("Failed to fetch sermons");
     }
-
     return res.json();
   } catch (error) {
     throw new Error("Failed to fetch users");

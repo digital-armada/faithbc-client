@@ -22,7 +22,7 @@ const InfiniteScroll = <T,>({
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [ref, inView] = useInView();
-
+  console.log("InfiniteScroll", data);
   const loadMoreData = useCallback(async () => {
     if (loading) return;
 

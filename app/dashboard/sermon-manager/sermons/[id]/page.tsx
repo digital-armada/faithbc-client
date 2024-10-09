@@ -11,7 +11,7 @@ export default async function page({ params }: { params: { id: string } }) {
   const sermon = await getSermon(sermonId);
   const { data: series } = await getSeries();
   const { data: speakers } = await getSpeakers();
-
+  console.log("sermon", sermon);
   return (
     <ContentLayout title="Sermon">
       <ClientSermon sermon={sermon} speakers={speakers} series={series} />

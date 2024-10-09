@@ -20,7 +20,8 @@ export default async function HomeSermonWidget() {
   const data = await getLatestFourSermons();
   const sermons: Sermon[] = data.data.slice(0, 4);
 
-  console.log(data);
+  console.log("getLatestFourSermons", data);
+  console.log(JSON.stringify(data, null, 2));
 
   return (
     <section>

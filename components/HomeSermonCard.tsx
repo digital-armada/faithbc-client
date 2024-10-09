@@ -7,7 +7,7 @@ import { Sermon } from "@/types/types";
 
 export default function HomeSermonCard({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
-
+  console.log("sermon", sermon);
   return (
     <div className="col-span-1 py-2">
       {sermon?.attributes?.imageUrl ? (
@@ -38,7 +38,7 @@ export default function HomeSermonCard({ sermon }: { sermon: Sermon }) {
             key={sermon.id}
             sermon={sermon}
             isPlaying={isPlaying}
-            activeSermon={activeSermon as Sermon}
+            activeSermon={activeSermon}
             data={sermon}
             // isActive={isActive}
           />

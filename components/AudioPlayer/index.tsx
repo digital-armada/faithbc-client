@@ -30,10 +30,9 @@ export default function AudioPlayer({
     useAppSelector((state) => state.player);
 
   // const dispatch = useDispatch();
-
   const durationDisplay = formatDurationDisplay(duration);
   const elapsedDisplay = formatDurationDisplay(currentProgress);
-
+  console.log("desktopaudiowrapper", activeSermon);
   return (
     <div className="relative bg-gray-800 p-3 text-gray-400">
       <Audio

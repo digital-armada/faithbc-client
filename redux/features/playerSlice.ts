@@ -6,7 +6,7 @@ const initialState = {
   // currentIndex: 0,
   isActive: false,
   isPlaying: false,
-  activeSermon: null as Sermon | null, // Fixing the type
+  activeSermon: null,
   duration: 0,
   currentProgress: 0,
   buffered: 0,

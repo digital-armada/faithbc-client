@@ -17,7 +17,7 @@ export default function DesktopAudioWrapper() {
   const { activeSermon, isPlaying, isActive } = useAppSelector(
     (state) => state.player,
   );
-
+  console.log("activeSermonactiveSermonactiveSermon", activeSermon);
   const dispatch = useDispatch();
 
   const togglePlayPause = (e) => {
