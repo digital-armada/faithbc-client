@@ -6,6 +6,6 @@ export default async function page() {
     page: 1,
   });
   const initialSermons = data;
-  console.log("initialSermons", initialSermons);
+
   return <WrapperSermons initialSermons={initialSermons} />;
 }

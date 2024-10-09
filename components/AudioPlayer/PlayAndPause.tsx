@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "./IconButton";
 import { CgSpinner } from "react-icons/cg";

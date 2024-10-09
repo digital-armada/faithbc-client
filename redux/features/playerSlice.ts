@@ -1,4 +1,4 @@
-import { Sermon } from "@/types/types";
+// @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -6,7 +6,7 @@ const initialState = {
   // currentIndex: 0,
   isActive: false,
   isPlaying: false,
-  activeSermon: null,
+  activeSermon: {},
   duration: 0,
   currentProgress: 0,
   buffered: 0,

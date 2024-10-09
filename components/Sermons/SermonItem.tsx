@@ -64,12 +64,12 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
             <div className="font-body text-2xl font-semibold">
               {sermon?.attributes?.name}
             </div>
-            {activeSermon && (
+            {sermon?.attributes?.audio?.data?.attributes?.url && (
               <MusicItem
                 key={sermon.id}
                 sermon={sermon}
                 isPlaying={isPlaying}
-                activeSermon={activeSermon}
+                activeSermon={activeSermon as Sermon}
                 data={sermon}
               />
             )}

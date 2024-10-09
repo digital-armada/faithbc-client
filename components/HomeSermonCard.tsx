@@ -7,7 +7,7 @@ import { Sermon } from "@/types/types";
 
 export default function HomeSermonCard({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
-  console.log("sermon", sermon);
+
   return (
     <div className="col-span-1 py-2">
       {sermon?.attributes?.imageUrl ? (
@@ -34,14 +34,16 @@ export default function HomeSermonCard({ sermon }: { sermon: Sermon }) {
       <div className="mt-2">
         <p className="truncate">{sermon?.attributes?.name}</p>
         <div className="flex items-center gap-2">
-          <MusicItem
-            key={sermon.id}
-            sermon={sermon}
-            isPlaying={isPlaying}
-            activeSermon={activeSermon}
-            data={sermon}
-            // isActive={isActive}
-          />
+          {sermon?.attributes?.audio?.data?.attributes?.url && (
+            <MusicItem
+              key={sermon.id}
+              sermon={sermon}
+              isPlaying={isPlaying}
+              activeSermon={activeSermon as Sermon}
+              data={sermon}
+              // isActive={isActive}
+            />
+          )}
           <div className="flex items-center gap-4 text-[10px]">
             <p className="italic">
               {formatDistance(new Date(sermon?.attributes?.date), new Date(), {

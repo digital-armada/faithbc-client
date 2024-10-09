@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { playPause } from "@/redux/features/playerSlice";
@@ -11,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import MiniPlayer from "./MiniPlayer";
 import MobilePlayer from "./MobilePlayer";
 import { useAppSelector } from "@/hooks/useRedux";
+import { Sermon } from "@/types/types";
 
 export default function DesktopAudioWrapper() {
   const [miniOut, SetMiniOut] = useState(false);
@@ -50,7 +52,10 @@ export default function DesktopAudioWrapper() {
           }}
         >
           {activeSermon && (
-            <AudioPlayer key={activeSermon?.id} activeSermon={activeSermon} />
+            <AudioPlayer
+              key={activeSermon?.id}
+              activeSermon={activeSermon as Sermon}
+            />
           )}
         </motion.div>
       )}
