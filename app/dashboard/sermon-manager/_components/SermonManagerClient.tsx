@@ -95,7 +95,7 @@ export default function VideoList() {
 
       try {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/sermons`,
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons`,
           sermonData,
           {
             headers: {

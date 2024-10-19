@@ -162,7 +162,14 @@ export default function ClientSermon({ sermon, speakers, series }) {
       </div>
 
       <input type="hidden" {...register("audio")} />
-
+      <button
+        type="button"
+        onClick={() => {
+          convertToMp3(sermon.attributes.youtubeId);
+        }}
+      >
+        Upload
+      </button>
       <FileUploader
         allowedTypes={["audio/mpeg", "audio/ogg", "audio/wav"]}
         onUpload={handleFileUpload}
