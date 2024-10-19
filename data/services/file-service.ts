@@ -9,10 +9,7 @@ type Metadata = {
   /* add other fields as necessary */
 };
 
-export async function fileUploadService(
-  file: string | NodeJS.ReadableStream,
-  metadata: Metadata = {},
-) {
+export async function fileUploadService(file, metadata: Metadata = {}) {
   const baseUrl = getStrapiURL();
   const url = new URL("/api/upload", baseUrl);
   const session = await auth();
