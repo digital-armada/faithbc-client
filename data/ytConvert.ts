@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 import { fileUploadService } from "./services/file-service";
+import ffmpeg from "fluent-ffmpeg";
 
 // Utility function for filename sanitation
 function sanitizeFilename(filename) {
@@ -22,24 +23,28 @@ export async function convertVideo(videoUrl) {
     // Make API request to get the download link
     const options = {
       method: "GET",
-      url: "https://youtube-mp36.p.rapidapi.com/dl",
-      params: { id: videoId },
+      url: "https://yt-api.p.rapidapi.com/dl",
+      params: {
+        id: videoId,
+        cgeo: "AU",
+      },
       headers: {
         "x-rapidapi-key": "83011428c8msh997d7936bc09d13p1fbfacjsn6246953181aa",
-        "x-rapidapi-host": "youtube-mp36.p.rapidapi.com",
+        "x-rapidapi-host": "yt-api.p.rapidapi.com",
       },
     };
 
     const response = await axios.request(options);
-    console.log("response", response);
-    const { link, title } = response.data;
+    const title = response.data.title;
+    const link = response.data.formats[0].url;
     const sanitizedTitle = sanitizeFilename(title);
     const tempDir = os.tmpdir();
+    const videoOutputPath = path.join(tempDir, `${sanitizedTitle}.video`);
     const outputPath = path.join(tempDir, `${sanitizedTitle}.mp3`);
 
-    console.log(`Downloading MP3: ${title}`);
+    console.log(`Downloading video: ${title}`);
 
-    // Download the MP3 file from the provided link
+    // Download the video file from the provided link
     const downloadResponse = await axios({
       url: link,
       method: "GET",
@@ -47,16 +52,29 @@ export async function convertVideo(videoUrl) {
     });
 
     // Save the downloaded stream to a file
-    const writer = fs.createWriteStream(outputPath);
+    const writer = fs.createWriteStream(videoOutputPath);
     downloadResponse.data.pipe(writer);
 
+    // Wait for download completion
     await new Promise((resolve, reject) => {
       writer.on("finish", resolve);
       writer.on("error", reject);
     });
 
-    console.log("MP3 downloaded and saved to:", outputPath);
+    console.log("Video downloaded. Starting conversion to MP3...");
 
+    // Convert video to MP3 using ffmpeg
+    await new Promise((resolve, reject) => {
+      ffmpeg(videoOutputPath)
+        .toFormat("mp3")
+        .on("end", resolve)
+        .on("error", reject)
+        .save(outputPath);
+    });
+
+    console.log("MP3 conversion done:", outputPath);
+
+    // Proceed with upload
     console.log("Starting file upload...");
     const mp3FileStream = fs.createReadStream(outputPath);
     const uploadResult = await fileUploadService(mp3FileStream, {
@@ -65,7 +83,8 @@ export async function convertVideo(videoUrl) {
 
     console.log("Upload successful:", uploadResult);
 
-    // Clean up the temporary file
+    // Clean up the temporary files
+    await fs.promises.unlink(videoOutputPath);
     await fs.promises.unlink(outputPath);
 
     return {
@@ -89,7 +108,19 @@ export async function convertVideo(videoUrl) {
 }
 
 function extractVideoId(url) {
-  // Logic to extract video ID from the URL (assuming YouTube URL format)
-  const urlObj = new URL(url);
-  return urlObj.searchParams.get("v") || ""; // Adjust if your URL format differs
+  try {
+    console.log("Attempting to extract ID from URL:", url);
+    const urlObj = new URL(url);
+    const videoId = urlObj.searchParams.get("v");
+
+    if (!videoId) {
+      console.error("Failed to retrieve video ID from URL:", url);
+      return null;
+    }
+    console.log("Video ID:", videoId);
+    return videoId;
+  } catch (error) {
+    console.error("Error extracting video ID:", error.message);
+    return null;
+  }
 }
