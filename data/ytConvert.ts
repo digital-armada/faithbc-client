@@ -17,7 +17,11 @@ function sanitizeFilename(filename) {
 export async function convertVideo(videoUrl) {
   console.log("Starting video conversion:", videoUrl);
   try {
-    const cookiesPath = path.resolve(__dirname, "../../../../", "cookies.json");
+    const cookiesPath = path.resolve(
+      __dirname,
+      "../../../../../",
+      "cookies.json",
+    );
     if (!fs.existsSync(cookiesPath)) {
       throw new Error(`Cookies file not found: ${cookiesPath}`);
     }
