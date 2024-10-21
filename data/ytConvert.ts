@@ -9,8 +9,14 @@ import { fileUploadService } from "./services/file-service";
 export async function convertVideo(videoUrl) {
   console.log("Converting video:", videoUrl);
   try {
+    const headers = {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+    };
     // 1. Fetch video info
-    const videoInfo = await ytdl.getInfo(videoUrl);
+    const videoInfo = await ytdl.getInfo(videoUrl, {
+      requestOptions: { headers },
+    });
     console.log("Video info:", videoInfo);
 
     const videoDetails = {
@@ -30,7 +36,12 @@ export async function convertVideo(videoUrl) {
 
     // 3. Convert the video to audio
     await new Promise((resolve, reject) => {
-      ffmpeg(ytdl(videoUrl, { filter: "audioonly" }))
+      ffmpeg(
+        ytdl(videoUrl, {
+          filter: "audioonly",
+          requestOptions: { headers },
+        }),
+      )
         .audioCodec("libmp3lame")
         .toFormat("mp3")
         .save(outputPath)
