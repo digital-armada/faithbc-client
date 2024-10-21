@@ -1,5 +1,5 @@
-/** @format */
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -229,9 +229,8 @@ const Breadcrumbs = ({
             }
             return (
               <>
-                <span>{separator}</span>
+                <span key={breadcrumb.href}>{separator}</span>
                 <li
-                  key={breadcrumb.href}
                   className={
                     i === breadcrumbs.length - 1
                       ? activeItemClassName

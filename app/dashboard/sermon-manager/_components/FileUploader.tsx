@@ -11,7 +11,6 @@ const FileUploader = ({ allowedTypes, multiple = false, onUpload }) => {
   const session = useSession();
 
   const handleFileChange = (event) => {
-    console.log("File change event:", event);
     event.preventDefault();
     const selectedFiles = event.target.files;
     const validFiles = [];

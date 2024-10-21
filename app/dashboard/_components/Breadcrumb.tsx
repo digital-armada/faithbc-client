@@ -20,13 +20,12 @@ export default function BreadCrumbs() {
     <div className="mb-8">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>
+          <BreadcrumbItem key="home">
             <BreadcrumbLink asChild>
               <Link href="/">Home</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-
           {pathSegments.map((segment, index) => {
             const title = segment
               .replace(/-/g, " ")
@@ -35,26 +34,20 @@ export default function BreadCrumbs() {
               .join(" ");
             if (segment === lastSegment) {
               return (
-                <>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{title}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </>
+                <BreadcrumbItem key={segment}>
+                  <BreadcrumbPage>{title}</BreadcrumbPage>
+                </BreadcrumbItem>
               );
             }
             return (
-              <>
-                <BreadcrumbItem key={index}>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href={`/${pathSegments.slice(0, index + 1).join("/")}`}
-                    >
-                      {title}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
+              <BreadcrumbItem key={segment}>
+                <BreadcrumbLink asChild>
+                  <Link href={`/${pathSegments.slice(0, index + 1).join("/")}`}>
+                    {title}
+                  </Link>
+                </BreadcrumbLink>
                 <BreadcrumbSeparator />
-              </>
+              </BreadcrumbItem>
             );
           })}
         </BreadcrumbList>

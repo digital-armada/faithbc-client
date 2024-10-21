@@ -1,5 +1,15 @@
+"use server";
 import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
+import path from "path";
+
+type Metadata = {
+  name?: string;
+  // Add other fields as necessary
+};
 
 export async function fileUploadService(image: any) {
   const baseUrl = getStrapiURL();
@@ -7,7 +17,26 @@ export async function fileUploadService(image: any) {
   const session = await auth();
 
   const formData = new FormData();
-  formData.append("files", image, image.name);
+
+  // Ensure 'file' is a valid Readable Stream or path
+  if (typeof file === "string") {
+    try {
+      await fs.promises.access(file, fs.constants.F_OK);
+    } catch {
+      throw new Error(`File does not exist: ${file}`);
+    }
+    file = fs.createReadStream(file);
+  }
+
+  formData.append("files", file, {
+    filename: metadata.name || path.basename(file.path || "untitled.mp3"),
+    contentType: "audio/mpeg",
+  });
+
+  // Append additional metadata fields
+  Object.entries(metadata).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
 
   try {
     const response = await fetch(url.toString(), {
