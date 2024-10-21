@@ -77,7 +77,6 @@
     "twilio": "^5.0.4",
     "undici": "^6.20.1",
     "uuid": "^9.0.1",
-    "ytdl-core": "^4.11.5",
     "zod": "^3.23.0"
   },
   "devDependencies": {
