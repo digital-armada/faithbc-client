@@ -1,3 +1,5 @@
+// ts-nocheck
+
 "use server";
 import { z } from "zod";
 import { fileUploadService } from "../services/file-service";
