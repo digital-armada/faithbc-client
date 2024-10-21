@@ -9,23 +9,15 @@ import { fileUploadService } from "./services/file-service";
 export async function convertVideo(videoUrl) {
   console.log("Converting video:", videoUrl);
   try {
-    const headers = {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-    };
-    // 1. Fetch video info
-    const videoInfo = await ytdl.getInfo(videoUrl, {
-      requestOptions: { headers },
-    });
-    console.log("Video info:", videoInfo);
+    const agent = ytdl.createAgent(
+      JSON.parse(fs.readFileSync("cookies.json", "utf-8")),
+    );
 
+    // 1. Fetch video info with the agent
+    const videoInfo = await ytdl.getInfo(videoUrl, { agent });
+    console.log("Video info:", videoInfo);
     const videoDetails = {
       name: videoInfo.videoDetails.title,
-      // Uncomment these lines if needed
-      // description: videoInfo.videoDetails.description,
-      // duration: videoInfo.videoDetails.lengthSeconds,
-      // author: videoInfo.videoDetails.author.name,
-      // thumbnailUrl: videoInfo.videoDetails.thumbnails[0]?.url,
     };
     console.log("Video details:", videoDetails);
 
@@ -34,14 +26,10 @@ export async function convertVideo(videoUrl) {
     const tempDir = os.tmpdir();
     const outputPath = path.join(tempDir, `${videoId}.mp3`);
 
-    // 3. Convert the video to audio
+    // 3. Convert the video to audio using agent
     await new Promise((resolve, reject) => {
-      ffmpeg(
-        ytdl(videoUrl, {
-          filter: "audioonly",
-          requestOptions: { headers },
-        }),
-      )
+      //@ts-ignore
+      ffmpeg(ytdl(videoUrl, { filter: "audioonly", requestOptions: { agent } }))
         .audioCodec("libmp3lame")
         .toFormat("mp3")
         .save(outputPath)
