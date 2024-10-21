@@ -5,60 +5,74 @@ import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
 import path from "path";
+import ytdl from "@distube/ytdl-core";
+import ffmpeg from "fluent-ffmpeg";
+import os from "os";
 
 type Metadata = {
   name?: string;
-  // Add other fields as necessary
 };
 
 export async function fileUploadService(file, metadata: Metadata = {}) {
   const baseUrl = getStrapiURL();
   const url = new URL("/api/upload", baseUrl);
   const session = await auth();
-
   const formData = new FormData();
 
-  // Ensure 'file' is a valid Readable Stream or path
-  if (typeof file === "string") {
-    try {
-      await fs.promises.access(file, fs.constants.F_OK);
-    } catch {
-      throw new Error(`File does not exist: ${file}`);
-    }
-    file = fs.createReadStream(file);
-  }
-
-  formData.append("files", file, {
-    filename: metadata.name || path.basename(file.path || "untitled.mp3"),
-    contentType: "audio/mpeg",
-  });
-
-  // Append additional metadata fields
-  Object.entries(metadata).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-
   try {
+    // Handle file input and ensure it's a proper stream
+    if (typeof file === "string") {
+      try {
+        await fs.promises.access(file, fs.constants.F_OK);
+        file = fs.createReadStream(file);
+      } catch (error) {
+        console.error("File access error:", error);
+        throw new Error(`File access error: ${error.message}`);
+      }
+    }
+
+    // Ensure file is a proper stream
+    if (!file.pipe || typeof file.pipe !== "function") {
+      throw new Error("Invalid file format: Expected a readable stream");
+    }
+
+    const filename =
+      metadata.name || (file.path ? path.basename(file.path) : "audio.mp3");
+
+    console.log("Uploading file:", {
+      filename,
+      path: file.path,
+      streamType: typeof file.pipe,
+    });
+
+    formData.append("files", file, {
+      filename,
+      contentType: "audio/mpeg",
+    });
+
     const response = await axios.post(url.toString(), formData, {
       headers: {
         ...formData.getHeaders(),
         Authorization: `Bearer ${session?.strapiToken}`,
       },
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity,
+      timeout: 0, // No timeout
     });
 
-    const dataResponse = response.data;
-    console.log("Response status:", response.status);
-    console.log("Response data:", dataResponse);
+    console.log("Upload response:", {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+    });
 
-    if (response.status !== 200) {
-      throw new Error(
-        dataResponse.message || "Failed to upload file to Strapi",
-      );
-    }
-
-    return dataResponse;
+    return response.data;
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error("Upload error details:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
     throw error;
   }
 }

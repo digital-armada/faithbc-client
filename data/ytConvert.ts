@@ -6,58 +6,105 @@ import fs from "fs";
 import os from "os";
 import { fileUploadService } from "./services/file-service";
 
+// Utility function for filename sanitation
+function sanitizeFilename(filename) {
+  return filename
+    .replace(/[^a-z0-9]/gi, "_") // Replace non-alphanumeric characters with underscores
+    .replace(/_{2,}/g, "_") // Replace multiple underscores with a single one
+    .toLowerCase(); // Optionally convert to lower case for consistency
+}
+
 export async function convertVideo(videoUrl) {
-  console.log("Converting video:", videoUrl);
+  console.log("Starting video conversion:", videoUrl);
   try {
-    const agent = ytdl.createAgent(
-      JSON.parse(fs.readFileSync("cookies.json", "utf-8")),
-    );
+    const cookiesPath = path.resolve(process.cwd(), "cookies.json");
+    if (!fs.existsSync(cookiesPath)) {
+      throw new Error(`Cookies file not found: ${cookiesPath}`);
+    }
 
-    // 1. Fetch video info with the agent
-    const videoInfo = await ytdl.getInfo(videoUrl, { agent });
-    console.log("Video info:", videoInfo);
-    const videoDetails = {
-      name: videoInfo.videoDetails.title,
+    const cookies = JSON.parse(fs.readFileSync(cookiesPath, "utf-8"));
+    const options = {
+      requestOptions: {
+        headers: {
+          cookie: cookies
+            .map((cookie) => `${cookie.name}=${cookie.value}`)
+            .join("; "),
+        },
+      },
     };
-    console.log("Video details:", videoDetails);
 
-    // 2. Define paths
+    const videoInfo = await ytdl.getInfo(videoUrl, options);
+    const videoTitle = videoInfo.videoDetails.title;
+    const sanitizedTitle = sanitizeFilename(videoTitle);
+    console.log("Video info retrieved:", {
+      title: videoTitle,
+      lengthSeconds: videoInfo.videoDetails.lengthSeconds,
+    });
+
     const videoId = ytdl.getURLVideoID(videoUrl);
     const tempDir = os.tmpdir();
     const outputPath = path.join(tempDir, `${videoId}.mp3`);
+    console.log("Converting video to MP3:", {
+      outputPath,
+      videoId,
+    });
 
-    // 3. Convert the video to audio using agent
     await new Promise((resolve, reject) => {
-      //@ts-ignore
-      ffmpeg(ytdl(videoUrl, { filter: "audioonly", requestOptions: { agent } }))
+      const stream = ytdl(videoUrl, {
+        ...options,
+        filter: "audioonly",
+        quality: "highestaudio",
+      });
+
+      stream.on("error", (error) => {
+        console.error("YouTube download error:", error);
+        reject(error);
+      });
+
+      ffmpeg(stream)
         .audioCodec("libmp3lame")
         .toFormat("mp3")
-        .save(outputPath)
-        .on("end", resolve)
-        .on("error", reject);
+        .audioBitrate(192)
+        .on("start", () => console.log("FFmpeg conversion started"))
+        .on("progress", (progress) => console.log("FFmpeg progress:", progress))
+        .on("error", (error) => {
+          console.error("FFmpeg error:", error);
+          reject(error);
+        })
+        .on("end", () => {
+          console.log("FFmpeg conversion completed");
+          resolve(null);
+        })
+        .save(outputPath);
     });
 
-    // 4. Use a stream for file upload
+    console.log("Starting file upload...");
     const mp3FileStream = fs.createReadStream(outputPath);
 
-    // 5. Upload the file to Strapi
+    // Use sanitized filename
     const uploadResult = await fileUploadService(mp3FileStream, {
-      ...videoDetails,
+      name: `${sanitizedTitle}.mp3`,
     });
-    console.log("Upload result:", uploadResult);
 
-    // 6. Clean up temporary file
-    fs.unlink(outputPath, (err) => {
-      if (err) console.error(`Error deleting temporary file: ${err}`);
-    });
+    await fs.promises.unlink(outputPath).catch(console.error);
 
     return {
       success: true,
       data: uploadResult,
-      videoDetails,
+      videoDetails: {
+        name: videoTitle,
+      },
     };
   } catch (error) {
-    console.error("Error converting video:", error);
-    return { success: false, error: error.message };
+    console.error("Video conversion error:", {
+      message: error.message,
+      stack: error.stack,
+      type: error.constructor.name,
+    });
+
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 }
