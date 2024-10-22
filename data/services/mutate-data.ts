@@ -4,13 +4,14 @@ import { getStrapiURL } from "@/lib/utils";
 export async function mutateData(method: string, path: string, payload?: any) {
   const baseUrl = getStrapiURL();
   const session = await auth();
-  const url = new URL(path, baseUrl);
+  // const url = new URL(path, baseUrl);
+  // const url = "http://localhost:1337/api";
 
   console.log("mutateData payload:", payload);
-  console.log("mutateData URL:", url.toString());
+  // console.log("mutateData URL:", url.toString());
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch("http://localhost:1337/api/youtube-url", {
       method: method,
       headers: {
         "Content-Type": "application/json",
@@ -49,40 +50,3 @@ export async function mutateData(method: string, path: string, payload?: any) {
     throw error;
   }
 }
-
-// export async function mutateData(method: string, path: string, payload?: any) {
-//   const baseUrl = getStrapiURL();
-//   const session = await auth();
-//   const url = new URL(path, baseUrl);
-//
-//   console.log("mutateData payload:", payload);
-//
-//   try {
-//     const response = await fetch(url, {
-//       method: method,
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${session?.strapiToken}`,
-//       },
-//       body: JSON.stringify(payload),
-//     });
-//
-//     // Log the entire response for debugging
-//     console.log("HTTP response:", response);
-//
-//     if (!response.ok) {
-//       // Log detailed error information
-//       const errorData = await response.json();
-//       console.error("Error response data:", errorData);
-//       throw new Error(
-//         `Request failed with status ${response.status}: ${errorData.message}`,
-//       );
-//     }
-//
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error("Network or parsing error:", error);
-//     throw error;
-//   }
-// }
