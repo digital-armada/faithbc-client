@@ -14,29 +14,16 @@ export async function updateSermon(payload) {
     description: payload.description,
     youtubeId: payload.youtubeId,
     imageUrl: payload.imageUrl,
-    speaker: payload.speaker
-      ? {
-          connect: [{ id: parseInt(payload.speaker) }],
-        }
-      : null,
-    series: payload.series
-      ? {
-          connect: [{ id: parseInt(payload.series) }],
-        }
-      : null,
-    audio: parseInt(payload.audio),
+    speaker: payload.speaker ? parseInt(payload.speaker) : null,
+    series: payload.series ? parseInt(payload.series) : null,
+    audio: payload.audio || null,
   };
-
-  console.log(
-    "dataToUpdatedataToUpdatedataToUpdatedataToUpdatedataToUpdatedataToUpdatedataToUpdatedataToUpdate",
-    dataToUpdate,
-  );
 
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("PUT", `/api/sermons/${payload.id}`, {
+    const response = await mutateData("PUT", `/sermons/${payload.id}`, {
       data: dataToUpdate,
     });
 
@@ -44,7 +31,7 @@ export async function updateSermon(payload) {
       revalidatePath("/dashboard/sermon-manager/sermons");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
     return { error: "Unexpected response from server" };
   } catch (error) {
@@ -71,7 +58,7 @@ export async function updateSermonAudio(sermonId, audioId) {
       revalidatePath("/dashboard/sermon-manager/sermons");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
     return { error: "Unexpected response from server" };
   } catch (error) {

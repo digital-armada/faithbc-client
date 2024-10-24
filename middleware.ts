@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
 export async function middleware(req: NextRequest) {
-  console.log("Middleware running for path:", req.nextUrl.pathname);
+  // console.log("Middleware running for path:", req.nextUrl.pathname);
   const session = await auth();
-  console.log("middleAuth", session);
+  // console.log("middleAuth", session);
 
   if (!session) {
     console.log("No session found in middleware");

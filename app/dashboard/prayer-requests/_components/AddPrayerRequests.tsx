@@ -14,6 +14,10 @@ import { Label } from "@/components/ui/label";
 import { createNewChurchPrayerRequest } from "@/data/actions/prayer-actions";
 
 export default function AddPrayerRequests() {
+  const handleSubmit = async (formData: FormData) => {
+    await createNewChurchPrayerRequest(formData);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -23,7 +27,7 @@ export default function AddPrayerRequests() {
         <DialogHeader>
           <DialogTitle>Add Request</DialogTitle>
         </DialogHeader>
-        <form action={createNewChurchPrayerRequest}>
+        <form action={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">

@@ -67,7 +67,7 @@ export async function createEvent(formData) {
       revalidatePath("/dashboard/events");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -135,7 +135,7 @@ export async function updateEvent(formData) {
       revalidatePath("/dashboard/events");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -156,7 +156,7 @@ export async function deleteEvent(id: string) {
       revalidatePath("/dashboard/events");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };

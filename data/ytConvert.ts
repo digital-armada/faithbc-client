@@ -1,37 +1,50 @@
 "use server";
+
 import { auth } from "@/auth";
+import { revalidatePath } from "next/cache";
 import { mutateData } from "./services/mutate-data";
 
-export async function convertVideo(videoUrl) {
+type ConversionResponse = {
+  success?: boolean;
+  data?: any;
+  videoDetails?: {
+    name: string;
+  };
+};
+
+export async function convertVideo(videoUrl: string) {
   const session = await auth();
-  console.log("hit", session?.strapiToken);
 
   if (!session?.strapiToken) {
-    throw new Error("Unauthorized");
+    return { error: "Unauthorized: Please log in" };
   }
 
-  const payload = { data: { url: videoUrl } };
+  const payload = {
+    data: { url: videoUrl },
+  };
 
   try {
-    const response = mutateData("POST", "/youtube-url", payload);
-    console.log("response", response);
+    const response = await mutateData<ConversionResponse>(
+      "POST",
+      "/convert-video",
+      payload,
+    );
+
+    if (response.error) {
+      return { error: response.error };
+    }
+
     if (response.data) {
+      // Revalidate the page if needed
       // revalidatePath("/dashboard/missions");
       return { data: response.data };
-    } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
     }
 
-    return { error: "Unexpected response from server" };
+    return { error: "No data received from server" };
   } catch (error) {
-    console.error("Error in Conver:", error);
-
-    if (error instanceof Error) {
-      // Check if 'error' is an instance of Error and has a 'message' property
-      return { error: error.message || "An error occurred" };
-    } else {
-      // Handle case where error might not be an instance of Error
-      return { error: "An unexpected error occurred" };
-    }
+    console.error("Video conversion failed:", error);
+    return {
+      error: error instanceof Error ? error.message : "Video conversion failed",
+    };
   }
 }

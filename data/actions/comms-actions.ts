@@ -4,8 +4,6 @@ import { auth } from "@/auth";
 import { mutateData } from "@/data/services/mutate-data";
 import { revalidatePath } from "next/cache";
 
-
-
 export async function createNewCommGroup(prevState: any, formData: FormData) {
   try {
     const groupName = formData.get("list");
@@ -23,7 +21,7 @@ export async function createNewCommGroup(prevState: any, formData: FormData) {
       revalidatePath("/dashboard/contacts/comms");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -50,7 +48,7 @@ export async function updateUserCommGroup(user, group) {
       revalidatePath("/dashboard/contacts/comms");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -79,7 +77,7 @@ export async function deleteUserCommGroup(payload) {
       revalidatePath("/dashboard/contacts/comms");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -99,7 +97,7 @@ export async function deleteCommGroup(groupId) {
       revalidatePath("/dashboard/contacts/comms");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };

@@ -16,7 +16,7 @@ interface LoginUserProps {
 const baseUrl = getStrapiURL();
 
 export async function registerUserService(userData: RegisterUserProps) {
-  console.log("registerUserService:", registerUserService); // Log the user data being sent
+  console.log("registerUserService:", userData); // Log the user data being sent
 
   try {
     const response = await mutateData(
@@ -27,20 +27,19 @@ export async function registerUserService(userData: RegisterUserProps) {
     console.log("mutateData", response);
     // Check if the response is not okay
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.data;
       console.error("Error Response:", errorData); // Log the error details
       throw new Error("Registration failed");
     }
 
     // If response is okay, process the data
-    const data = await response.json();
+    const data = response.data;
     console.log("Registered User:", data.user); // Log the registered user data
     return data.user;
   } catch (error) {
     console.error("Registration Service Error:", error);
   }
-}
-export async function updateUserService(userData) {
+}export async function updateUserService(userData) {
   try {
     const response = await mutateData(
       "PUT",

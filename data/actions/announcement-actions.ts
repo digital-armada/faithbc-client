@@ -42,7 +42,7 @@ export async function createNewAnnouncement(prevState, formData: FormData) {
       revalidatePath("/dashboard/announcements");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -63,7 +63,7 @@ export async function deleteAnnouncement(id: number) {
       revalidatePath("/dashboard/announcements");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };

@@ -19,7 +19,7 @@ export async function createNewMissions(prevState: any, formData: FormData) {
       revalidatePath("/dashboard/missions");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };

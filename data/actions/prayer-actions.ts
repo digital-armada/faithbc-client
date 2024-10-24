@@ -12,41 +12,38 @@ export async function createNewChurchPrayerRequest(formData: FormData) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    // Fetch the existing data
-    const existingData = await mutateData(
-      "GET",
-      "/api/missionaries/1?populate=*",
-    );
+    const missionary = await mutateData("GET", "/missionaries/1?populate=*");
 
-    if (!existingData.data) {
-      throw new Error("Failed to fetch existing data");
+    if (!missionary.data || typeof missionary.data !== "object") {
+      throw new Error("Invalid missionary data");
     }
 
-    // Append the new item to the existing array
-    const newPrayerItem = {
+    const existingPrayerRequests =
+      (missionary.data as any).data?.attributes?.prayerrequests || [];
+
+    const newPrayerRequest = {
+      _component: "prayerrequests.component",
       name,
       request,
     };
 
-    const updatedPrayerItems = [
-      ...existingData.data.attributes.prayerrequests,
-      newPrayerItem,
-    ];
+    const updatedPrayerRequests = [...existingPrayerRequests, newPrayerRequest];
 
     const payload = {
       data: {
-        prayerrequests: updatedPrayerItems,
+        prayerrequests: updatedPrayerRequests,
       },
     };
-    console.log(payload);
+
+    console.log("payload", payload);
     // Update the data with the modified array
-    const response = await mutateData("PUT", "/api/missionaries/1", payload);
+    const response = await mutateData("PUT", "/missionaries/1", payload);
 
     if (response.data) {
       revalidatePath("/dashboard/prayer-requests");
       return { data: response.data };
     } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+      return { error: response.error || "An error occurred" };
     }
 
     return { error: "Unexpected response from server" };
@@ -57,40 +54,40 @@ export async function createNewChurchPrayerRequest(formData: FormData) {
     };
   }
 }
-
-export async function deletePrayerRequest(id: number) {
+export async function deletePrayerRequest(id: { id: number }) {
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const existingData = await mutateData(
-      "GET",
-      "/api/missionaries/1?populate=*",
-    );
-    if (!existingData.data) {
+    const existingData = await mutateData("GET", "/missionaries/1?populate=*");
+
+    if (!existingData || !("data" in existingData)) {
       throw new Error("Failed to fetch existing data");
     }
 
-    const updatedPrayerItems =
-      existingData.data.attributes.prayerrequests.filter(
-        (item: any) => item.id !== id,
-        // (item: any) => item.id !== id.id,
-      );
+    const updatedPrayerItems = (
+      existingData.data as any
+    ).data.attributes.prayerrequests.filter((item: any) => item.id !== id.id);
+    console.log("Filtered prayer items:", updatedPrayerItems);
 
     const payload = {
       data: {
         prayerrequests: updatedPrayerItems,
       },
     };
-    const response = await mutateData("PUT", "/api/missionaries/1", payload);
+    const response = await mutateData("PUT", "/missionaries/1", payload);
+    console.log("Update response:", response);
 
-    if (response.data) {
+    if (response && "data" in response) {
+      console.log("Successfully updated prayer requests");
       revalidatePath("/dashboard/prayer-requests");
       return { data: response.data };
-    } else if (response.error) {
-      return { error: response.error.message || "An error occurred" };
+    } else if (response && "error" in response) {
+      console.log("Error in response:", response.error);
+      return { error: response.error || "An error occurred" };
     }
 
+    console.log("Unexpected response format");
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in Prayer request:", error);

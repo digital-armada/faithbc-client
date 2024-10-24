@@ -1,52 +1,69 @@
+"use server";
+// types.ts
+type ApiResponse<T> = {
+  data?: T;
+  error?: string;
+  meta?: any;
+};
+
+// lib/mutate-data.ts
 import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
 
-export async function mutateData(method: string, path: string, payload?: any) {
+export async function mutateData<T>(
+  method: string,
+  path: string,
+  payload?: any,
+): Promise<ApiResponse<T>> {
   const baseUrl = getStrapiURL();
   const session = await auth();
-  // const url = new URL(path, baseUrl);
-  // const url = "http://localhost:1337/api";
 
-  console.log("mutateData payload:", payload);
-  // console.log("mutateData URL:", url.toString());
+  if (!session?.strapiToken) {
+    throw new Error("Unauthorized: No valid session token");
+  }
 
+  const url = `${baseUrl}${path}`;
+  console.log("Making request to:", url);
+  console.log("With payload:", payload);
+  console.log("With method:", method);
   try {
-    const response = await fetch("http://localhost:1337/api/youtube-url", {
+    const response = await fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.strapiToken}`,
+        Authorization: `Bearer ${session.strapiToken}`,
       },
       body: JSON.stringify(payload),
     });
 
-    // Log the entire response for debugging
-    console.log("HTTP response status:", response.status);
-    console.log("HTTP response headers:", response.headers);
+    // Log response details for debugging
+    console.log("Response status:", response.status);
 
-    const responseBody = await response.text();
-    console.log("HTTP response body:", responseBody);
+    const responseText = await response.text();
+    console.log("Raw response:", responseText);
 
-    if (!response.ok) {
-      // Log detailed error information
-      try {
-        const errorData = JSON.parse(responseBody);
-        console.error("Error response data:", errorData);
-        throw new Error(
-          `Request failed with status ${response.status}: ${errorData.message}`,
-        );
-      } catch (parseError) {
-        console.error("Failed to parse error response:", parseError);
-        throw new Error(
-          `Request failed with status ${response.status} and unparseable error response`,
-        );
-      }
+    // Try to parse the response as JSON
+    let data;
+    try {
+      data = responseText ? JSON.parse(responseText) : null;
+    } catch (e) {
+      console.error("Failed to parse response as JSON:", e);
+      throw new Error("Invalid JSON response from server");
     }
 
-    const data = JSON.parse(responseBody);
-    return data;
+    if (!response.ok) {
+      // Handle Strapi error format
+      const errorMessage =
+        data?.error?.message || data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    }
+
+    return { data };
   } catch (error) {
-    console.error("Network or parsing error:", error);
-    throw error;
+    console.error("Request failed:", error);
+    return {
+      error:
+        error instanceof Error ? error.message : "An unexpected error occurred",
+    };
   }
 }
