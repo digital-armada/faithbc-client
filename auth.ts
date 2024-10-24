@@ -6,7 +6,7 @@ import { LoginSchema } from "./schemas";
 import { User } from "./types/types";
 
 export const BASE_PATH = "/api/auth";
-
+console.log("BASE_PATH", BASE_PATH);
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({

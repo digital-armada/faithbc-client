@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { registerUserAction } from "@/data/actions/auth-actions";
+// import { registerUserAction } from "@/data/actions/auth-actions";
 
 import {
   CardTitle,
@@ -26,14 +26,14 @@ const INITIAL_STATE = {
 };
 
 export function SignupForm() {
-  const [formState, formAction] = useFormState(
-    registerUserAction,
-    INITIAL_STATE,
-  );
+  // const [formState, formAction] = useFormState(
+  //   registerUserAction,
+  //   INITIAL_STATE,
+  // );
 
   return (
     <div className="w-full max-w-md">
-      <form action={formAction}>
+      {/* <form action={formAction}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign Up</CardTitle>
@@ -89,7 +89,7 @@ export function SignupForm() {
             Sing In
           </Link>
         </div>
-      </form>
+      </form> */}
     </div>
   );
 }

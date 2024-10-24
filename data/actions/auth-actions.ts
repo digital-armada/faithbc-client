@@ -4,11 +4,9 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import {
-  registerUserService,
-  loginUserService,
-  updateUserService,
-} from "@/data/services/auth-service";
+// import {} from // registerUserService,
+// // updateUserService,
+// "@/data/services/auth-service";
 import { mutateData } from "../services/mutate-data";
 import { revalidatePath } from "next/cache";
 import { signIn, auth, signOut } from "@/auth";
@@ -89,61 +87,61 @@ interface RegisterUserProps {
   password: string;
   email: string;
 }
-export async function registerUserAction(prevState: any, formData: FormData) {
-  console.log("registerUserAction", formData);
+// export async function registerUserAction(prevState: any, formData: FormData) {
+//   console.log("registerUserAction", formData);
+//
+//   const userData: RegisterUserProps = {
+//     username: formData.get("username") as string,
+//     password: formData.get("password") as string,
+//     email: formData.get("email") as string,
+//   };
+//
+//   const responseData = await registerUserService(userData);
+//
+//   if (!responseData) {
+//     return {
+//       ...prevState,
+//       strapiErrors: null,
+//       zodErrors: null,
+//       message: "Ops! Something went wrong. Please try again.",
+//     };
+//   }
+//
+//   if (responseData.error) {
+//     return {
+//       ...prevState,
+//       strapiErrors: responseData.error,
+//       zodErrors: null,
+//       message: "Failed to Register.",
+//     };
+//   }
+//
+//   redirect("/dashboard");
+// }
 
-  const userData: RegisterUserProps = {
-    username: formData.get("username") as string,
-    password: formData.get("password") as string,
-    email: formData.get("email") as string,
-  };
-
-  const responseData = await registerUserService(userData);
-
-  if (!responseData) {
-    return {
-      ...prevState,
-      strapiErrors: null,
-      zodErrors: null,
-      message: "Ops! Something went wrong. Please try again.",
-    };
-  }
-
-  if (responseData.error) {
-    return {
-      ...prevState,
-      strapiErrors: responseData.error,
-      zodErrors: null,
-      message: "Failed to Register.",
-    };
-  }
-
-  redirect("/dashboard");
-}
-
-export async function updateUserAction(payload) {
-  const responseData = await updateUserService(payload);
-
-  if (!responseData) {
-    return {
-      // ...prevState,
-      strapiErrors: null,
-      zodErrors: null,
-      message: "Ops! Something went wrong. Please try again.",
-    };
-  }
-
-  if (responseData.error) {
-    return {
-      // ...prevState,
-      strapiErrors: responseData.error,
-      zodErrors: null,
-      message: "Failed to Update.",
-    };
-  }
-
-  redirect("/dashboard");
-}
+// export async function updateUserAction(payload) {
+//   const responseData = await updateUserService(payload);
+//
+//   if (!responseData) {
+//     return {
+//       // ...prevState,
+//       strapiErrors: null,
+//       zodErrors: null,
+//       message: "Ops! Something went wrong. Please try again.",
+//     };
+//   }
+//
+//   if (responseData.error) {
+//     return {
+//       // ...prevState,
+//       strapiErrors: responseData.error,
+//       zodErrors: null,
+//       message: "Failed to Update.",
+//     };
+//   }
+//
+//   redirect("/dashboard");
+// }
 
 const schemaLogin = z.object({
   identifier: z

@@ -8,7 +8,6 @@ import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper
 
 export default async function page() {
   const { data: users } = await getUsers();
-  // const roles = await getUserRoles();
 
   return (
     <ContentLayout title="Contacts">

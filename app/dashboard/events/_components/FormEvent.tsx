@@ -8,8 +8,8 @@ import { EventImageUpload } from "./EventImageUpload";
 import Editor from "./Editor";
 import { getStrapiURL } from "@/lib/utils";
 
-export default function FormEvent() {
-// { data, id } = {}
+export default function FormEvent(data) {
+  // { data, id } = {}
   // const [featureImageId, setFeatureImageId] = useState<string | null>(
   //   data?.featuredImage || null,
   // );

@@ -7,25 +7,25 @@ import { auth } from "@/auth";
 
 export async function updateEvent(eventData) {
   console.log(eventData);
-  try {
-    const response = await mutateData(
-      "PUT",
-      `/api/events/${eventData.slug}`,
-      eventData,
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error Response:", errorData);
-      throw new Error("Failed to update event");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Update Event Service Error:", error);
-    throw error;
-  }
+  //   try {
+  //     const response = await mutateData(
+  //       "PUT",
+  //       `/api/events/${eventData.slug}`,
+  //       eventData,
+  //     );
+  //
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       console.error("Error Response:", errorData);
+  //       throw new Error("Failed to update event");
+  //     }
+  //
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Update Event Service Error:", error);
+  //     throw error;
+  //   }
 }
 
 export async function checkSlug({ slug }: { slug: string }) {

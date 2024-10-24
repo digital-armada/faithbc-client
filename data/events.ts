@@ -53,7 +53,7 @@ export async function getEvent(id: string) {
       cache: "no-cache",
     });
     const { data } = await response.json();
-    console.log(data);
+    console.log("url", data);
 
     return { ok: true, data: data.attributes, error: null };
   } catch (error) {
