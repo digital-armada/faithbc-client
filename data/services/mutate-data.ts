@@ -23,9 +23,7 @@ export async function mutateData<T>(
   }
 
   const url = `${baseUrl}${path}`;
-  console.log("Making request to:", url);
-  console.log("With payload:", payload);
-  console.log("With method:", method);
+
   try {
     const response = await fetch(url, {
       method: method,
@@ -36,12 +34,8 @@ export async function mutateData<T>(
       body: JSON.stringify(payload),
     });
 
-    // Log response details for debugging
-    console.log("Response status:", response.status);
-
+    console.log("Response:", response);
     const responseText = await response.text();
-    console.log("Raw response:", responseText);
-
     // Try to parse the response as JSON
     let data;
     try {

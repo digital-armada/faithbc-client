@@ -1,5 +1,5 @@
 import { getEventSlug } from "@/data/events";
-import EventMap from "@/components/EventMap";
+import EventMap from "@/app/(site)/events/_components/EventMap";
 import HeadingTwo from "@/components/ui/headingtwo";
 import formatDateRange from "@/lib/formatDate";
 import getAddressCoordinates from "@/lib/getAddressCoordinates";
@@ -72,7 +72,7 @@ export default async function page({ params }: { params: { id: number } }) {
 
 const EventDetails = ({ data }: { data: any }) => {
   const d = data?.attributes;
-  console.log("asdasdasd", d.content);
+
   return (
     <div className="w-full space-y-8 pb-8 text-gray-700">
       <div>

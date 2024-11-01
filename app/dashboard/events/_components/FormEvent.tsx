@@ -1,156 +1,215 @@
 "use client";
 
-import FormDateTimePicker from "@/components/ui/FormDateTimePicker";
-import { createEvent, updateEvent } from "@/data/actions/event-action";
-import { useEffect, useRef, useState } from "react";
-import { useFormState } from "react-dom";
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { FormDateTimePicker } from "@/components/ui/FormDateTimePicker";
 import { EventImageUpload } from "./EventImageUpload";
 import Editor from "./Editor";
-import { getStrapiURL } from "@/lib/utils";
+import { createEvent, updateEvent } from "@/data/actions/event-action";
+import { useRouter } from "next/navigation";
 
-export default function FormEvent(data) {
-  // { data, id } = {}
-  // const [featureImageId, setFeatureImageId] = useState<string | null>(
-  //   data?.featuredImage || null,
-  // );
-  // const [content, setContent] = useState(data?.content || "");
-  const formRef = useRef(null);
-  const baseUrl = getStrapiURL();
+interface EventData {
+  id?: string;
+  slug?: string;
+  title: string;
+  content: string;
+  startDate: string;
+  endDate?: string;
+  featuredImage?: string;
+  organiser?: string;
+  venName?: string;
+  venAdd?: string;
+  internal: boolean;
+}
 
-  // useEffect(() => {
-  //   if (data?.featuredImage) {
-  //     setFeatureImageId(data.featuredImage);
-  //   }
-  // }, [data]);
+interface FormEventProps {
+  data?: EventData;
+  eventID: string;
+}
 
-  // const updateEventFunction = async (prevState, formData) => {
-  //   formData.append("id", id);
-  //   formData.append("slug", data?.slug);
-  //   formData.append("featuredImage", featureImageId);
-  //   formData.append("content", content);
-  //   try {
-  //     await updateEvent(formData); // Assuming `data.id` is the event ID
-  //   } catch (error) {
-  //     console.error("Error handling form action:", error);
-  //     throw error;
-  //   }
-  // };
+export default function FormEvent({ data, eventID }: FormEventProps) {
+  const [featuredImage, setFeaturedImage] = useState<string | null>(
+    data?.featuredImage || null,
+  );
+  const [content, setContent] = useState(data?.content || "");
+  const router = useRouter();
 
-  // const createEventFunction = async (prevState, formData) => {
-  //   if (featureImageId) {
-  //     formData.append("featuredImage", featureImageId);
-  //   }
-  //   formData.append("content", content);
-  //   try {
-  //     await createEvent(formData);
-  //   } catch (error) {
-  //     console.error("Error handling form action:", error);
-  //     throw error;
-  //   }
-  // };
+  const {
+    control,
+    handleSubmit,
+    register,
+    setError,
+    watch,
+    setValue,
+    formState: { isSubmitting, errors },
+  } = useForm<EventData>({
+    defaultValues: {
+      ...data,
+      internal: data?.internal ?? false,
+    },
+  });
+  console.log("watching you", watch());
+  console.log("content", watch("content"));
+  const onSubmit = async (formData: EventData) => {
+    const submitData = new FormData();
 
-  // const [state, formAction] = useFormState(
-  //   data?.slug ? updateEventFunction : createEventFunction,
-  //   null,
-  // );
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        submitData.append(key, value.toString());
+      }
+    });
 
-  // useEffect(() => {
-  //   if (state?.success) {
-  //     formRef.current.reset();
-  //     // setFeatureImageId(null);
-  //   }
-  // }, [state]);
+    if (featuredImage) {
+      submitData.append("featuredImage", featuredImage);
+    }
 
-  //   const handleImageUploaded = (imageId) => {
-  //     setFeatureImageId(imageId);
-  //   };
-  //
-  //   const handleEditorStateChange = (newEditorState) => {
-  //     setContent(newEditorState);
-  //   };
+    console.log("submitData", submitData);
+
+    try {
+      const result = eventID
+        ? await updateEvent(submitData, eventID)
+        : await createEvent(submitData);
+
+      if (result.error) {
+        setError("root", { type: "manual", message: result.error });
+      } else {
+        router.push("/dashboard/events");
+      }
+    } catch (error) {
+      setError("root", {
+        type: "manual",
+        message: "An unexpected error occurred",
+      });
+    }
+  };
 
   return (
-    <div>FormEvent</div>
+    <Card className="mx-auto w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle>{data ? "Edit Event" : "Create Event"}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {errors.root && (
+            <div
+              className="relative rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
+              role="alert"
+            >
+              <strong className="font-bold">Error:</strong>
+              <span className="block sm:inline"> {errors.root.message}</span>
+            </div>
+          )}
 
-    //     <form ref={formRef} action={formAction}>
-    //       {state?.error && <div className="error">{state.error}</div>}
-    //       {state?.success && (
-    //         <div className="success">
-    //           Event {data ? "updated" : "created"} successfully!
-    //         </div>
-    //       )}
-    //       <div>
-    //         <label htmlFor="title">Title:</label>
-    //         <input
-    //           type="text"
-    //           id="title"
-    //           name="title"
-    //           defaultValue={data?.title || ""}
-    //           required
-    //         />
-    //       </div>
-    //       <Editor
-    //         onContentChange={handleEditorStateChange}
-    //         content={data?.content || ""}
-    //       />
-    //
-    //       <div className="flex">
-    //         <div className="flex">
-    //           <FormDateTimePicker
-    //             label="Start Date and Time"
-    //             name="startDate"
-    //             defaultValue={data?.startDate || ""}
-    //           />
-    //           <FormDateTimePicker
-    //             label="End Date and Time"
-    //             name="endDate"
-    //             defaultValue={data?.endDate || ""}
-    //           />
-    //         </div>
-    //       </div>
-    //       <div>
-    //         <EventImageUpload
-    //           onImageUploaded={handleImageUploaded}
-    //           preview={`${baseUrl}${data?.featuredImage?.data?.attributes?.formats?.thumbnail?.url}`}
-    //         />
-    //       </div>
-    //       <div>
-    //         <label htmlFor="organiser">Organiser:</label>
-    //         <input
-    //           type="text"
-    //           id="organiser"
-    //           name="organiser"
-    //           defaultValue={data?.organiser || ""}
-    //         />
-    //       </div>
-    //       <div>
-    //         <label htmlFor="venName">Venue Name:</label>
-    //         <input
-    //           type="text"
-    //           id="venName"
-    //           name="venName"
-    //           defaultValue={data?.venName || ""}
-    //         />
-    //       </div>
-    //       <div>
-    //         <label htmlFor="venAdd">Venue Address:</label>
-    //         <input
-    //           type="text"
-    //           id="venAdd"
-    //           name="venAdd"
-    //           defaultValue={data?.venAdd || ""}
-    //         />
-    //       </div>
-    //       <div>
-    //         <label htmlFor="public">Public:</label>
-    //         <input
-    //           type="checkbox"
-    //           id="internal"
-    //           name="internal"
-    //           defaultChecked={data?.public ?? true}
-    //         />
-    //       </div>
-    //       <button type="submit">Submit</button>
-    //     </form>
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              {...register("title", { required: "Title is required" })}
+              placeholder="Enter event title"
+            />
+            {errors.title && (
+              <p className="text-sm text-red-500">{errors.title.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Content</Label>
+            <Editor
+              onContentChange={(value) => setValue("content", value)}
+              content={content}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Controller
+              name="startDate"
+              control={control}
+              rules={{ required: "Start date is required" }}
+              render={({ field }) => (
+                <FormDateTimePicker
+                  label="Start Date and Time"
+                  name={field.name}
+                  defaultValue={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <FormDateTimePicker
+                  label="End Date and Time"
+                  name={field.name}
+                  defaultValue={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Featured Image</Label>
+            <EventImageUpload
+              onImageUploaded={setFeaturedImage}
+              preview={featuredImage || undefined}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="organiser">Organiser</Label>
+            <Input
+              id="organiser"
+              {...register("organiser")}
+              placeholder="Enter organiser name"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="venName">Venue Name</Label>
+            <Input
+              id="venName"
+              {...register("venName")}
+              placeholder="Enter venue name"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="venAdd">Venue Address</Label>
+            <Textarea
+              id="venAdd"
+              {...register("venAdd")}
+              placeholder="Enter venue address"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Controller
+              name="internal"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id="internal"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              )}
+            />
+            <Label htmlFor="internal">Internal Event</Label>
+          </div>
+
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? "Submitting..."
+              : (data ? "Update" : "Create") + " Event"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

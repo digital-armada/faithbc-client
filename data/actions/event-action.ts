@@ -61,7 +61,7 @@ export async function createEvent(formData) {
       payload.data.endDate = startDate;
     }
 
-    const response = await mutateData("POST", "/api/events", payload);
+    const response = await mutateData("POST", "/events", payload);
 
     if (response.data) {
       revalidatePath("/dashboard/events");
@@ -77,9 +77,8 @@ export async function createEvent(formData) {
   }
 }
 
-export async function updateEvent(formData) {
+export async function updateEvent(formData, eventID) {
   const {
-    id,
     slug,
     title,
     startDate,
@@ -89,9 +88,9 @@ export async function updateEvent(formData) {
     venAdd,
     internal,
     content,
-    featuredImage,
+    // featuredImage,
   } = Object.fromEntries(formData.entries());
-  console.log(formData);
+
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
@@ -103,6 +102,7 @@ export async function updateEvent(formData) {
 
     const payload = {
       data: {
+        id: eventID,
         title,
         slug: newSlug,
         content,
@@ -111,25 +111,23 @@ export async function updateEvent(formData) {
         organiser,
         venName,
         venAdd,
-        internal: internal === "on" || internal === true,
-        featuredImage,
+        internal,
+        // featuredImage,
       },
     };
-
-    if (featuredImage && featuredImage !== "{ data: null }") {
-      const featuredImageId = parseInt(featuredImage, 10);
-      if (!isNaN(featuredImageId)) {
-        payload.data.featuredImage = featuredImageId;
-      }
-    }
+    console.log("event payload", payload);
+    // if (featuredImage && featuredImage !== "{ data: null }") {
+    //   const featuredImageId = parseInt(featuredImage, 10);
+    //   if (!isNaN(featuredImageId)) {
+    //     payload.data.featuredImage = featuredImageId;
+    //   }
+    // }
 
     if (!endDate) {
       payload.data.endDate = startDate;
     }
 
-    const eventId = id;
-
-    const response = await mutateData("PUT", `/api/events/${eventId}`, payload);
+    const response = await mutateData("PUT", `/events/${eventID}`, payload);
 
     if (response.data) {
       revalidatePath("/dashboard/events");
@@ -150,7 +148,7 @@ export async function deleteEvent(id: string) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/api/events/${id}`);
+    const response = await mutateData("DELETE", `/events/${id}`);
 
     if (response.data) {
       revalidatePath("/dashboard/events");

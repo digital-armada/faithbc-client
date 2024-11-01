@@ -1,4 +1,4 @@
-import More from "./ui/more";
+import More from "../../../components/ui/more";
 
 function escapeHtml(text: string): string {
   const map: { [key: string]: string } = {

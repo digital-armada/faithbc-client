@@ -1,7 +1,7 @@
-import More from "./ui/more";
+import More from "../../../components/ui/more";
 import { getLatestFourSermons } from "@/data/sermons";
 import HomeSermonCard from "./HomeSermonCard";
-import HeadingTwo from "./ui/headingtwo";
+import HeadingTwo from "../../../components/ui/headingtwo";
 import { Sermon } from "@/types/types";
 
 interface SermonData {

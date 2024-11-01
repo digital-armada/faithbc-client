@@ -72,11 +72,7 @@ export function EventImageUpload({
       />
       {isUploading && <p>Uploading...</p>}
       {previewUrl && (
-        <Image
-          src={previewUrl}
-          alt="Preview"
-          style={{ maxWidth: "200px", marginTop: "10px" }}
-        />
+        <Image src={previewUrl} alt="Preview" width={200} height={200} />
       )}
     </div>
   );

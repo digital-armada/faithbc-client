@@ -52,10 +52,10 @@ export async function getEvent(id: string) {
       },
       cache: "no-cache",
     });
-    const { data } = await response.json();
-    console.log("url", data);
 
-    return { ok: true, data: data.attributes, error: null };
+    const { data } = await response.json();
+
+    return { ok: true, data, error: null };
   } catch (error) {
     console.log(error);
     return { ok: false, data: null, error: error };
@@ -193,14 +193,34 @@ export async function getInfiniteEvents({
   // search = ''
 }) {
   try {
-    let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?populate=*&sort=startDate:desc&pagination[page]=${page}`;
+    const query = qs.stringify({
+      populate: "*",
+      sort: ["startDate:desc"],
+      pagination: {
+        page: page,
+      },
+      filters: {
+        $or: [
+          {
+            internal: {
+              $null: true,
+            },
+          },
+          {
+            internal: {
+              $eq: false,
+            },
+          },
+        ],
+      },
+    });
 
-    // if (search && search.trim()) {
-    //     url += `&filters[name][$contains]=${encodeURIComponent(search)}`;
-    // }
+    const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?${query}`;
+
+    console.log("url", url);
 
     const res = await fetch(url, {
-      next: { revalidate: 60 },
+      next: { revalidate: 10 },
     });
 
     if (res.status !== 200) {

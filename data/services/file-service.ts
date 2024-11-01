@@ -5,9 +5,6 @@ import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
 import path from "path";
-import ytdl from "@distube/ytdl-core";
-import ffmpeg from "fluent-ffmpeg";
-import os from "os";
 
 type Metadata = {
   name?: string;

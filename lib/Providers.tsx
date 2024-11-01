@@ -1,16 +1,19 @@
 "use client";
+import React from "react";
 
 import { SessionProvider } from "next-auth/react";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
-import React, { useState } from "react";
+
 import {
   QueryClient,
   QueryClientProvider,
   isServer,
 } from "@tanstack/react-query";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
+
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -41,7 +44,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
           <ReactQueryStreamedHydration> {children}</ReactQueryStreamedHydration>
           <ReactQueryDevtools initialIsOpen={false} />
         </SessionProvider>
-      </QueryClientProvider>{" "}
+      </QueryClientProvider>
     </Provider>
   );
 };

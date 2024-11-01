@@ -4,10 +4,11 @@ import { ContentLayout } from "@/app/dashboard/_components/Layouts/DashboardCont
 
 export default async function page({ params }) {
   const { data } = await getEvent(params.id);
-
+  const id = data.id;
+  const events = data.attributes;
   return (
     <ContentLayout title="Events">
-      <FormEvent data={data} id={params.id} />;
+      <FormEvent data={events} eventID={id} />;
     </ContentLayout>
   );
 }

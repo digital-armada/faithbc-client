@@ -7,11 +7,10 @@ import * as z from "zod";
 import { updateSermon } from "@/data/actions/sermon-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { Select } from "@/components/ui/select";
 import { Speaker } from "./Speaker";
 import { AudioUploader } from "./audio-uploader";
 import { ClipboardComponent } from "./ClipboardComponent";
-import { Select } from "@radix-ui/react-select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
@@ -81,7 +80,7 @@ export default function ClientSermon({
   );
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  // comment
   const methods = useForm<FormValues>({
     // resolver: zodResolver(formSchema),
     defaultValues: {
@@ -155,36 +154,54 @@ export default function ClientSermon({
     return <div>Loading...</div>;
   }
 
+  console.log("series", series);
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Label htmlFor="name">Sermon Title</Label>
-        <Input {...register("name")} />
-        <Label htmlFor="slug">Slug</Label>
-        <Input {...register("slug")} disabled />
-        <Label htmlFor="date">Date Preached</Label>
-        <Input {...register("date")} type="date" />
-        <Label htmlFor="service_type">Service Type</Label>
-        <Select
-          {...register("service_type")}
-          options={serviceTypes.map((type) => ({ value: type, label: type }))}
-        />
-        <Textarea {...register("description")} label="Description" />
-        <Label htmlFor="verse">Verse</Label>
-        <Input {...register("verse")} label="Verse" />
-        <Label htmlFor="series">Series</Label>
-        <Select
-          {...register("series")}
-          options={[
-            { value: "", label: "Select a Series" },
-            ...series.data.map((s) => ({
-              value: s.id,
-              label: s.attributes.name,
-            })),
-          ]}
-        />
-        <Label htmlFor="speaker">Speaker</Label>
-        <Speaker speakerList={speakers.data} />
+        <div>
+          <Label htmlFor="name">Sermon Title</Label>
+          <Input {...register("name")} />
+        </div>
+        <div>
+          <Label htmlFor="slug">Slug</Label>
+          <Input {...register("slug")} disabled />
+        </div>
+        <div>
+          <Label htmlFor="date">Date Preached</Label>
+          <Input {...register("date")} type="date" />
+        </div>
+        <div>
+          <Label htmlFor="service_type">Service Type</Label>
+          {/* <Select
+            {...register("service_type")}
+            options={serviceTypes.map((type) => ({ value: type, label: type }))}
+          /> */}
+        </div>
+        <div>
+          <Label htmlFor="description">Description</Label>
+          <Textarea {...register("description")} />
+        </div>
+        <div>
+          <Label htmlFor="verse">Verse</Label>
+          <Input {...register("verse")} />
+        </div>
+        <div>
+          <Label htmlFor="series">Series</Label>
+          {/* <Select
+            {...register("series")}
+            options={[
+              { value: "", label: "Select a Series" },
+              ...series.data.map((s) => ({
+                value: s.id,
+                label: s.attributes.name,
+              })),
+            ]}
+          /> */}
+        </div>
+        <div>
+          <Speaker speakerList={speakers.data} />
+        </div>
         <ClipboardComponent youtube={sermon.attributes.youtube || ""} />
         <AudioUploader
           audioFileId={audioFileId}

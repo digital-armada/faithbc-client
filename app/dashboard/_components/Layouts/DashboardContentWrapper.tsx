@@ -13,7 +13,7 @@ export function ContentLayout({ title, children }: ContentLayoutProps) {
       <TopNavContainer title={title} />
       <div className="container px-4 pb-8 pt-8 sm:px-8">
         <BreadCrumbs />
-        <div className="rounded-md bg-white p-4 shadow-md">{children}</div>
+        <div className="rounded-md p-4">{children}</div>
       </div>
     </div>
   );

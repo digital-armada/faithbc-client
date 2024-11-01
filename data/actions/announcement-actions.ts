@@ -57,7 +57,7 @@ export async function deleteAnnouncement(id: number) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/api/announcements/${id}`);
+    const response = await mutateData("DELETE", `/announcements/${id}`);
 
     if (response.data) {
       revalidatePath("/dashboard/announcements");

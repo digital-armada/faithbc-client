@@ -67,7 +67,7 @@
 
 @layer components {
   section {
-    @apply w-full p-8;
+    @apply w-full;
   }
 
   .contain {
