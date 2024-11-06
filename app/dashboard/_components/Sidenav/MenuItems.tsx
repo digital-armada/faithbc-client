@@ -12,7 +12,6 @@ import {
 } from "react-icons/ti";
 import { PiHandsPraying } from "react-icons/pi";
 // import { MenuSection } from "@/types/types";
-// TODO
 export const menuItems = [
   {
     title: "Main",

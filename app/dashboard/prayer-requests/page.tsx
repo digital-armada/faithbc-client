@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getChurch } from "@/data/services/missionary-service";
+import { getChurch } from "@/app/dashboard/missionaries/_api/data/missionary-service";
 import { deletePrayerRequest } from "@/data/actions/prayer-actions";
 import DeleteRequest from "./_components/DeleteRequest";
 

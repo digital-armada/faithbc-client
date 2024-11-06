@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/data/services/mutate-data";
+import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
 
@@ -48,7 +48,7 @@ export async function createEvent(formData) {
         organiser,
         venName,
         venAdd,
-        internal: internal === "on" || internal === true,
+        internal,
       },
     };
 
@@ -88,7 +88,7 @@ export async function updateEvent(formData, eventID) {
     venAdd,
     internal,
     content,
-    // featuredImage,
+    featuredImage,
   } = Object.fromEntries(formData.entries());
 
   try {
@@ -112,16 +112,9 @@ export async function updateEvent(formData, eventID) {
         venName,
         venAdd,
         internal,
-        // featuredImage,
+        featuredImage,
       },
     };
-    console.log("event payload", payload);
-    // if (featuredImage && featuredImage !== "{ data: null }") {
-    //   const featuredImageId = parseInt(featuredImage, 10);
-    //   if (!isNaN(featuredImageId)) {
-    //     payload.data.featuredImage = featuredImageId;
-    //   }
-    // }
 
     if (!endDate) {
       payload.data.endDate = startDate;

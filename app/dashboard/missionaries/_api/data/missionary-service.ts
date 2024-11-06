@@ -45,6 +45,7 @@ export async function getMissionaries() {
     return { ok: false, data: null, error: error };
   }
 }
+
 export async function getChurch() {
   const query = qs.stringify(
     {

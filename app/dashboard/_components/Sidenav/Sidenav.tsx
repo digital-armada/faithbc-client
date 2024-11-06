@@ -66,90 +66,6 @@ export default function Sidenav() {
     dispatch(toggleSidebar());
   };
 
-  //   const menuItems = [
-  //     {
-  //       title: "Main",
-  //       items: [
-  //         {
-  //           icon: <TiHomeOutline />,
-  //           text: "Dashboard",
-  //           link: "/dashboard/home",
-  //         },
-  //         {
-  //           text: "Sermon Manager",
-  //           link: "/dashboard/sermon-manager",
-  //           icon: <TiVideoOutline />,
-  //         },
-  //         {
-  //           text: "Announcements",
-  //           link: "/dashboard/announcements",
-  //           icon: <TiVolumeUp />,
-  //         },
-  //         {
-  //           text: "Contacts",
-  //           link: "/dashboard/contacts",
-  //           icon: <TiGroupOutline />,
-  //           subItems: [
-  //             { text: "All", link: "/dashboard/contacts/all" },
-  //             {
-  //               text: "Comms Lists",
-  //               link: "/dashboard/contacts/comms",
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           text: "Events",
-  //           link: "/dashboard/events",
-  //           icon: <TiCalendarOutline />,
-  //           subItems: [
-  //             { text: "All Events", link: "/dashboard/events" },
-  //             {
-  //               text: "Create New Event",
-  //               link: "/dashboard/events/new",
-  //             },
-  //             {
-  //               text: "Manage Events",
-  //               link: "/dashboard/events/manage",
-  //             },
-  //           ],
-  //         },
-  //
-  //         {
-  //           text: "Prayer Requests",
-  //           link: "/dashboard/prayer-requests",
-  //           icon: <PiHandsPraying />,
-  //         },
-  //         {
-  //           text: "Missionaries",
-  //           link: "/dashboard/missionaries",
-  //           icon: <TiWorldOutline />,
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       title: "Settings",
-  //       items: [
-  //         {
-  //           text: "Profile",
-  //           link: "/dashboard/profile",
-  //           icon: <TiCogOutline />,
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       title: "Account",
-  //       items: [
-  //         {
-  //           text: "Info",
-  //           link: "/dashboard/info",
-  //           icon: <TiInfoLargeOutline />,
-  //         },
-  //         ,
-  //         { icon: <TiPower />, text: "Logout", link: "#" },
-  //       ],
-  //     },
-  //   ];
-
   const handleItemClick = (itemText, subItemText = null) => {
     setActiveItems((prevActiveItems) => {
       const newActiveItems = { ...prevActiveItems };
@@ -303,9 +219,8 @@ export default function Sidenav() {
           {isSidebarCollapsed ? <TiChevronRight /> : <TiChevronLeft />}
         </div>
       </div>
-
       {/* NAVIGATION AREA */}
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-hidden">
         <div className="flex flex-col">
           {menuItems.map((menu, index) => (
             <div key={index}>

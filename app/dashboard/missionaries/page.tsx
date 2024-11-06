@@ -1,4 +1,4 @@
-import { getMissionaries } from "@/data/services/missionary-service";
+import { getMissionaries } from "@/app/dashboard/missionaries/_api/data/missionary-service";
 import Missions from "../_components/Missions";
 
 import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";

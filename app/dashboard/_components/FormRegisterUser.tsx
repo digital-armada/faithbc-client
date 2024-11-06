@@ -1,10 +1,10 @@
 // @ts-nocheck
 "use client";
 
+import React, { useState } from "react";
+import { z } from "zod";
 import { registerUserAction } from "@/data/actions/auth-actions";
 import { useFormState } from "react-dom";
-import { z } from "zod";
-import React, { useState } from "react";
 
 const addressSchema = z.object({
   street: z.string().min(1, "Street is required"),
@@ -25,6 +25,7 @@ const schemaRegister = z.object({
   contactNumber: z.string().min(1, "Contact number is required"),
   dateOfBirth: z.date(),
   address: addressSchema,
+  commgroups: z.number().int().min(1, "Commgroup is required"),
 });
 
 type FormData = z.infer<typeof schemaRegister>;
@@ -50,6 +51,7 @@ export default function FormRegisterUser() {
     registerUserAction,
     initialState,
   );
+
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
     {},
   );
@@ -83,8 +85,8 @@ export default function FormRegisterUser() {
         state: formData.get("state")?.toString() || "",
         pCode: formData.get("pCode")?.toString() || "",
       },
+      commgroups: 1,
     };
-
     // Validate the data using Zod schema
     const result = schemaRegister.safeParse(data);
 
@@ -283,8 +285,8 @@ export default function FormRegisterUser() {
                 </label>
                 <div className="mt-2">
                   <input
-                    name="address.street"
-                    id="address.street"
+                    name="street"
+                    id="street"
                     type="text"
                     autoComplete="street-address"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -306,8 +308,8 @@ export default function FormRegisterUser() {
                 </label>
                 <div className="mt-2">
                   <input
-                    name="address.suburb"
-                    id="address.suburb"
+                    name="suburb"
+                    id="suburb"
                     type="text"
                     autoComplete="address-level2"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -329,8 +331,8 @@ export default function FormRegisterUser() {
                 </label>
                 <div className="mt-2">
                   <input
-                    name="address.state"
-                    id="address.state"
+                    name="state"
+                    id="state"
                     type="text"
                     autoComplete="address-level1"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -352,8 +354,8 @@ export default function FormRegisterUser() {
                 </label>
                 <div className="mt-2">
                   <input
-                    name="address.pCode"
-                    id="address.pCode"
+                    name="pCode"
+                    id="pCode"
                     type="text"
                     autoComplete="postal-code"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

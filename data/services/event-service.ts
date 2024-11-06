@@ -1,7 +1,7 @@
 // event-service.ts
 
 import { getStrapiURL } from "@/lib/utils";
-import { mutateData } from "./mutate-data";
+import { mutateData } from "../../lib/mutate-data";
 import qs from "qs";
 import { auth } from "@/auth";
 

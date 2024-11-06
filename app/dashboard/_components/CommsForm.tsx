@@ -1,11 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { createNewCommGroup } from "@/data/actions/comms-actions";
 import { useFormState } from "react-dom";
 
 const INITIAL_STATE = {
-  data: null,
-  error: null,
+  data: "",
+  error: "",
 };
 
 export default function CommsForm() {
@@ -18,7 +20,7 @@ export default function CommsForm() {
     <div>
       <form action={formAction} className="my-2 flex">
         <div className="flex-1">
-          <input
+          <Input
             type="text"
             id="list"
             name="list"
@@ -27,23 +29,20 @@ export default function CommsForm() {
             className="w-full rounded-l-md px-2 py-1"
           />
           {formState.error && (
-            <p aria-live="polite" className="error">
+            <p aria-live="polite" className="mt-1 text-sm text-red-500">
               {formState.error}
             </p>
           )}
           {formState.data && (
-            <p aria-live="polite" className="success">
+            <p aria-live="polite" className="mt-1 text-sm text-green-500">
               Group created successfully!
             </p>
           )}
         </div>
 
-        <button
-          type="submit"
-          className="flex-none rounded-r-md bg-slate-400 px-2 py-1"
-        >
+        <Button type="submit" className="flex-none">
           Create
-        </button>
+        </Button>
       </form>
     </div>
   );

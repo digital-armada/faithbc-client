@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-import { mutateData } from "./services/mutate-data";
+import { mutateData } from "../lib/mutate-data";
 
 type ConversionResponse = {
   success?: boolean;

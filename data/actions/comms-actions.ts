@@ -1,42 +1,45 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/data/services/mutate-data";
+import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 
 export async function createNewCommGroup(prevState: any, formData: FormData) {
   try {
     const groupName = formData.get("list");
-    if (typeof groupName !== "string" || groupName.length === 0) {
-      return { error: "Group name is required" };
-    }
-    const session = await auth();
-    if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const payload = { data: { groupName } };
+    const payload = {
+      data: {
+        groupName,
+      },
+    };
 
-    const response = await mutateData("POST", "/api/commgroups", payload);
+    const response = await mutateData("POST", "/commgroups", payload);
 
     if (response.data) {
       revalidatePath("/dashboard/contacts/comms");
-      return { data: response.data };
-    } else if (response.error) {
-      return { error: response.error || "An error occurred" };
+      // Return a plain object
+      return { data: JSON.parse(JSON.stringify(response.data)) };
+    }
+
+    if (response.error) {
+      return { error: response.error.toString() };
     }
 
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in createNewCommGroup:", error);
-    return { error: error.message || "An error occurred" };
+    return {
+      error: error instanceof Error ? error.message : "An error occurred",
+    };
   }
 }
-
 export async function updateUserCommGroup(user, group) {
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("PUT", `/api/commgroups/${group}`, {
+    const response = await mutateData("PUT", `/commgroups/${group}`, {
       data: {
         users: {
           set: user,
@@ -66,7 +69,7 @@ export async function deleteUserCommGroup(payload) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("PUT", `/api/commgroups/${groupId}`, {
+    const response = await mutateData("PUT", `/commgroups/${groupId}`, {
       data: {
         users: {
           disconnect: [userId],
@@ -91,7 +94,7 @@ export async function deleteCommGroup(groupId) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/api/commgroups/${groupId}`);
+    const response = await mutateData("DELETE", `/commgroups/${groupId}`);
 
     if (response.data) {
       revalidatePath("/dashboard/contacts/comms");

@@ -3,15 +3,23 @@
 import { useTransition } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { deleteCommGroup } from "@/data/actions/comms-actions";
+import { Button } from "@/components/ui/button";
+import { MdDeleteOutline } from "react-icons/md";
 
 export default function DeleteCommsButton({ groupId }) {
   const router = useRouter();
   console.log(groupId);
   const [isPending, startTransition] = useTransition();
   const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this communication group?",
+    );
+    if (!confirmed) return;
+
     try {
       startTransition(async () => {
         const result = await deleteCommGroup(groupId);
+        console.log(result);
         if (!result.error) {
           router.push("/dashboard/contacts/comms");
         } else {
@@ -27,9 +35,14 @@ export default function DeleteCommsButton({ groupId }) {
 
   return (
     <>
-      <button onClick={handleDelete} disabled={isPending}>
-        {isPending ? "Removing..." : "Remove"}
-      </button>
+      <Button
+        variant={"destructive"}
+        onClick={handleDelete}
+        disabled={isPending}
+      >
+        <MdDeleteOutline />
+        {isPending ? "Removing..." : "Delete"}
+      </Button>
     </>
   );
 }

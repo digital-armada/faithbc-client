@@ -8,7 +8,7 @@ export default async function page({ params }) {
   const events = data.attributes;
   return (
     <ContentLayout title="Events">
-      <FormEvent data={events} eventID={id} />;
+      <FormEvent data={events} eventID={id} />
     </ContentLayout>
   );
 }

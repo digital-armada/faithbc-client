@@ -1,5 +1,5 @@
 "use client";
-import { MdAlternateEmail, MdSms } from "react-icons/md";
+import { MdAlternateEmail, MdOutlineSms, MdSms } from "react-icons/md";
 import Modal from "./Modal";
 import SendSMS from "./SMS";
 import { useState } from "react";
@@ -50,7 +50,7 @@ export default function EmailSMS({ users }) {
   return (
     <div className="flex gap-8">
       <button onClick={handleSMS}>
-        <MdSms className="h-8 w-8" />
+        <MdOutlineSms className="h-8 w-8" />
       </button>
       <button onClick={handleEmail}>
         <MdAlternateEmail className="h-8 w-8" />

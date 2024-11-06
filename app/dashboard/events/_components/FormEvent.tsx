@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -13,20 +14,57 @@ import { EventImageUpload } from "./EventImageUpload";
 import Editor from "./Editor";
 import { createEvent, updateEvent } from "@/data/actions/event-action";
 import { useRouter } from "next/navigation";
+import { MediaUpload } from "@/components/MediaUpload";
 
-interface EventData {
+export interface EventData {
   id?: string;
-  slug?: string;
-  title: string;
-  content: string;
-  startDate: string;
-  endDate?: string;
-  featuredImage?: string;
-  organiser?: string;
-  venName?: string;
-  venAdd?: string;
-  internal: boolean;
+  title: string; // Text
+  content: string; // Rich text (Markdown)
+  slug: string; // UID
+  startDate: string; // Datetime
+  endDate?: string; // Datetime
+  featuredImage?: {
+    // Media
+    id: string;
+    url: string;
+    formats?: {
+      thumbnail?: { url: string };
+      small?: { url: string };
+      medium?: { url: string };
+      large?: { url: string };
+    };
+  };
+  organiser?: string; // Text
+  venName?: string; // Text
+  venAdd?: string; // Text
+  internal: boolean; // Boolean
 }
+
+export const eventSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string(),
+  slug: z.string(),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().optional(),
+  featuredImage: z
+    .object({
+      id: z.string(),
+      url: z.string(),
+      formats: z
+        .object({
+          thumbnail: z.object({ url: z.string() }).optional(),
+          small: z.object({ url: z.string() }).optional(),
+          medium: z.object({ url: z.string() }).optional(),
+          large: z.object({ url: z.string() }).optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  organiser: z.string().optional(),
+  venName: z.string().optional(),
+  venAdd: z.string().optional(),
+  internal: z.boolean(),
+});
 
 interface FormEventProps {
   data?: EventData;
@@ -34,10 +72,7 @@ interface FormEventProps {
 }
 
 export default function FormEvent({ data, eventID }: FormEventProps) {
-  const [featuredImage, setFeaturedImage] = useState<string | null>(
-    data?.featuredImage || null,
-  );
-  const [content, setContent] = useState(data?.content || "");
+  const [newFeaturedImage, setNewFeaturedImage] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -47,6 +82,7 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
     setError,
     watch,
     setValue,
+    getValues,
     formState: { isSubmitting, errors },
   } = useForm<EventData>({
     defaultValues: {
@@ -54,8 +90,9 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
       internal: data?.internal ?? false,
     },
   });
-  console.log("watching you", watch());
-  console.log("content", watch("content"));
+
+  console.log("watch", watch());
+
   const onSubmit = async (formData: EventData) => {
     const submitData = new FormData();
 
@@ -65,11 +102,9 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
       }
     });
 
-    if (featuredImage) {
-      submitData.append("featuredImage", featuredImage);
+    if (newFeaturedImage) {
+      submitData.append("featuredImage", newFeaturedImage);
     }
-
-    console.log("submitData", submitData);
 
     try {
       const result = eventID
@@ -122,7 +157,7 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
             <Label>Content</Label>
             <Editor
               onContentChange={(value) => setValue("content", value)}
-              content={content}
+              content={getValues("content")}
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -155,9 +190,15 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
 
           <div className="space-y-2">
             <Label>Featured Image</Label>
-            <EventImageUpload
-              onImageUploaded={setFeaturedImage}
-              preview={featuredImage || undefined}
+
+            <MediaUpload
+              type="image"
+              onUploadComplete={(data) => {
+                console.log("feature image", data);
+                setValue("featuredImage", data.id);
+                setNewFeaturedImage(data.id);
+              }}
+              preview={getValues("featuredImage.data.attributes.url")}
             />
           </div>
 

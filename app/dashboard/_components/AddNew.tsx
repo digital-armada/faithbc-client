@@ -5,6 +5,7 @@ import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import Modal from "./Modal";
 import MultiSelect from "./MultiListBox";
 import { updateUserCommGroup } from "@/data/actions/comms-actions";
+import { Button } from "@/components/ui/button";
 
 export default function AddNew({ allUsers, commUsers, group }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -28,12 +29,12 @@ export default function AddNew({ allUsers, commUsers, group }) {
 
   return (
     <div>
-      <button
+      <Button
         onClick={openModal}
         className="flex items-center gap-2 outline-2 outline-offset-1 outline-gray-700"
       >
         <MdOutlinePersonAddAlt1 /> Add Contact to List
-      </button>
+      </Button>
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

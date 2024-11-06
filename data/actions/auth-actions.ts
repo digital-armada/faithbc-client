@@ -4,14 +4,17 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-// import {} from // registerUserService,
 // // updateUserService,
 // "@/data/services/auth-service";
-import { mutateData } from "../services/mutate-data";
+import { mutateData } from "../../lib/mutate-data";
 import { revalidatePath } from "next/cache";
 import { signIn, auth, signOut } from "@/auth";
 import { AuthError, CredentialsSignin } from "next-auth";
 import { LoginSchema } from "@/schemas";
+import {
+  registerUserService,
+  updateUserService,
+} from "../services/auth-service";
 // export const DEFAULT_LOGIN_REDIRECT = "/profile";
 
 // import { ConfirmationNewRequestFormStateT } from "./ConfirmationNewRequest";
@@ -81,67 +84,79 @@ export async function signinUserAction({ data }) {
     };
   }
 }
-
 interface RegisterUserProps {
   username: string;
   password: string;
   email: string;
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  dateOfBirth: string;
+  address: {
+    street: string;
+    suburb: string;
+    state: string;
+    pCode: string;
+  };
+  commgroups: number;
 }
-// export async function registerUserAction(prevState: any, formData: FormData) {
-//   console.log("registerUserAction", formData);
-//
-//   const userData: RegisterUserProps = {
-//     username: formData.get("username") as string,
-//     password: formData.get("password") as string,
-//     email: formData.get("email") as string,
-//   };
-//
-//   const responseData = await registerUserService(userData);
-//
-//   if (!responseData) {
-//     return {
-//       ...prevState,
-//       strapiErrors: null,
-//       zodErrors: null,
-//       message: "Ops! Something went wrong. Please try again.",
-//     };
-//   }
-//
-//   if (responseData.error) {
-//     return {
-//       ...prevState,
-//       strapiErrors: responseData.error,
-//       zodErrors: null,
-//       message: "Failed to Register.",
-//     };
-//   }
-//
-//   redirect("/dashboard");
-// }
 
-// export async function updateUserAction(payload) {
-//   const responseData = await updateUserService(payload);
-//
-//   if (!responseData) {
-//     return {
-//       // ...prevState,
-//       strapiErrors: null,
-//       zodErrors: null,
-//       message: "Ops! Something went wrong. Please try again.",
-//     };
-//   }
-//
-//   if (responseData.error) {
-//     return {
-//       // ...prevState,
-//       strapiErrors: responseData.error,
-//       zodErrors: null,
-//       message: "Failed to Update.",
-//     };
-//   }
-//
-//   redirect("/dashboard");
-// }
+export async function registerUserAction(
+  prevState: any,
+  data: RegisterUserProps,
+): Promise<ApiResponse<UserData>> {
+  try {
+    const response = await registerUserService(data);
+
+    if (!response.success || !response.data) {
+      return {
+        success: false,
+        error: response.error || {
+          message: "Registration failed",
+        },
+      };
+    }
+
+    // If successful, redirect
+    redirect("/dashboard");
+
+    // This won't actually be reached due to redirect,
+    // but TypeScript needs it for type safety
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: "Something went wrong. Please try again.",
+        details: error instanceof Error ? error.message : error,
+      },
+    };
+  }
+}
+
+export async function updateUserAction(payload: RegisterUserProps) {
+  const responseData = await updateUserService(payload);
+
+  if (!responseData) {
+    return {
+      error: true,
+      message: "Something went wrong. Please try again.",
+    };
+  }
+
+  if (responseData.error) {
+    return {
+      error: true,
+      message: "Failed to Update",
+      strapiError: responseData.error,
+    };
+  }
+
+  redirect("/dashboard");
+}
 
 const schemaLogin = z.object({
   identifier: z

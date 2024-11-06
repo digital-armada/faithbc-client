@@ -25,6 +25,8 @@ export default async function Missions({ missionaries }) {
                 src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a"
                 alt="University of Southern California"
                 className="absolute inset-0 h-full w-full object-cover"
+                width={500}
+                height={500}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
               <h3 className="z-10 mt-3 text-3xl font-bold text-white">

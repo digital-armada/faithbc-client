@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/data/services/mutate-data";
+import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 
 export async function createNewMissions(prevState: any, formData: FormData) {
@@ -13,7 +13,7 @@ export async function createNewMissions(prevState: any, formData: FormData) {
     if (!session?.strapiToken) throw new Error("No auth token found");
 
     const payload = { data: { name, location } };
-    const response = await mutateData("POST", "/api/missionaries", payload);
+    const response = await mutateData("POST", "/missionaries", payload);
 
     if (response.data) {
       revalidatePath("/dashboard/missions");

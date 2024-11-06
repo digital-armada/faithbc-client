@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/data/services/mutate-data";
+import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 

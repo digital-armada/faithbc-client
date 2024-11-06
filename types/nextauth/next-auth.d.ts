@@ -41,3 +41,20 @@ declare module "next-auth/jwt" {
     role?: string;
   }
 }
+
+interface RegisterUserProps {
+  username: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  dateOfBirth: string;
+  address: {
+    street: string;
+    suburb: string;
+    state: string;
+    pCode: string;
+  };
+  commgroups: number;
+}
