@@ -33,7 +33,7 @@ export async function mutateData<T>(
 
     const responseText = await response.text();
     const data = responseText ? JSON.parse(responseText) : null;
-
+    console.log("data", data);
     if (!response.ok) {
       return {
         success: false,

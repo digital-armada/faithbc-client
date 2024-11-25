@@ -23,7 +23,6 @@ export default async function AnnouncementsWidget({
 }: AnnouncementsProps) {
   const { data } = await getAnnouncements({ includesPast: false });
 
-  console.log("Announcements data:", data);
   return (
     <Card className={`h-auto w-full ${className}`}>
       <CardHeader>

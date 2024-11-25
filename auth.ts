@@ -7,6 +7,10 @@ import { User } from "./types/types";
 
 export const BASE_PATH = "/api/auth";
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  /**
+  The authorize function in the Credentials provider is called first when a user attempts to sign in. This function is responsible for validating the user's credentials against your Strapi backend and returning a user object if the authentication is successful.
+  If the authorize function returns a user object, NextAuth.js considers the authentication successful and proceeds to create a session.
+   */
   providers: [
     Credentials({
       name: "email and password",
@@ -23,9 +27,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("no credentials");
           return null;
         }
+
+        console.log("credentials", credentials);
+
         try {
           const strapiResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`,
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/local`,
             {
               method: "POST",
               headers: {
@@ -54,7 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Fetch user role
           const userResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/me?populate=role`,
+            `${process.env.NEXT_PUBLIC_API_URL}/users/me?populate=role`,
             {
               method: "GET",
               headers: {
@@ -65,7 +72,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           const userData = await userResponse.json();
-          console.log(userData);
+          console.log("userData", userData);
+
           return {
             name: data.user.username,
             email: data.user.email,
@@ -85,6 +93,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
 
   callbacks: {
+    //After successful authentication, the signIn callback is triggered. This callback allows you to control what happens immediately after a successful sign-in attempt.
     async signIn({ user, account, profile }) {
       if (!user.confirmed) {
         // Redirect to an email confirmation page

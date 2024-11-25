@@ -5,28 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-const menuLinks = [
-  {
-    label: "Home",
-    path: "/",
-  },
-  {
-    label: "Sermons",
-    path: "/sermons",
-  },
-  {
-    label: "Events",
-    path: "/events",
-  },
-  {
-    label: "Statement",
-    path: "/statement",
-  },
-  {
-    label: "Ministries",
-    path: "/ministries",
-  },
-];
+import { menuLinks } from "@/lib/constants/mobile-menu";
 
 export default function Menu() {
   const container = useRef<HTMLDivElement>(null); // The parent container for GSAP

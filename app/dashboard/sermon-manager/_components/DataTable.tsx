@@ -30,9 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getSermons } from "@/data/sermons";
 import { Sermon } from "@/types/types";
-
+import { useGetSermonsQuery } from "@/features/sermons/api/sermons-api";
 interface DataTableProps<TData, TValue> {
   data: Sermon[];
   columns: ColumnDef<TData, TValue>[];
@@ -51,14 +50,13 @@ export function DataTable<TData, TValue>({
     pageSize: 10,
   });
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["sermons", pageIndex, pageSize],
-    queryFn: () => getSermons({ pageIndex, pageSize }),
-    placeholderData: keepPreviousData,
+  const { data, isLoading, isError } = useGetSermonsQuery({
+    pageIndex,
+    pageSize,
   });
 
   const table = useReactTable({
-    data: data?.sermons || [],
+    data: data?.data || [],
     columns,
     pageCount: data?.pageCount ?? -1,
     onColumnFiltersChange: setColumnFilters,

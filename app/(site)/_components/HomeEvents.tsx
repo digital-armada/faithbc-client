@@ -1,6 +1,6 @@
 import { getLatestEvents } from "@/data/events";
-import HeadingTwo from "../../../components/ui/headingtwo";
-import More from "../../../components/ui/more";
+import HeadingTwo from "../../../components/custom/headingtwo";
+import More from "../../../components/custom/more";
 import formatDateRange from "@/lib/formatDate";
 import Link from "next/link";
 import Image from "next/image";

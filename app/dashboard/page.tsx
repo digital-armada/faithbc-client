@@ -20,6 +20,7 @@ export default async function DashboardPage() {
         <DashHeader heading={`Hi ${user.firstName} 👋`} />
         <div className="grid gap-4 lg:grid-cols-12">
           <Announcements className="col-span-12 rounded-md bg-white p-4 shadow-md" />
+
           <Events
             events={events}
             className="col-span-12 rounded-md bg-white p-4 shadow-md lg:col-span-7"

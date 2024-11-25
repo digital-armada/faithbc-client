@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { getStrapiURL } from "@/lib/utils";
+import { API_CONFIG } from "@/lib/constants/api-endpoints";
 
 export async function getSermonsByYoutubeIds(youtubeIds) {
   try {
@@ -134,7 +134,7 @@ export async function getSermons({ pageIndex = 0, pageSize = 10 }) {
 
 export async function getInfiniteSermons({ page = 1, search = "" }) {
   try {
-    let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?populate=*&sort=date:desc&pagination[page]=${page}`;
+    let url = `${API_CONFIG.API_URL}/sermons?populate=*&sort=date:desc&pagination[page]=${page}`;
 
     if (search && search.trim()) {
       url += `&filters[name][$contains]=${encodeURIComponent(search)}`;

@@ -3,7 +3,7 @@ import { formatDistance, parseISO } from "date-fns";
 import { MusicItem } from "@/components/Music/MusicItem";
 import Image from "next/image";
 import { useAppSelector } from "@/hooks/useRedux";
-import { Sermon } from "@/types/types";
+import { Sermon } from "@/features/sermons/types";
 
 export default function HomeSermonCard({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);

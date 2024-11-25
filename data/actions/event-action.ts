@@ -4,8 +4,12 @@ import { auth } from "@/auth";
 import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
+import { strapiRequest } from "@/lib/strapi-service";
 
 export async function createEvent(formData) {
+  // console.log(typeof formData);
+  // const data = Object.fromEntries(formData.entries());
+  // console.log("data", formData);
   const {
     title,
     startDate,
@@ -18,8 +22,7 @@ export async function createEvent(formData) {
     internal,
     content,
     featuredImage,
-  } = Object.fromEntries(formData.entries());
-  console.log(formData);
+  } = formData;
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
@@ -61,7 +64,10 @@ export async function createEvent(formData) {
       payload.data.endDate = startDate;
     }
 
-    const response = await mutateData("POST", "/events", payload);
+    const response = await strapiRequest("POST", "/events", {
+      data: payload,
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/events");
@@ -77,19 +83,18 @@ export async function createEvent(formData) {
   }
 }
 
-export async function updateEvent(formData, eventID) {
+export async function updateEvent(eventID, formData) {
   const {
-    slug,
     title,
+    content,
     startDate,
     endDate,
     organiser,
     venName,
     venAdd,
     internal,
-    content,
     featuredImage,
-  } = Object.fromEntries(formData.entries());
+  } = formData;
 
   try {
     const session = await auth();
@@ -112,7 +117,7 @@ export async function updateEvent(formData, eventID) {
         venName,
         venAdd,
         internal,
-        featuredImage,
+        featuredImage: parseInt(featuredImage, 10),
       },
     };
 
@@ -120,16 +125,17 @@ export async function updateEvent(formData, eventID) {
       payload.data.endDate = startDate;
     }
 
-    const response = await mutateData("PUT", `/events/${eventID}`, payload);
+    const response = await strapiRequest("PUT", `/events/${eventID}`, {
+      data: payload,
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/events");
       return { data: response.data };
-    } else if (response.error) {
-      return { error: response.error || "An error occurred" };
     }
 
-    return { error: "Unexpected response from server" };
+    return { error: response.error || "Unexpected response from server" };
   } catch (error) {
     console.error("Error in updateEvent:", error);
     return { error: error.message || "An error occurred" };

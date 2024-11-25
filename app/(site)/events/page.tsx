@@ -1,10 +1,8 @@
-import { getInfiniteEvents, getNotifications } from "@/data/events";
-import Event from "@/app/(site)/events/_components/Event";
+import Event from "@/features/events/components/Event";
+import { eventsService } from "@/features/events/event-services";
 
 export default async function page() {
-  const { data } = await getInfiniteEvents({ page: 1 });
-  console.log("data", data);
-  const initialEvents = data;
+  const { data } = await eventsService.getEvents();
 
-  return <Event initialEvents={initialEvents} />;
+  return <Event initialEvents={data} />;
 }

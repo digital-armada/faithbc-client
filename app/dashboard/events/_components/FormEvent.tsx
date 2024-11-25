@@ -1,8 +1,8 @@
 "use client";
 
-import { z } from "zod";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,134 +10,83 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { FormDateTimePicker } from "@/components/ui/FormDateTimePicker";
-import { EventImageUpload } from "./EventImageUpload";
+import { MediaUpload } from "@/components/MediaUpload";
 import Editor from "./Editor";
 import { createEvent, updateEvent } from "@/data/actions/event-action";
-import { useRouter } from "next/navigation";
-import { MediaUpload } from "@/components/MediaUpload";
-
-export interface EventData {
-  id?: string;
-  title: string; // Text
-  content: string; // Rich text (Markdown)
-  slug: string; // UID
-  startDate: string; // Datetime
-  endDate?: string; // Datetime
-  featuredImage?: {
-    // Media
-    id: string;
-    url: string;
-    formats?: {
-      thumbnail?: { url: string };
-      small?: { url: string };
-      medium?: { url: string };
-      large?: { url: string };
-    };
-  };
-  organiser?: string; // Text
-  venName?: string; // Text
-  venAdd?: string; // Text
-  internal: boolean; // Boolean
-}
-
-export const eventSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string(),
-  slug: z.string(),
-  startDate: z.string().min(1, "Start date is required"),
-  endDate: z.string().optional(),
-  featuredImage: z
-    .object({
-      id: z.string(),
-      url: z.string(),
-      formats: z
-        .object({
-          thumbnail: z.object({ url: z.string() }).optional(),
-          small: z.object({ url: z.string() }).optional(),
-          medium: z.object({ url: z.string() }).optional(),
-          large: z.object({ url: z.string() }).optional(),
-        })
-        .optional(),
-    })
-    .optional(),
-  organiser: z.string().optional(),
-  venName: z.string().optional(),
-  venAdd: z.string().optional(),
-  internal: z.boolean(),
-});
+import { Event } from "@/features/events/types";
 
 interface FormEventProps {
-  data?: EventData;
-  eventID: string;
+  data?: Event;
+  eventID?: number;
 }
 
 export default function FormEvent({ data, eventID }: FormEventProps) {
-  const [newFeaturedImage, setNewFeaturedImage] = useState<string | null>(null);
   const router = useRouter();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  console.log("data incoming", data);
 
+  const defaultValues: Event = {
+      title: data?.attributes?.title || "",
+      slug: data?.attributes?.slug || "",
+      content: data?.attributes?.content || "",
+      startDate: data?.attributes?.startDate || "",
+      endDate: data?.attributes?.endDate || "",
+      organiser: data?.attributes?.organiser || "",
+      venName: data?.attributes?.venName || "",
+      venAdd: data?.attributes?.venAdd || "",
+      internal: data?.attributes?.internal || false,
+      featuredImage: data?.attributes?.featuredImage?.data?.id || undefined,
+    },
+  };
   const {
     control,
+    watch,
     handleSubmit,
     register,
-    setError,
-    watch,
     setValue,
     getValues,
     formState: { isSubmitting, errors },
-  } = useForm<EventData>({
-    defaultValues: {
-      ...data,
-      internal: data?.internal ?? false,
-    },
+  } = useForm<Event>({
+    defaultValues,
   });
 
-  console.log("watch", watch());
-
-  const onSubmit = async (formData: EventData) => {
-    const submitData = new FormData();
-
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        submitData.append(key, value.toString());
-      }
-    });
-
-    if (newFeaturedImage) {
-      submitData.append("featuredImage", newFeaturedImage);
-    }
-
+  console.log("watching", watch());
+  const onSubmit = async (formData: Event) => {
+    console.log("formData", formData);
     try {
-      const result = eventID
-        ? await updateEvent(submitData, eventID)
-        : await createEvent(submitData);
-
-      if (result.error) {
-        setError("root", { type: "manual", message: result.error });
-      } else {
-        router.push("/dashboard/events");
+      setSubmitError(null);
+      const response = eventID
+        ? await updateEvent(eventID, formData)
+        : await createEvent(formData);
+      console.log("back from server", response);
+      if (!response.ok) {
+        // const error = await response.json();
+        // throw new Error(error.message || "Failed to submit form");
       }
+
+      // router.push("/dashboard/events");
+      router.refresh();
     } catch (error) {
-      setError("root", {
-        type: "manual",
-        message: "An unexpected error occurred",
-      });
+      setSubmitError(
+        error instanceof Error ? error.message : "An unexpected error occurred",
+      );
     }
   };
 
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>{data ? "Edit Event" : "Create Event"}</CardTitle>
+        <CardTitle>{eventID ? "Edit Event" : "Create Event"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {errors.root && (
+          {submitError && (
             <div
               className="relative rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
               role="alert"
             >
               <strong className="font-bold">Error:</strong>
-              <span className="block sm:inline"> {errors.root.message}</span>
+              <span className="block sm:inline"> {submitError}</span>
             </div>
           )}
 
@@ -160,6 +109,7 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
               content={getValues("content")}
             />
           </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <Controller
               name="startDate"
@@ -190,15 +140,12 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
 
           <div className="space-y-2">
             <Label>Featured Image</Label>
-
             <MediaUpload
               type="image"
               onUploadComplete={(data) => {
-                console.log("feature image", data);
                 setValue("featuredImage", data.id);
-                setNewFeaturedImage(data.id);
               }}
-              preview={getValues("featuredImage.data.attributes.url")}
+              preview={data?.attributes?.featuredImage?.data?.attributes?.url}
             />
           </div>
 
@@ -247,7 +194,9 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting
               ? "Submitting..."
-              : (data ? "Update" : "Create") + " Event"}
+              : eventID
+                ? "Update Event"
+                : "Create Event"}
           </Button>
         </form>
       </CardContent>

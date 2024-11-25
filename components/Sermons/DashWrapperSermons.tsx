@@ -1,5 +1,5 @@
 "use client";
-import InfiniteScroll from "@/components/ui/InfiniteScroll";
+import InfiniteScroll from "@/components/custom/InfiniteScroll";
 import SermonItem from "./SermonItem";
 import { getInfiniteSermons } from "@/data/sermons";
 import PageHeader from "../ui/PageHeader";

@@ -1,27 +1,15 @@
-import More from "../../../components/ui/more";
-import { getLatestFourSermons } from "@/data/sermons";
+import More from "@/components/custom/more";
+import { sermonsService } from "@/features/sermons/sermons-service";
 import HomeSermonCard from "./HomeSermonCard";
-import HeadingTwo from "../../../components/ui/headingtwo";
-import { Sermon } from "@/types/types";
-
-interface SermonData {
-  data: Sermon[];
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
-}
+import HeadingTwo from "@/components/custom/headingtwo";
+import { Sermon } from "@/features/sermons/types";
 
 export default async function HomeSermonWidget() {
-  const data = await getLatestFourSermons();
-  const sermons: Sermon[] = data.data.slice(0, 4);
-
-  console.log("getLatestFourSermons", data);
-  console.log(JSON.stringify(data, null, 2));
+  const data = await sermonsService.getSermons({
+    pageSize: 4,
+  });
+  console.log("dataData", data);
+  const sermons: Sermon[] = data.data ?? [];
 
   return (
     <section>
@@ -36,7 +24,7 @@ export default async function HomeSermonWidget() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {sermons?.map((sermon: Sermon) => {
+          {sermons.map((sermon: Sermon) => {
             return <HomeSermonCard sermon={sermon} key={sermon.id} />;
           })}
         </div>

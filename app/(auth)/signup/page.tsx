@@ -1,4 +1,4 @@
-import { SignupForm } from "@/app/(auth)/_components/SignupForm";
+import { SignupForm } from "@/features/auth/components/SignupForm";
 
 export default function SignUpRoute() {
   return <SignupForm />;

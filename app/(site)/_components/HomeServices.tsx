@@ -1,7 +1,7 @@
 "use client";
-import HeadingTwo from "../../../components/ui/headingtwo";
-import More from "../../../components/ui/more";
-import NottyDot from "../../../components/ui/NottyDot";
+import HeadingTwo from "../../../components/custom/headingtwo";
+import More from "../../../components/custom/more";
+import NottyDot from "../../../components/custom/NottyDot";
 
 export default function HomeServices() {
   const services = {
