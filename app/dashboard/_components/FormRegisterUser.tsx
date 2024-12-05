@@ -1,84 +1,48 @@
-// @ts-nocheck
 "use client";
 
 import React, { useState } from "react";
-import { z } from "zod";
-import { registerUserAction } from "@/data/actions/auth-actions";
+import { registerUserAction } from "@/features/auth/auth-actions";
 import { useFormState } from "react-dom";
+import { schemaFormData, schemaRegister } from "@/features/auth/schemaAuth";
 
-const addressSchema = z.object({
-  street: z.string().min(1, "Street is required"),
-  suburb: z.string().min(1, "Suburb is required"),
-  state: z.string().min(1, "State is required"),
-  pCode: z
-    .string()
-    .min(4, "Postcode must be at least 4 characters long")
-    .max(10, "Postcode must be between 4 and 10 characters"),
-});
-
-const schemaRegister = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long"),
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  contactNumber: z.string().min(1, "Contact number is required"),
-  dateOfBirth: z.date(),
-  address: addressSchema,
-  commgroups: z.number().int().min(1, "Commgroup is required"),
-});
-
-type FormData = z.infer<typeof schemaRegister>;
-
-type SignUpFormInitialStateT = {
-  error: false;
-};
-
-type SignUpFormErrorStateT = {
-  error: true;
-  message: string;
-  inputErrors?: Record<string, string[]>;
-};
-
-export type SignUpFormStateT = SignUpFormInitialStateT | SignUpFormErrorStateT;
-
-const initialState: SignUpFormInitialStateT = {
+const initialState = {
   error: false,
 };
 
 export default function FormRegisterUser() {
-  const [state, formAction] = useFormState<SignUpFormStateT, FormData>(
-    registerUserAction,
-    initialState,
-  );
+  const [state, formAction] = useFormState(registerUserAction, initialState);
 
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {},
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof schemaFormData, string>>
+  >({});
   const [formError, setFormError] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-
     const firstName = formData.get("firstName")?.toString() || "";
     const lastName = formData.get("lastName")?.toString() || "";
 
     function generateUsername(firstName: string, lastName: string): string {
       const firstInitial = firstName.charAt(0).toLowerCase();
       const lastNameLower = lastName.toLowerCase();
-      return `${firstInitial}${lastNameLower}`;
+      const randomSuffix = Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(3, "0");
+      return `${firstInitial}${lastNameLower}${randomSuffix}`;
     }
 
-    const data: FormData = {
+    const data: schemaFormData = {
       username: generateUsername(firstName, lastName),
       email: formData.get("email")?.toString() || "",
       password: formData.get("password")?.toString() || "",
       firstName: formData.get("firstName")?.toString() || "",
       lastName: formData.get("lastName")?.toString() || "",
       contactNumber: formData.get("contactNumber")?.toString() || "",
-      dateOfBirth: new Date(formData.get("dateOfBirth")?.toString() || ""),
+      dateOfBirth: formData.get("dateOfBirth")
+        ? new Date(formData.get("dateOfBirth")?.toString() || "")
+        : undefined,
       address: {
         street: formData.get("street")?.toString() || "",
         suburb: formData.get("suburb")?.toString() || "",
@@ -87,14 +51,15 @@ export default function FormRegisterUser() {
       },
       commgroups: 1,
     };
+
     // Validate the data using Zod schema
     const result = schemaRegister.safeParse(data);
 
     if (!result.success) {
-      const fieldErrors: Partial<Record<keyof FormData, string>> = {};
+      const fieldErrors: Partial<Record<keyof schemaFormData, string>> = {};
       result.error.issues.forEach((issue) => {
         const path = issue.path.join(".");
-        fieldErrors[path as keyof FormData] = issue.message;
+        fieldErrors[path as keyof schemaFormData] = issue.message;
       });
       setErrors(fieldErrors);
       return;
@@ -104,6 +69,7 @@ export default function FormRegisterUser() {
     setFormError(null); // Clear form error on success
 
     try {
+      //@ts-ignore
       await formAction(result.data);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -185,29 +151,6 @@ export default function FormRegisterUser() {
                 </div>
               </div>
 
-              {/* <div className="sm:col-span-4">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Username
-                </label>
-                <div className="mt-2">
-                  <input
-                    name="username"
-                    id="username"
-                    type="text"
-                    autoComplete="username"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                  {errors.username && (
-                    <p className="mt-2 text-sm text-red-600">
-                      {errors.username}
-                    </p>
-                  )}
-                </div>
-              </div> */}
-
               <div className="sm:col-span-4">
                 <label
                   htmlFor="dateOfBirth"
@@ -256,7 +199,7 @@ export default function FormRegisterUser() {
 
               <div className="sm:col-span-4">
                 <label
-                  htmlFor="password"
+                  htmlFor="contactNumber"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Contact Number
@@ -278,7 +221,7 @@ export default function FormRegisterUser() {
 
               <div className="col-span-full">
                 <label
-                  htmlFor="address.street"
+                  htmlFor="street"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Street address
@@ -301,10 +244,10 @@ export default function FormRegisterUser() {
 
               <div className="sm:col-span-2 sm:col-start-1">
                 <label
-                  htmlFor="address.suburb"
+                  htmlFor="suburb"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  suburb
+                  Suburb
                 </label>
                 <div className="mt-2">
                   <input
@@ -324,19 +267,23 @@ export default function FormRegisterUser() {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="address.state"
+                  htmlFor="state"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   State / Province
                 </label>
                 <div className="mt-2">
-                  <input
-                    name="state"
-                    id="state"
-                    type="text"
-                    autoComplete="address-level1"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                  <select name="state" id="state">
+                    <option value="">Select State</option>
+                    <option value="NSW">NSW</option>
+                    <option value="VIC">VIC</option>
+                    <option value="ACT">ACT</option>
+                    <option value="QLD">QLD</option>
+                    <option value="NT">NT</option>
+                    <option value="WA">WA</option>
+                    <option value="SA">SA</option>
+                    <option value="TAS">TAS</option>
+                  </select>
                   {errors["address.state"] && (
                     <p className="mt-2 text-sm text-red-600">
                       {errors["address.state"]}
@@ -347,7 +294,7 @@ export default function FormRegisterUser() {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="address.postcode"
+                  htmlFor="pCode"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   ZIP / Postal code
@@ -393,7 +340,8 @@ export default function FormRegisterUser() {
             <ul>
               {Object.entries(state.inputErrors).map(([field, errors]) => (
                 <li key={field}>
-                  {field}: {errors.join(", ")}
+                  {field}:{" "}
+                  {Array.isArray(errors) ? errors.join(", ") : String(errors)}
                 </li>
               ))}
             </ul>

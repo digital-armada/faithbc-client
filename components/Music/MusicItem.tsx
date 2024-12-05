@@ -2,7 +2,7 @@
 import { useDispatch } from "react-redux";
 import { playPause, setActiveSermon } from "@/redux/features/playerSlice";
 import PlayPause from "./PlayPause";
-import { Sermon } from "@/types/types";
+import { Sermon } from "@/features/sermons/types";
 
 export const MusicItem = ({
   sermon,

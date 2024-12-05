@@ -6,7 +6,7 @@ export async function getSermonsByYoutubeIds(youtubeIds) {
     const idsQuery = youtubeIds
       .map((id) => `filters[youtubeId][$in]=${id}`)
       .join("&");
-    const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?${idsQuery}&fields[0]=youtubeId&pagination[limit]=100`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/sermons?${idsQuery}&fields[0]=youtubeId&pagination[limit]=100`;
 
     const res = await fetch(url, {
       next: { revalidate: 60 },
@@ -36,7 +36,7 @@ export async function getSermon(id: string) {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons/${id}?populate=*`,
+      `${process.env.NEXT_PUBLIC_API_URL}/sermons/${id}?populate=*`,
       {
         headers: {
           "Content-Type": "application/json",

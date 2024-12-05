@@ -3,10 +3,18 @@
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
 
 const RenderTipTap = ({ content }: { content: string }) => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Highlight,
+    ],
     content,
     editable: false,
     onCreate: () => {
@@ -22,7 +30,7 @@ const RenderTipTap = ({ content }: { content: string }) => {
     }
   }, [content, editor]);
 
-  return <EditorContent editor={editor} />;
+  return <EditorContent className="markdown" editor={editor} />;
 };
 
 export default RenderTipTap;

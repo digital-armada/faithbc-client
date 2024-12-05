@@ -30,40 +30,40 @@ export function AudioUploader({
     }
   };
 
-  const handleConvertVideo = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await convertVideo(watch("youtube"));
-
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      if (
-        result.data?.data &&
-        Array.isArray(result.data.data) &&
-        result.data.data.length > 0
-      ) {
-        const fileData = result.data.data[0];
-        setAudioFileId(fileData.id);
-        setValue("audio", fileData.id, { shouldValidate: true });
-        setValue("audioUrl", fileData.url);
-        setValue("audioName", fileData.name);
-      } else {
-        setError("No audio file was generated from the conversion");
-      }
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "An unexpected error occurred",
-      );
-      console.error("Error in video conversion:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   const handleConvertVideo = async () => {
+  //     setLoading(true);
+  //     setError(null);
+  //
+  //     try {
+  //       const result = await convertVideo(watch("youtube"));
+  //
+  //       if (result.error) {
+  //         setError(result.error);
+  //         return;
+  //       }
+  //
+  //       if (
+  //         result.data?.data &&
+  //         Array.isArray(result.data.data) &&
+  //         result.data.data.length > 0
+  //       ) {
+  //         const fileData = result.data.data[0];
+  //         setAudioFileId(fileData.id);
+  //         setValue("audio", fileData.id, { shouldValidate: true });
+  //         setValue("audioUrl", fileData.url);
+  //         setValue("audioName", fileData.name);
+  //       } else {
+  //         setError("No audio file was generated from the conversion");
+  //       }
+  //     } catch (error) {
+  //       setError(
+  //         error instanceof Error ? error.message : "An unexpected error occurred",
+  //       );
+  //       console.error("Error in video conversion:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
   return (
     <div className="space-y-4">
@@ -88,7 +88,7 @@ export function AudioUploader({
       )}
 
       <FileUploader
-        allowedTypes={["audio/mpeg", "audio/ogg", "audio/wav"]}
+        allowedTypes={["audio/mpeg", "audio/ogg", "audio/wav", "audio/mp3"]}
         onUpload={handleFileUpload}
         multiple={false}
       />

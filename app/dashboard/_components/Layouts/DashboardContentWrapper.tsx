@@ -7,7 +7,7 @@ interface ContentLayoutProps {
   children: React.ReactNode;
 }
 
-export function ContentLayout({ title, children }: ContentLayoutProps) {
+export default function ContentLayout({ title, children }: ContentLayoutProps) {
   return (
     <div>
       <TopNavContainer title={title} />

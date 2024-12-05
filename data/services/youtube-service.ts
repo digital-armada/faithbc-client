@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 "use server";
 import { google, youtube_v3 } from "googleapis";
 
@@ -47,7 +47,7 @@ export async function fetchVideos(
       pageToken: pageToken,
     });
 
-    // console.log("response server", response.data.items[0].snippet);
+    console.log("response server", response.data.items[0].snippet);
 
     const videos = response.data.items.map((item) => ({
       id: item.contentDetails.videoId,

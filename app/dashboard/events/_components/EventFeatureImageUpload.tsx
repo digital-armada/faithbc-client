@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { uploadImageAction } from "@/data/actions/file-actions";
 import { ImageUploadForm } from "@/components/ui/FormImage";
+import { uploadMediaAction } from "@/data/actions/file-actions";
 
 interface EventFeatureImageUploadProps {
   eventId: string | null;
@@ -21,7 +21,7 @@ export function EventFeatureImageUpload({
     formData.append("files", file);
 
     // Upload the image
-    const result = await uploadImageAction(formData);
+    const result = await uploadMediaAction(formData, "image");
     // console.log(
 
     // If upload is successful, notify parent component

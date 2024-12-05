@@ -1,10 +1,9 @@
 import { getAnnouncements } from "@/data/services/announcement-service";
-import formatDateTime from "@/lib/formatDateTime";
 import WidgetHeadings from "../WidgetHeadings";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BellIcon, BellOffIcon } from "lucide-react";
-import { formatSydneyDateTime } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
 
 interface Announcement {
   id: number;
@@ -51,15 +50,12 @@ export default async function AnnouncementsWidget({
                     {announcement.attributes.message}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {announcement.attributes.date.endsWith("13:00:00.000Z")
-                      ? formatSydneyDateTime(
-                          announcement.attributes.date,
-                          "eeee PP",
-                        )
-                      : formatSydneyDateTime(
-                          announcement.attributes.date,
-                          "eeee PPpp",
-                        )}
+                    {format(
+                      parseISO(announcement.attributes.date),
+                      announcement.attributes.date.endsWith("13:00:00.000Z")
+                        ? "eeee PP"
+                        : "eeee PPpp",
+                    )}
                   </p>
                 </div>
                 <hr className="my-2 border-muted" />

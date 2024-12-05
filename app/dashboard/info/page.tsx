@@ -1,5 +1,5 @@
 import DashHeader from "../_components/DashHeader";
-import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
 
 export default function page() {
   return (

@@ -10,7 +10,7 @@ import Audio from "./Audio";
 import PlayAndPause from "./PlayAndPause";
 import Image from "next/image";
 import { useAppSelector } from "@/hooks/useRedux";
-import { Sermon } from "@/types/types";
+import { Sermon } from "@/features/sermons/types";
 
 function formatDurationDisplay(duration: number) {
   const min = Math.floor(duration / 60);

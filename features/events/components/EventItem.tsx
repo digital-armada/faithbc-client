@@ -1,51 +1,30 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { format, toDate } from "date-fns-tz";
+import { format, parseISO } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Map, MapPinIcon } from "lucide-react";
 
 export default function EventItem({ event }) {
-  const sydneyTimeZone = "Australia/Sydney";
-
-  // Convert dates to Date objects
+  // Convert dates using parseISO
   const startDateObj = event?.attributes?.startDate
-    ? toDate(new Date(event.attributes.startDate), { timeZone: sydneyTimeZone })
+    ? parseISO(event.attributes.startDate)
     : null;
 
   const endDateObj = event?.attributes?.endDate
-    ? toDate(new Date(event.attributes.endDate), { timeZone: sydneyTimeZone })
+    ? parseISO(event.attributes.endDate)
     : null;
 
-  // Format dates for display
-  const startDate = startDateObj
-    ? format(startDateObj, "do", { timeZone: sydneyTimeZone })
-    : null;
-  const startDay = startDateObj
-    ? format(startDateObj, "ccc", { timeZone: sydneyTimeZone })
-    : null;
-
-  const startYear = startDateObj
-    ? format(startDateObj, "yyyy", { timeZone: sydneyTimeZone })
-    : null;
-
-  const endDate = endDateObj
-    ? format(endDateObj, "do", { timeZone: sydneyTimeZone })
-    : null;
+  // Format dates with standard date-fns
+  const startDate = startDateObj ? format(startDateObj, "do") : null;
+  const startDay = startDateObj ? format(startDateObj, "EEE") : null;
+  const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
+  const endDate = endDateObj ? format(endDateObj, "do") : null;
   console.log("endDate", endDate);
-  const endYear = endDateObj
-    ? format(endDateObj, "yyyy", { timeZone: sydneyTimeZone })
-    : null;
-
-  const startTime = startDateObj
-    ? format(startDateObj, " h:mma", { timeZone: sydneyTimeZone })
-    : null;
-
-  const endTime = endDateObj
-    ? format(endDateObj, " h:mma", { timeZone: sydneyTimeZone })
-    : null;
-  console.log(endTime);
-  // Venue information
+  const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
+  const startTime = startDateObj ? format(startDateObj, "h:mma") : null;
+  const endTime = endDateObj ? format(endDateObj, "h:mma") : null;
+  console.log(endTime); // Venue information
   const venName = event?.attributes?.venName;
   const venAdd = event?.attributes?.venAdd;
 

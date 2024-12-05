@@ -3,6 +3,7 @@
 // lib/mutate-data.ts
 import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
+import { ApiResponse } from "@/types/types";
 
 export async function mutateData<T>(
   method: string,

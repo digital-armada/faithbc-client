@@ -1,16 +1,24 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { updateSermon } from "@/data/actions/sermon-actions";
+import { updateSermon } from "@/features/sermons/sermon-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { Speaker } from "./Speaker";
-import { AudioUploader } from "./audio-uploader";
-import { ClipboardComponent } from "./ClipboardComponent";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Speaker } from "../../../app/dashboard/sermon-manager/_components/Speaker";
+import { AudioUploader } from "../../../app/dashboard/sermon-manager/_components/audio-uploader";
+import { ClipboardComponent } from "../../../app/dashboard/sermon-manager/_components/ClipboardComponent";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
@@ -80,7 +88,6 @@ export default function ClientSermon({
   );
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // comment
   const methods = useForm<FormValues>({
     // resolver: zodResolver(formSchema),
     defaultValues: {
@@ -101,20 +108,22 @@ export default function ClientSermon({
       speaker: sermon.attributes.speaker?.data?.id,
     },
   });
+
   const { handleSubmit, register, setValue, watch } = methods;
-  console.log("watch", watch());
+  console.log("sermon", sermon);
+  console.log("watch service", watch("slug"));
 
-  const title = watch("name");
-
-  useEffect(() => {
-    if (title) {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)+/g, "");
-      setValue("slug", slug);
-    }
-  }, [title, setValue]);
+  //   const title = watch("name");
+  //
+  //   useEffect(() => {
+  //     if (title) {
+  //       const slug = title
+  //         .toLowerCase()
+  //         .replace(/[^a-z0-9]+/g, "-")
+  //         .replace(/(^-|-$)+/g, "");
+  //       setValue("slug", slug);
+  //     }
+  //   }, [title, setValue]);
 
   const onSubmit = async (formData: FormValues) => {
     setIsSubmitting(true);
@@ -123,12 +132,14 @@ export default function ClientSermon({
         ...formData,
         audio: audioFileId,
       };
+
       const result = await updateSermon(updatedSermon);
       console.log("Result from updateSermon:", result);
       // toast({
       //   title: "Sermon Updated",
       //   description: "The sermon has been successfully updated.",
       // });
+      // router.refresh();
     } catch (error) {
       console.error("Error in form submission:", error);
       // toast({
@@ -142,19 +153,17 @@ export default function ClientSermon({
   };
 
   const serviceTypes = [
-    "Sunday Morning",
-    "Sunday Evening",
-    "Wednesday Evening",
-    "Friday Youth",
-    "Sunday School",
-    "Special Events",
+    { value: "sunday-morning", key: "Sunday Morning" },
+    { value: "sunday-evening", key: "Sunday Evening" },
+    { value: "wednesday-evening", key: "Wednesday Evening" },
+    { value: "friday-youth", key: "Friday Youth" },
+    { value: "sunday-school", key: "Sunday School" },
+    { value: "special-events", key: "Special Events" },
   ];
 
   if (!sermon || !speakers || !series) {
     return <div>Loading...</div>;
   }
-
-  console.log("series", series);
 
   return (
     <FormProvider {...methods}>
@@ -165,7 +174,11 @@ export default function ClientSermon({
         </div>
         <div>
           <Label htmlFor="slug">Slug</Label>
-          <Input {...register("slug")} disabled />
+          <Input
+            {...register("slug")}
+            defaultValue={sermon.attributes.slug}
+            disabled
+          />
         </div>
         <div>
           <Label htmlFor="date">Date Preached</Label>
@@ -173,10 +186,23 @@ export default function ClientSermon({
         </div>
         <div>
           <Label htmlFor="service_type">Service Type</Label>
-          {/* <Select
-            {...register("service_type")}
-            options={serviceTypes.map((type) => ({ value: type, label: type }))}
-          /> */}
+          <Select
+            onValueChange={(value) => setValue("service_type", value)}
+            defaultValue={sermon.attributes.service_type}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select service type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {serviceTypes.map((type) => (
+                  <SelectItem key={type.value} value={type.key}>
+                    {type.key}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="description">Description</Label>
@@ -186,9 +212,9 @@ export default function ClientSermon({
           <Label htmlFor="verse">Verse</Label>
           <Input {...register("verse")} />
         </div>
-        <div>
+        {/* <div>
           <Label htmlFor="series">Series</Label>
-          {/* <Select
+          <Select
             {...register("series")}
             options={[
               { value: "", label: "Select a Series" },
@@ -197,8 +223,8 @@ export default function ClientSermon({
                 label: s.attributes.name,
               })),
             ]}
-          /> */}
-        </div>
+          />
+        </div> */}
         <div>
           <Speaker speakerList={speakers.data} />
         </div>

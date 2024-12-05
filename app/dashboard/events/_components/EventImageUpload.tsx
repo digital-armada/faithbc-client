@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { uploadImageAction } from "@/data/actions/file-actions";
+import { uploadMediaAction } from "@/data/actions/file-actions";
 import { getStrapiURL } from "@/lib/utils";
 import Image from "next/image";
 
@@ -22,8 +22,6 @@ export function EventImageUpload({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    console.log("Selected file:", file);
-
     // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -38,13 +36,10 @@ export function EventImageUpload({
       const formData = new FormData();
       formData.append("files", file);
 
-      console.log("FormData before upload:", formData);
-
-      const result = await uploadImageAction(formData);
-
-      console.log("Upload result:", result);
+      const result = await uploadMediaAction(formData, "image");
 
       if (result.data) {
+        //@ts-ignore
         onImageUploaded(result.data.image);
         // Update preview URL with the uploaded image URL
         setPreviewUrl(`${baseUrl}${result.data.url}`);

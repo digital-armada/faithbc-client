@@ -2,15 +2,6 @@ import { auth } from "@/auth";
 import { API_CONFIG } from "./constants/api-endpoints";
 import qs from "qs";
 
-type ApiResponse<T> = {
-  success: boolean;
-  data?: T;
-  error?: {
-    message: string;
-    details?: any;
-  };
-};
-
 const checkPermission = async (requiredRole: string) => {
   const session = await auth();
   return session?.user?.role === requiredRole;
@@ -24,13 +15,14 @@ export const strapiRequest = async <T>(
     requiredRole?: string;
     query?: object;
     data?: any;
+    // next?: { revalidate?: number };
   },
-): Promise<ApiResponse<T>> => {
+) => {
   // INITIALIZE HEADERS
   let headers: HeadersInit = {
     "Content-Type": "application/json",
   };
-
+  console.log("options", options);
   // IF AUTH IS REQUIRED
   if (options?.requireAuth) {
     const session = await auth();
@@ -70,12 +62,11 @@ export const strapiRequest = async <T>(
     const response = await fetch(url, {
       method,
       headers,
-      body: options?.data ? JSON.stringify(options.data) : undefined,
+      body: options?.data ? JSON.stringify(options?.data) : undefined,
     });
-    const responseText = await response.text();
 
-    const data = responseText ? JSON.parse(responseText) : null;
-
+    const data = await response.json();
+    console.log("strapiReturnedValue", data);
     if (!response.ok) {
       return {
         success: false,
@@ -88,7 +79,7 @@ export const strapiRequest = async <T>(
 
     return {
       success: true,
-      data: data.data || data,
+      data,
     };
   } catch (error) {
     return {

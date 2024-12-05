@@ -3,10 +3,10 @@ import { z } from "zod";
 import qs from "qs";
 
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import { mutateData } from "@/lib/mutate-data";
 
 import { flattenAttributes } from "@/lib/utils";
 import { fileUploadService } from "../services/file-service";
+import { strapiRequest } from "@/lib/strapi-service";
 
 export async function updateProfileAction(
   userId: string,
@@ -25,10 +25,10 @@ export async function updateProfileAction(
     bio: rawFormData.bio,
   };
 
-  const responseData = await mutateData(
+  const responseData = await strapiRequest(
     "PUT",
     `/api/users/${userId}?${query}`,
-    payload,
+    { data: payload },
   );
 
   if (!responseData) {
@@ -129,7 +129,7 @@ export async function uploadProfileImageAction(
   // UPLOAD NEW IMAGE TO MEDIA LIBRARY
   const fileUploadResponse = await fileUploadService(data.image);
 
-  if (!fileUploadResponse) {
+  if (!fileUploadResponse || fileUploadResponse.length === 0) {
     return {
       ...prevState,
       strapiErrors: null,
@@ -138,22 +138,23 @@ export async function uploadProfileImageAction(
     };
   }
 
-  if (fileUploadResponse.error) {
+  if ("error" in fileUploadResponse[0]) {
     return {
       ...prevState,
-      strapiErrors: fileUploadResponse.error,
+      strapiErrors: fileUploadResponse[0].error,
       zodErrors: null,
       message: "Failed to Upload File.",
     };
   }
+
   const updatedImageId = fileUploadResponse[0].id;
   const payload = { image: updatedImageId };
 
   // UPDATE USER PROFILE WITH NEW IMAGE
-  const updateImageResponse = await mutateData(
+  const updateImageResponse = await strapiRequest(
     "PUT",
     `/api/users/${userId}`,
-    payload,
+    { data: payload },
   );
   console.log(updateImageResponse);
   const flattenedData = flattenAttributes(updateImageResponse);

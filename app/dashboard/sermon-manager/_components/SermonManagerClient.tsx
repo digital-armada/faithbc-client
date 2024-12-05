@@ -1,22 +1,20 @@
 // @ts-nocheck
 "use client";
-
 import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { fetchVideos } from "@/data/services/youtube-service";
 import { getSermonsByYoutubeIds } from "@/data/sermons";
-import slugify from "slugify";
+import { createSermonFromVideo } from "@/features/sermons/sermon-actions";
 
 export default function VideoList() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
-
   const pageToken = searchParams.get("pageToken") || "";
 
   const fetchVideosAndCheckSermons = useCallback(async ({ queryKey }) => {
@@ -43,93 +41,25 @@ export default function VideoList() {
     queryFn: fetchVideosAndCheckSermons,
   });
 
-  const createSermonMutation = useMutation({
-    mutationFn: async (video) => {
-      if (!session?.strapiToken) {
-        throw new Error("No authentication token available");
+  const handleConvert = async (video) => {
+    try {
+      const response = await createSermonFromVideo(video);
+
+      if (response.data) {
+        queryClient.setQueryData(["videos", pageToken], (oldData) => ({
+          ...oldData,
+          videos: oldData.videos.map((v) =>
+            v.id === video.id
+              ? { ...v, isConverted: true, sermonId: response.data.id }
+              : v,
+          ),
+        }));
+        router.refresh();
       }
-
-      const baseSlug = slugify(video.title, { lower: true, strict: true });
-      let uniqueSlug = baseSlug;
-      let slugExists = true;
-      let slugCounter = 1;
-
-      while (slugExists) {
-        try {
-          // Check if the slug exists
-          const checkResponse = await axios.get(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?filters[slug][$eq]=${uniqueSlug}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session.strapiToken}`,
-              },
-            },
-          );
-
-          if (checkResponse.data.data.length === 0) {
-            slugExists = false;
-          } else {
-            // If slug exists, append a number and try again
-            uniqueSlug = `${baseSlug}-${slugCounter}`;
-            slugCounter++;
-          }
-        } catch (error) {
-          console.error("Error checking slug:", error);
-          throw new Error("Failed to check if slug exists");
-        }
-      }
-
-      const sermonData: SermonCreateData = {
-        data: {
-          name: video.title,
-          date: new Date(video.publishTime).toISOString(),
-          slug: uniqueSlug,
-          youtubeId: video.id,
-          youtube: `https://www.youtube.com/watch?v=${video.id}`,
-          description: video.description || "",
-          imageUrl: video.thumbnailUrl.url,
-        },
-      };
-
-      console.log("Sending sermon data:", sermonData);
-
-      try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons`,
-          sermonData,
-          {
-            headers: {
-              Authorization: `Bearer ${session.strapiToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        return response.data;
-      } catch (error) {
-        console.error("Error response:", error.response?.data);
-        throw error;
-      }
-    },
-    onSuccess: (response, video) => {
-      console.log("Sermon created successfully:", response);
-      queryClient.setQueryData(["videos", pageToken], (oldData) => ({
-        ...oldData,
-        videos: oldData.videos.map((v) =>
-          v.id === video.id
-            ? { ...v, isConverted: true, sermonId: response.data.id }
-            : v,
-        ),
-      }));
-    },
-    onError: (error) => {
-      console.error("Error creating sermon:", error);
-    },
-  });
-
-  const handleConvert = (video) => {
-    createSermonMutation.mutate(video);
+    } catch (error) {
+      console.error("Error converting video:", error);
+    }
   };
-
   const handlePageChange = (newToken) => {
     router.push(`?pageToken=${newToken}`, { scroll: false });
   };
@@ -147,13 +77,15 @@ export default function VideoList() {
             <p className="text-sm text-gray-600">
               Published: {new Date(video.publishTime).toLocaleDateString()}
             </p>
-            <Image
-              src={video.thumbnailUrl.url}
-              alt={video.title}
-              width={video.thumbnailUrl.width}
-              height={video.thumbnailUrl.height}
-              className="my-2 rounded"
-            />
+            {video.thumbnailUrl.url && (
+              <Image
+                src={video.thumbnailUrl.url}
+                alt={video.title}
+                width={video.thumbnailUrl.width}
+                height={video.thumbnailUrl.height}
+                className="my-2 rounded"
+              />
+            )}
             {video.isConverted ? (
               <span className="text-green-600">
                 Already converted (Sermon ID: {video.sermonId})
@@ -161,12 +93,12 @@ export default function VideoList() {
             ) : (
               <button
                 onClick={() => handleConvert(video)}
-                disabled={createSermonMutation.isLoading}
+                // disabled={createSermonMutation.isLoading}
                 className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
               >
-                {createSermonMutation.isLoading
+                {/* {createSermonMutation.isLoading
                   ? "Converting..."
-                  : "Convert to Sermon"}
+                  : "Convert to Sermon"} */}
               </button>
             )}
           </li>

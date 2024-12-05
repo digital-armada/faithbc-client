@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/lib/mutate-data";
+import { strapiRequest } from "@/lib/strapi-service";
 import { revalidatePath } from "next/cache";
 
 export async function createNewCommGroup(prevState: any, formData: FormData) {
@@ -14,7 +14,9 @@ export async function createNewCommGroup(prevState: any, formData: FormData) {
       },
     };
 
-    const response = await mutateData("POST", "/commgroups", payload);
+    const response = await strapiRequest("POST", "/commgroups", {
+      data: payload,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/contacts/comms");
@@ -39,7 +41,7 @@ export async function updateUserCommGroup(user, group) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("PUT", `/commgroups/${group}`, {
+    const response = await strapiRequest("PUT", `/commgroups/${group}`, {
       data: {
         users: {
           set: user,
@@ -69,7 +71,7 @@ export async function deleteUserCommGroup(payload) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("PUT", `/commgroups/${groupId}`, {
+    const response = await strapiRequest("PUT", `/commgroups/${groupId}`, {
       data: {
         users: {
           disconnect: [userId],
@@ -94,7 +96,7 @@ export async function deleteCommGroup(groupId) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/commgroups/${groupId}`);
+    const response = await strapiRequest("DELETE", `/commgroups/${groupId}`);
 
     if (response.data) {
       revalidatePath("/dashboard/contacts/comms");

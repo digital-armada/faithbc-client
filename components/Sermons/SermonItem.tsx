@@ -4,17 +4,16 @@ import { formatDistance } from "date-fns";
 import { FaYoutube } from "react-icons/fa";
 import { IoMdBook, IoMdDownload, IoMdMicrophone } from "react-icons/io";
 import { MusicItem } from "../Music/MusicItem";
-import { useSelector } from "react-redux";
 import { IoTodayOutline } from "react-icons/io5";
 import Image from "next/image";
 import Placeholder from "@/public/image.png";
 import { useAppSelector } from "@/hooks/useRedux";
-import { Sermon } from "@/types/types";
+import { Sermon } from "@/features/sermons/types";
+// import { Sermon } from "@/types/types";
 
 export default function SermonItem({ sermon }: { sermon: Sermon }) {
   const { activeSermon, isPlaying } = useAppSelector((state) => state.player);
 
-  console.log("activeSermon", activeSermon);
   if (!sermon) {
     return null; // or render a fallback UI here
   }
@@ -40,19 +39,6 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
             height={1000}
             alt=""
           />
-          // <Image
-          //     src={
-          //         sermon?.attributes?.youtube
-          //             ? `https://i.ytimg.com/vi/${
-          //                   sermon?.attributes?.youtube.split('=')[1]
-          //               }/0.jpg`
-          //             : ''
-          //     }
-          //     className='w-full pb-4 sm:pb-0 sm:w-48 object-contain'
-          //     width={1000}
-          //     height={1000}
-          //     alt=''
-          // />
         )}
       </div>
 
@@ -75,16 +61,16 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
             )}
           </div>
           <div className="flex flex-col flex-wrap gap-2 text-[11px] sm:flex-row">
-            {/* {sermon?.attributes?.speaker?.data?.attributes?.speaker && (
+            {sermon?.attributes?.speaker?.data?.attributes?.speaker && (
               <div className="flex items-center gap-1">
                 <IoMdMicrophone />
 
                 {sermon?.attributes?.speaker?.data?.attributes?.speaker}
               </div>
-            )} */}
+            )}
             {sermon?.attributes?.service_type && (
               <>
-                <span className="hidden sm:inline-block">&bull;</span>
+                <span className="hidden sm:inline-block">•</span>
                 <div className="flex items-center gap-1">
                   <IoTodayOutline />
                   {sermon?.attributes?.service_type}
@@ -93,7 +79,7 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
             )}
             {sermon?.attributes?.verse && (
               <>
-                <span className="hidden sm:inline-block">&bull;</span>
+                <span className="hidden sm:inline-block">•</span>
                 <div className="flex items-center gap-1">
                   <IoMdBook />
                   {sermon?.attributes?.verse}
@@ -116,20 +102,9 @@ export default function SermonItem({ sermon }: { sermon: Sermon }) {
                   >
                     <FaYoutube className="text-red-700" />
                     <span>Watch</span>
-                    {/* <RiExternalLinkLine /> */}
                   </a>
                 </div>
               )}
-              {/* <button
-                onClick={() =>
-                  handleDownload(
-                    sermon?.attributes?.audio?.data?.attributes?.url,
-                  )
-                }
-                className="flex items-center gap-2"
-              >
-                <IoMdDownload /> Download
-              </button> */}
             </div>
             <div>
               {formatDistance(new Date(sermon?.attributes?.date), new Date(), {

@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/data/actions/auth-actions";
+import { logout } from "@/features/auth/auth-actions";
 
 export function UserNav({ user }) {
   console.log(user);

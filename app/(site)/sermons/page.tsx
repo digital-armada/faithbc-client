@@ -5,7 +5,7 @@ export default async function Page() {
   const { data } = await sermonsService.getInfiniteSermons({
     page: 1,
   });
-  const initialSermons = data ?? [];
+  const initialSermons = data.data ?? [];
 
   return <WrapperSermons initialSermons={initialSermons} />;
 }

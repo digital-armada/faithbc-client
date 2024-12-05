@@ -17,7 +17,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { SidebarCollapsibleButton } from "./SidebarCollapsibleButton";
-import { logout } from "@/data/actions/auth-actions";
+import { logout } from "@/features/auth/auth-actions";
 import { menuItems } from "@/app/dashboard/_components/Sidenav/MenuItems";
 
 type Role = "member" | "admin" | "ministry";
@@ -52,18 +52,16 @@ export function Menu({ isOpen }: MenuProps) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const result = await logout();
+      const { success, error } = await logout();
 
-      if (result.success) {
-        console.log("Sign out successful, redirecting...");
-        router.push("/"); // Redirect on the client side
-      } else {
-        console.error("Sign out failed:", result.error);
-        // Optionally, show an error message to the user
+      if (success) {
+        router.push("/");
+        return;
       }
+
+      console.error("Sign out failed:", error);
     } catch (error) {
       console.error("Sign out error:", error);
-      // Optionally, show an error message to the user
     } finally {
       setIsLoggingOut(false);
     }
@@ -189,7 +187,7 @@ export function Menu({ isOpen }: MenuProps) {
                     isOpen === false ? "hidden opacity-0" : "opacity-100",
                   )}
                 >
-                  {isLoggingOut ? "Signing out..." : "Sign out"}{" "}
+                  {isLoggingOut ? "Signing out..." : "Sign out"}
                 </p>
               </Button>
             </TooltipTrigger>

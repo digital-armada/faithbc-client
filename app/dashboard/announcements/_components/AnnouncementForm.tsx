@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { useFormState } from "react-dom";
-import { createNewAnnouncement } from "@/data/actions/announcement-actions";
+import { createNewAnnouncement } from "@/features/announcements/announcement-actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

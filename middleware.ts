@@ -1,38 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-
 export async function middleware(req: NextRequest) {
-  // console.log("Middleware running for path:", req.nextUrl.pathname);
   const session = await auth();
-  // console.log("middleAuth", session);
-
-  if (!session) {
-    console.log("No session found in middleware");
-  }
-
   const nextUrl = req.nextUrl;
-  const isLoggedIn =
-    !!session?.user &&
-    session.user.confirmed === true &&
-    session.user.blocked !== true;
-  const isDashboardRoute = nextUrl.pathname.startsWith("/dashboard");
 
-  if (isDashboardRoute && !isLoggedIn) {
-    console.log("Redirecting to signin page");
-    return NextResponse.redirect(new URL("/signin", req.url));
+  // Early return if no session
+  if (!session?.user) {
+    if (nextUrl.pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/signin", req.url));
+    }
+    return NextResponse.next();
   }
 
-  if (session?.user?.blocked) {
-    console.log("User is blocked, redirecting to blocked page");
+  // User state checks
+  const { blocked, confirmed } = session.user;
+
+  // Handle different user states
+  if (blocked) {
     return NextResponse.redirect(new URL("/blocked", req.url));
   }
 
-  if (session?.user && !session.user.confirmed) {
-    console.log("User is not confirmed, redirecting to confirmation page");
+  if (!confirmed) {
     return NextResponse.redirect(new URL("/confirmation/newrequest", req.url));
   }
 
-  console.log("Proceeding to next middleware/page");
+  // If user is logged in and all checks pass
   return NextResponse.next();
 }
 

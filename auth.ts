@@ -1,9 +1,5 @@
-import { StrapiErrorT } from "@/types/strapi/StrapiError";
-import { StrapiLoginResponseT } from "@/types/strapi/User";
-import NextAuth, { CredentialsSignin } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { LoginSchema } from "./schemas";
-import { User } from "./types/types";
 
 export const BASE_PATH = "/api/auth";
 export const { handlers, signIn, signOut, auth } = NextAuth({

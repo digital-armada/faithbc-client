@@ -1,4 +1,20 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+
+export interface Meta {
+  pagination: {
+    total: number;
+    page: number;
+    pageSize: number;
+  };
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: {
+    data: T[];
+    meta: Meta;
+  };
+}
 
 export type SideNavItem = {
   title: string;
@@ -129,3 +145,8 @@ export interface User {
     updatedAt: string;
   };
 }
+const response: ApiResponse<Sermon[]> = await sermonsService.getSermons({
+  pageSize: 4,
+});
+
+const sermons = response.success ? response.data.data : [];

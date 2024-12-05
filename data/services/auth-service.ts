@@ -1,6 +1,6 @@
 import { getStrapiURL } from "@/lib/utils";
 import { auth } from "@/auth";
-import { mutateData } from "../../lib/mutate-data";
+import { strapiRequest } from "@/lib/strapi-service";
 
 interface RegisterUserProps {
   username: string;
@@ -19,19 +19,18 @@ export async function registerUserService(
   userData: RegisterUserProps,
 ): Promise<ApiResponse<UserData>> {
   try {
-    const response = await mutateData<UserData>(
+    const response = await strapiRequest<UserData>(
       "POST",
       "/auth/local/register",
-      userData,
+      {
+        data: userData,
+      },
     );
 
     if (response.error) {
       return {
         success: false,
-        error: {
-          message: response.error,
-          details: response.error,
-        },
+        error: response.error,
       };
     }
 
@@ -61,27 +60,24 @@ export async function registerUserService(
     };
   }
 }
-
 export async function updateUserService(userData) {
   try {
-    const response = await mutateData("PUT", `/users/${userData.id}`, userData);
-    // console.log("mutateData", response);
-    // Check if the response is not okay
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error Response:", errorData); // Log the error details
-      throw new Error("Registration failed");
+    const response = await strapiRequest("PUT", `/users/${userData.id}`, {
+      data: userData,
+      requireAuth: true,
+    });
+    if (!response.success) {
+      console.error("Error Response:", response.error); // Log the error details
+      throw new Error("Update failed");
     }
 
-    // If response is okay, process the data
-    const data = await response.json();
-    // console.log("Registered User:", data.user); // Log the registered user data
-    return data.user;
+    // If response is successful, return the data
+    return response.data;
   } catch (error) {
-    console.error("Registration Service Error:", error);
+    console.error("Update Service Error:", error);
+    throw error;
   }
 }
-
 export async function loginUserService(userData: LoginUserProps) {
   const url = new URL("/api/auth/local", baseUrl);
 

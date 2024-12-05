@@ -1,14 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/lib/mutate-data";
+import { strapiRequest } from "@/lib/strapi-service";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
-
-const announcementSchema = z.object({
-  message: z.string().min(1, "Message is required"),
-  date: z.string().min(1, "Date and time is required"),
-});
+import { formatDateForTimezone } from "@/lib/dateHelper";
+import { announcementSchema } from "./announcement-schema";
 
 export async function createNewAnnouncement(prevState, formData: FormData) {
   const validatedFields = announcementSchema.safeParse({
@@ -26,17 +22,27 @@ export async function createNewAnnouncement(prevState, formData: FormData) {
   const { message, date } = validatedFields.data;
 
   try {
+    // Convert the parsed date to the specified time zone
+    const normalizeDate = formatDateForTimezone(date, "Australia/Sydney");
+
+    // Format the zoned date for Strapi
+    console.log("normalizeDate", normalizeDate);
+
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
     const payload = {
       data: {
         message,
-        date,
+        date: normalizeDate,
       },
     };
+    console.log("payload", payload);
 
-    const response = await mutateData("POST", "/api/announcements", payload);
+    const response = await strapiRequest("POST", "/announcements", {
+      data: payload,
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/announcements");
@@ -57,7 +63,9 @@ export async function deleteAnnouncement(id: number) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/announcements/${id}`);
+    const response = await strapiRequest("DELETE", `/announcements/${id}`, {
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/announcements");

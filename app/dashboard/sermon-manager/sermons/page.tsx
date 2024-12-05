@@ -1,16 +1,21 @@
-import { getInfiniteSermons } from "@/data/sermons";
-import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper";
-import DashWrapperSermons from "@/components/Sermons/DashWrapperSermons";
-import { DataTable } from "../_components/DataTable";
-import { columns } from "../_components/columns";
+import ContentLayout from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
 import { sermonsService } from "@/features/sermons/sermons-service";
+import { Suspense } from "react";
+import SermonsTable from "@/features/sermons/components/SermonsTable";
 
 async function page() {
-  const { data } = await sermonsService.getInfiniteSermons({ page: 1 });
-
+  const initialSermons = await sermonsService.getInfiniteSermons({ page: 1 });
   return (
     <ContentLayout title="Sermons">
-      <DataTable data={data} columns={columns} />
+      <Suspense
+        fallback={
+          <div className="flex h-screen items-center justify-center">
+            Loading
+          </div>
+        }
+      >
+        <SermonsTable initialData={initialSermons.data} />
+      </Suspense>
     </ContentLayout>
   );
 }

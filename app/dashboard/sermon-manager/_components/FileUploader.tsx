@@ -75,7 +75,7 @@ const FileUploader = ({ allowedTypes, multiple = false, onUpload }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/upload`,
+        `${process.env.NEXT_PUBLIC_API_URL}/upload`,
         {
           headers: { Authorization: `Bearer ${session?.data?.strapiToken}` },
           method: "POST",

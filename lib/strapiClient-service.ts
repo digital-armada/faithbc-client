@@ -1,16 +1,5 @@
-"use client";
-import { auth } from "@/auth";
 import { API_CONFIG } from "./constants/api-endpoints";
 import qs from "qs";
-
-type ApiResponse<T> = {
-  success: boolean;
-  data?: T;
-  error?: {
-    message: string;
-    details?: any;
-  };
-};
 
 export const strapiRequestClient = async <T>(
   method: string,
@@ -18,25 +7,19 @@ export const strapiRequestClient = async <T>(
   options?: {
     query?: object;
     data?: any;
-    requireAuth?: boolean;
+    session?: any;
   },
-): Promise<ApiResponse<T>> => {
-  // INITIALIZE HEADERS
-  let headers: HeadersInit = {
+): Promise<{
+  success: boolean;
+  data?: T;
+  error?: { message: string; details?: any };
+}> => {
+  let headers: { [key: string]: string } = {
     "Content-Type": "application/json",
   };
 
-  // IF AUTH IS REQUIRED
-  if (options?.requireAuth) {
-    const session = await auth();
-    console.log("session", session);
-    if (!session?.strapiToken) {
-      return {
-        success: false,
-        error: { message: "Unauthorized: No valid session token" },
-      };
-    }
-    headers.Authorization = `Bearer ${session.strapiToken}`;
+  if (options?.session && options.session.strapiToken) {
+    headers["Authorization"] = `Bearer ${options.session.strapiToken}`;
   }
 
   const url = new URL(`${API_CONFIG.API_URL}${endpoint}`);

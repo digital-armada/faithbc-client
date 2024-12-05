@@ -17,7 +17,7 @@ import {
   MdNavigateNext,
 } from "react-icons/md";
 import Dropdown from "./Dropdown";
-import { updateUserRole } from "@/data/actions/auth-actions";
+import { updateUserRole } from "@/features/auth/auth-actions";
 import { format, parseISO } from "date-fns";
 import { TiTick, TiTimes } from "react-icons/ti";
 

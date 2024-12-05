@@ -13,23 +13,9 @@ export default function MiniPlayer({
   return (
     <div className="mx-auto max-w-md rounded-md bg-gray-800 text-gray-300">
       <div className="flex items-center justify-between px-3 py-2">
-        {activeSermon?.attributes?.imageUrl ? (
+        {activeSermon?.attributes?.imageUrl && (
           <Image
             src={activeSermon?.attributes?.imageUrl}
-            className="size-10 rounded-md object-cover"
-            width={40}
-            height={40}
-            alt="Image"
-          />
-        ) : (
-          <Image
-            src={
-              activeSermon?.attributes?.youtube
-                ? `https://i.ytimg.com/vi/${
-                    activeSermon?.attributes?.youtube.split("=")[1]
-                  }/0.jpg`
-                : ""
-            }
             className="size-10 rounded-md object-cover"
             width={40}
             height={40}

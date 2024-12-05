@@ -16,8 +16,11 @@ export const eventsService = {
 
     const response = await strapiRequest<Event>("GET", API.EVENTS.GET_ONE(id), {
       query,
+      requireAuth: true, // Ensure Authorization is included
     });
-    console.dir(response.data.attributes, { depth: null });
+    // console.log("EVENT_SERVICE_GET_EVENT", response.data?.attributes, {
+    //   depth: null,
+    // });
     return response.data;
   },
 

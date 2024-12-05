@@ -3,7 +3,7 @@ import Link from "next/link";
 import { TiTrash } from "react-icons/ti";
 import ManageEventsClient from "../_components/ManageEventsClient";
 import DashHeader from "../../_components/DashHeader";
-import { ContentLayout } from "../../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
 import { DataTable } from "../_components/DataTable";
 import { columns } from "../_components/columns";
 

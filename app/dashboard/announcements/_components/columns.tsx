@@ -16,7 +16,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Trash } from "lucide-react";
 import { TiTrash } from "react-icons/ti";
-import { deleteAnnouncement } from "@/data/actions/announcement-actions";
+import { deleteAnnouncement } from "@/features/announcements/announcement-actions";
 
 type AnnouncementAttributes = {
   message: string;

@@ -1,6 +1,5 @@
 import { getDashEvents } from "@/app/dashboard/events/_api/dashevents-service";
-import EventClient from "../_components/EventClient";
-import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
 import EventClient2 from "../_components/EventClient2";
 
 export default async function page() {
@@ -8,9 +7,9 @@ export default async function page() {
     includesPast: false,
     sort: ["startDate:asc"],
   });
+  console.dir(data, { depth: null });
   return (
     <ContentLayout title="Events">
-      {/* <EventClient data={data} /> */}
       <EventClient2 events={data} />
     </ContentLayout>
   );

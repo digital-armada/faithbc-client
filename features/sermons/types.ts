@@ -35,8 +35,23 @@ export interface Sermon {
     imageUrl?: string;
   };
 }
+export interface SermonRes {
+  success: boolean;
+  data: {
+    data: Sermon[];
+    meta: {
+      pagination: {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      };
+    };
+  };
+}
 
 export interface Speaker {
+  speaker: string;
   id: number;
   attributes: {
     speaker: string;
@@ -61,3 +76,17 @@ export interface Series {
     publishedAt: string;
   };
 }
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export type SermonResponse = ApiResponse<Sermon>;

@@ -225,11 +225,11 @@ const Breadcrumbs = ({
               breadcrumb.breadcrumb.length === 0 ||
               (omitIndexList && omitIndexList.find((value) => value === i))
             ) {
-              return;
+              return null;
             }
             return (
-              <>
-                <span key={breadcrumb.href}>{separator}</span>
+              <React.Fragment key={`breadcrumb-${i}`}>
+                <span>{separator}</span>
                 <li
                   className={
                     i === breadcrumbs.length - 1
@@ -247,11 +247,10 @@ const Breadcrumbs = ({
                       breadcrumb.breadcrumb,
                       labelsToUppercase,
                       replaceCharacterList,
-                      // transformLabel
                     )}
                   </Link>
                 </li>
-              </>
+              </React.Fragment>
             );
           })}
       </ol>

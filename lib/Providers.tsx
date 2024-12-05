@@ -41,7 +41,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <SessionProvider>
-          <ReactQueryStreamedHydration> {children}</ReactQueryStreamedHydration>
+          <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
           <ReactQueryDevtools initialIsOpen={false} />
         </SessionProvider>
       </QueryClientProvider>

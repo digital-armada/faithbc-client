@@ -1,7 +1,7 @@
 import { getChurchPrayers } from "@/data/services/prayerItem-service";
 import AddPrayerRequests from "./_components/AddPrayerRequests";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getChurch } from "@/app/dashboard/missionaries/_api/data/missionary-service";
+import { getChurch } from "@/features/missions/_api/data/missionary-service";
 import { deletePrayerRequest } from "@/data/actions/prayer-actions";
 import DeleteRequest from "./_components/DeleteRequest";
 

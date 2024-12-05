@@ -107,7 +107,12 @@ export function FormDateTimePicker({
         value={
           date && time
             ? format(
-                new Date(date.setHours(...time.split(":").map(Number))),
+                new Date(
+                  date.getFullYear(),
+                  date.getMonth(),
+                  date.getDate(),
+                  ...time.split(":").map(Number),
+                ),
                 "yyyy-MM-dd'T'HH:mm",
               )
             : ""
@@ -117,7 +122,6 @@ export function FormDateTimePicker({
     </div>
   );
 }
-
 // import React, { useState, useEffect } from "react";
 // import { format, parseISO, isValid } from "date-fns";
 //

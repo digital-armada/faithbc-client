@@ -1,4 +1,4 @@
-import { ContentLayout } from "./_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "./_components/Layouts/DashboardContentWrapper";
 import { getBirthdayUsers } from "@/data/services/getUsers";
 import UpcomingBirthdays from "@/app/dashboard/_components/widgets/upcomingBirthdays";
 import Announcements from "@/app/dashboard/_components/widgets/announcements";
@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   const { data: user } = await getUserMeLoader();
   const { data: events } = await getEvents({
     includesPast: false,
-    sort: "startDate:asc",
+    sort: ["startDate:asc"],
   });
 
   return (

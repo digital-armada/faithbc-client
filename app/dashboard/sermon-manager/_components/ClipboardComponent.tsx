@@ -10,7 +10,8 @@ interface ClipboardComponentProps {
 }
 
 export function ClipboardComponent({ youtube }: ClipboardComponentProps) {
-  const copyToClipboard = () => {
+  const copyToClipboard = (e) => {
+    e.preventDefault();
     if (youtube) {
       navigator.clipboard.writeText(youtube);
     }

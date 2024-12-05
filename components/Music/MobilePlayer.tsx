@@ -34,24 +34,9 @@ export default function MobilePlayer({ toggleMiniPlayer, activeSermon }) {
 
         {/* CONTROLS */}
         <div className="flex flex-col text-center">
-          {activeSermon?.attributes?.imageUrl ? (
+          {activeSermon?.attributes?.imageUrl && (
             <Image
               src={activeSermon?.attributes?.imageUrl}
-              className="w-full rounded-md"
-              // layout="responsive"
-              width={1920}
-              height={1080}
-              alt="image"
-            />
-          ) : (
-            <Image
-              src={
-                activeSermon?.attributes?.youtube
-                  ? `https://i.ytimg.com/vi/${
-                      activeSermon?.attributes?.youtube.split("=")[1]
-                    }/0.jpg`
-                  : ""
-              }
               className="w-full rounded-md"
               // layout="responsive"
               width={1920}

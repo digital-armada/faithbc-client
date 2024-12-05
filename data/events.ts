@@ -5,7 +5,7 @@ import qs from "qs";
 export async function getEventSlug(id: number) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/events/${id}?populate=*`,
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${id}?populate=*`,
       {
         next: { revalidate: 60 },
       },
@@ -173,7 +173,7 @@ export async function getLatestEvents() {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?populate=*&sort=createdAt:desc&filters[startDate][$gte]=${currentDate}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/events?populate=*&sort=createdAt:desc&filters[startDate][$gte]=${currentDate}`,
       {
         next: { revalidate: 60 },
       },
@@ -215,7 +215,7 @@ export async function getInfiniteEvents({
       },
     });
 
-    const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/events?${query}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/events?${query}`;
 
     console.log("url", url);
 
@@ -236,7 +236,7 @@ export async function getInfiniteEvents({
 export async function getNotifications() {
   try {
     const res = await fetch(
-      process.env.NEXT_PUBLIC_STRAPI_URL +
+      process.env.NEXT_PUBLIC_API_URL +
         "/api/events?filters[eventType][$contains]=notifications&populate=*&sort=createdAt:desc",
       { cache: "no-store" },
     );

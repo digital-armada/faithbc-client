@@ -1,7 +1,6 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/lib/mutate-data";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
 import { strapiRequest } from "@/lib/strapi-service";
@@ -147,7 +146,7 @@ export async function deleteEvent(id: string) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await mutateData("DELETE", `/events/${id}`);
+    const response = await strapiRequest("DELETE", `/events/${id}`);
 
     if (response.data) {
       revalidatePath("/dashboard/events");

@@ -3,9 +3,7 @@
 import * as React from "react";
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,15 +11,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
   Table,
   TableBody,
@@ -30,46 +23,73 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Sermon } from "@/types/types";
-import { useGetSermonsQuery } from "@/features/sermons/api/sermons-api";
+import { Sermon, SermonResponse } from "@/features/sermons/types";
+import { ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { strapiRequestClient } from "@/lib/strapiClient-service";
+import { sermonsService } from "@/features/sermons/sermons-service";
+import { ApiResponse } from "@/types/types";
+
 interface DataTableProps<TData, TValue> {
-  data: Sermon[];
   columns: ColumnDef<TData, TValue>[];
+  initialData: ApiResponse<Sermon[]>;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Sermon, TValue>({
+  initialData,
   columns,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  const { data, isLoading, isError } = useGetSermonsQuery({
-    pageIndex,
-    pageSize,
+  const queryClient = useQueryClient();
+  const searchTerm = queryClient.getQueryData(["sermons", "search"]) as string;
+  console.log("searchTerm", searchTerm);
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["sermons", pageIndex, pageSize, searchTerm],
+    queryFn: async (): Promise<SermonResponse> => {
+      const response = await sermonsService.getClientInfiniteSermons({
+        page: pageIndex + 1,
+        search: searchTerm || "",
+      });
+      return response as SermonResponse;
+    },
+    initialData,
   });
+
+  // Pre-fetch next page
+  React.useEffect(() => {
+    if (pageIndex < (data?.meta?.pagination?.pageCount ?? 0) - 1) {
+      queryClient.prefetchQuery({
+        queryKey: ["sermons", pageIndex + 1, pageSize, searchTerm],
+        queryFn: () =>
+          sermonsService.getClientInfiniteSermons({
+            page: pageIndex + 2,
+            search: searchTerm || "",
+          }),
+      });
+    }
+  }, [pageIndex, pageSize, queryClient, searchTerm]);
 
   const table = useReactTable({
     data: data?.data || [],
-    columns,
-    pageCount: data?.pageCount ?? -1,
-    onColumnFiltersChange: setColumnFilters,
+    pageCount: data?.meta?.pagination?.pageCount ?? -1,
+    columns: columns as ColumnDef<Sermon, any>[],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
+    onSortingChange: setSorting,
     manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     state: {
-      columnFilters,
-      columnVisibility,
+      sorting,
       pagination: {
         pageIndex,
         pageSize,
@@ -77,35 +97,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching sermons</div>;
-
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <DropdownMenu>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
+    <div className="w-full space-y-4">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -113,12 +106,25 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
                         )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -154,20 +160,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {/* PAGINATION */}
-      {/* PAGINATION */}
-      {/* PAGINATION */}
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
-        </div>
+      <div className="flex items-center justify-between space-x-2 py-4">
         <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            disabled={pageIndex === 0}
           >
             Previous
           </Button>
@@ -175,12 +174,17 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            disabled={pageIndex >= (data?.meta?.pagination?.pageCount ?? 0) - 1}
           >
             Next
           </Button>
         </div>
       </div>
+      {(isLoading || isFetching) && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60">
+          Loading...
+        </div>
+      )}
     </div>
   );
 }

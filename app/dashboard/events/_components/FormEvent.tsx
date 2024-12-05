@@ -23,21 +23,20 @@ interface FormEventProps {
 export default function FormEvent({ data, eventID }: FormEventProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  console.log("data incoming", data);
 
-  const defaultValues: Event = {
-      title: data?.attributes?.title || "",
-      slug: data?.attributes?.slug || "",
-      content: data?.attributes?.content || "",
-      startDate: data?.attributes?.startDate || "",
-      endDate: data?.attributes?.endDate || "",
-      organiser: data?.attributes?.organiser || "",
-      venName: data?.attributes?.venName || "",
-      venAdd: data?.attributes?.venAdd || "",
-      internal: data?.attributes?.internal || false,
-      featuredImage: data?.attributes?.featuredImage?.data?.id || undefined,
-    },
+  const defaultValues = {
+    title: data?.attributes?.title || "",
+    slug: data?.attributes?.slug || "",
+    content: data?.attributes?.content || "",
+    startDate: data?.attributes?.startDate || "",
+    endDate: data?.attributes?.endDate || "",
+    organiser: data?.attributes?.organiser || "",
+    venName: data?.attributes?.venName || "",
+    venAdd: data?.attributes?.venAdd || "",
+    internal: data?.attributes?.internal || false,
+    featuredImage: data?.attributes?.featuredImage?.data?.id || undefined,
   };
+
   const {
     control,
     watch,
@@ -46,12 +45,12 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
     setValue,
     getValues,
     formState: { isSubmitting, errors },
-  } = useForm<Event>({
+  } = useForm({
     defaultValues,
   });
 
-  console.log("watching", watch());
-  const onSubmit = async (formData: Event) => {
+  // console.log("watching", watch());
+  const onSubmit = async (formData: typeof defaultValues) => {
     console.log("formData", formData);
     try {
       setSubmitError(null);
@@ -59,12 +58,10 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
         ? await updateEvent(eventID, formData)
         : await createEvent(formData);
       console.log("back from server", response);
-      if (!response.ok) {
-        // const error = await response.json();
-        // throw new Error(error.message || "Failed to submit form");
+      if (response.error) {
+        throw new Error(response.error || "Failed to submit form");
       }
 
-      // router.push("/dashboard/events");
       router.refresh();
     } catch (error) {
       setSubmitError(
@@ -110,7 +107,7 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4">
             <Controller
               name="startDate"
               control={control}

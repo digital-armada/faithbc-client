@@ -5,11 +5,10 @@ import {
   format,
   isAfter,
   isSameDay,
-  isSameMonth,
-  startOfMonth,
+  startOfToday,
+  parseISO,
   compareAsc,
 } from "date-fns";
-import { toDate, formatInTimeZone } from "date-fns-tz";
 import EventItem from "@/features/events/components/EventItem";
 import PageHeader from "@/components/ui/PageHeader";
 
@@ -20,23 +19,11 @@ const MonthHeader = ({ month }) => (
 );
 
 export default function Event({ initialEvents }) {
-  const sydneyTimeZone = "Australia/Sydney";
-  const [dates, setDates] = useState({
-    today: null,
-    currentMonth: null,
-  });
+  const [today, setToday] = useState<Date | null>(null);
 
   useEffect(() => {
-    const today = toDate(new Date(), { timeZone: sydneyTimeZone });
-    const currentMonth = formatInTimeZone(today, sydneyTimeZone, "MMMM");
-
-    setDates({
-      today,
-      currentMonth,
-    });
+    setToday(startOfToday());
   }, []);
-
-  const { today } = dates;
 
   const isRegularEvent = (event) =>
     !event?.attributes?.eventType || event?.attributes?.eventType === "event";
@@ -44,9 +31,7 @@ export default function Event({ initialEvents }) {
   const getEventDate = (event) => {
     try {
       return event?.attributes?.startDate
-        ? toDate(new Date(event.attributes.startDate), {
-            timeZone: sydneyTimeZone,
-          })
+        ? parseISO(event.attributes.startDate)
         : null;
     } catch {
       return null;
@@ -68,20 +53,28 @@ export default function Event({ initialEvents }) {
     .sort((a, b) => {
       const dateA = getEventDate(a);
       const dateB = getEventDate(b);
-      return compareAsc(dateA, dateB);
+      if (dateA && dateB) {
+        return compareAsc(dateA, dateB);
+      }
+      return 0;
     });
 
   // Group events by month
-  const eventsByMonth = validEvents.reduce((acc, event) => {
-    const eventDate = getEventDate(event);
-    const monthYear = format(eventDate, "MMMM yyyy");
+  const eventsByMonth = validEvents.reduce(
+    (acc, event) => {
+      const eventDate = getEventDate(event);
+      if (eventDate) {
+        const monthYear = format(eventDate, "MMMM yyyy");
 
-    if (!acc[monthYear]) {
-      acc[monthYear] = [];
-    }
-    acc[monthYear].push(event);
-    return acc;
-  }, {});
+        if (!acc[monthYear]) {
+          acc[monthYear] = [];
+        }
+        acc[monthYear].push(event);
+      }
+      return acc;
+    },
+    {} as Record<string, typeof validEvents>,
+  );
 
   return (
     <section className="min-h-screen">
@@ -93,7 +86,7 @@ export default function Event({ initialEvents }) {
             <div key={monthYear} className="rounded-lg p-6">
               <MonthHeader month={monthYear} />
               <div className="divide-y divide-gray-100">
-                {events.map((event, index) => (
+                {(events as any[]).map((event, index) => (
                   <div key={index} className="py-4">
                     <EventItem event={event} />
                   </div>

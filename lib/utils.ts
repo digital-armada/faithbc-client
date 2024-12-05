@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { formatInTimeZone, toDate } from "date-fns-tz";
+import { formatDate, toDate } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,9 +32,9 @@ export function flattenAttributes(data: any): any {
 export const SYDNEY_TIMEZONE = "Australia/Sydney";
 
 export function formatSydneyDate(date: string | Date) {
-  return toDate(new Date(date), { timeZone: SYDNEY_TIMEZONE });
+  return new Date(date);
 }
 
 export function formatSydneyDateTime(date: string | Date, format: string) {
-  return formatInTimeZone(date, SYDNEY_TIMEZONE, format);
+  return formatDate(new Date(date), format);
 }

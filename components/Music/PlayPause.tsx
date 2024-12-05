@@ -1,5 +1,5 @@
 "use client";
-import { Sermon } from "@/types/types";
+import { Sermon } from "@/features/sermons/types";
 import { FaPauseCircle, FaPlay, FaPlayCircle } from "react-icons/fa";
 
 const PlayPause = ({

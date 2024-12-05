@@ -1,6 +1,6 @@
 import { getAnnouncements } from "@/data/services/announcement-service";
 import AnnouncementForm from "./_components/AnnouncementForm";
-import { ContentLayout } from "../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 import AnnouncementTable from "./_components/AnnouncementTable";
 import { auth } from "@/auth";

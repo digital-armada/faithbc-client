@@ -5,7 +5,7 @@ import DeleteCommsButton from "@/app/dashboard/_components/DeleteCommsButton";
 import AddNew from "@/app/dashboard/_components/AddNew";
 import { getUsers } from "@/data/services/getUsers";
 // import DashHeader from "@/app/dashboard/_components/DashHeader";
-import { ContentLayout } from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
 
 const PROTECTED_GROUPS = ["All", "Members", "Non-members"];
 

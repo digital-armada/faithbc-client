@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { mutateData } from "@/lib/mutate-data";
+import { strapiRequest } from "@/lib/strapi-service";
 import { revalidatePath } from "next/cache";
 
 export async function createNewChurchPrayerRequest(formData: FormData) {
@@ -12,7 +12,11 @@ export async function createNewChurchPrayerRequest(formData: FormData) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const missionary = await mutateData("GET", "/missionaries/1?populate=*");
+    const missionary = await strapiRequest(
+      "GET",
+      "/missionaries/1?populate=*",
+      { requireAuth: true },
+    );
 
     if (!missionary.data || typeof missionary.data !== "object") {
       throw new Error("Invalid missionary data");
@@ -35,9 +39,11 @@ export async function createNewChurchPrayerRequest(formData: FormData) {
       },
     };
 
-    console.log("payload", payload);
     // Update the data with the modified array
-    const response = await mutateData("PUT", "/missionaries/1", payload);
+    const response = await strapiRequest("PUT", "/missionaries/1", {
+      data: payload,
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/prayer-requests");
@@ -59,7 +65,11 @@ export async function deletePrayerRequest(id: { id: number }) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const existingData = await mutateData("GET", "/missionaries/1?populate=*");
+    const existingData = await strapiRequest(
+      "GET",
+      "/missionaries/1?populate=*",
+      { requireAuth: true },
+    );
 
     if (!existingData || !("data" in existingData)) {
       throw new Error("Failed to fetch existing data");
@@ -75,7 +85,10 @@ export async function deletePrayerRequest(id: { id: number }) {
         prayerrequests: updatedPrayerItems,
       },
     };
-    const response = await mutateData("PUT", "/missionaries/1", payload);
+    const response = await strapiRequest("PUT", "/missionaries/1", {
+      data: payload,
+      requireAuth: true,
+    });
     console.log("Update response:", response);
 
     if (response && "data" in response) {

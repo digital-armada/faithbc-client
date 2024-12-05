@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronDown, ChevronUp, Map, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { format, toDate } from "date-fns-tz";
+import { format, parseISO } from "date-fns";
 
 export default function EventClient2({ events }) {
   return (
@@ -25,37 +25,16 @@ export default function EventClient2({ events }) {
 function EventCard({ event }) {
   // const [isExpanded, setIsExpanded] = useState(false);
 
-  const sydneyTimeZone = "Australia/Sydney";
+  // Replace toDate with parseISO for date string parsing
+  const startDateObj = event?.startDate ? parseISO(event.startDate) : null;
+  const endDateObj = event?.endDate ? parseISO(event.endDate) : null;
 
-  // Convert dates to Date objects
-  const startDateObj = event?.startDate
-    ? toDate(new Date(event.startDate), { timeZone: sydneyTimeZone })
-    : null;
-
-  const endDateObj = event?.endDate
-    ? toDate(new Date(event.endDate), { timeZone: sydneyTimeZone })
-    : null;
-
-  // Format dates for display
-  const startDate = startDateObj
-    ? format(startDateObj, "MMM do", { timeZone: sydneyTimeZone })
-    : null;
-
-  const startYear = startDateObj
-    ? format(startDateObj, "yyyy", { timeZone: sydneyTimeZone })
-    : null;
-
-  const endDate = endDateObj
-    ? format(endDateObj, "MMM do", { timeZone: sydneyTimeZone })
-    : null;
-
-  const endYear = endDateObj
-    ? format(endDateObj, "yyyy", { timeZone: sydneyTimeZone })
-    : null;
-
-  const startTime = startDateObj
-    ? format(startDateObj, "cccc h:mma", { timeZone: sydneyTimeZone })
-    : null;
+  // Remove timeZone option from format calls
+  const startDate = startDateObj ? format(startDateObj, "MMM do") : null;
+  const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
+  const endDate = endDateObj ? format(endDateObj, "MMM do") : null;
+  const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
+  const startTime = startDateObj ? format(startDateObj, "EEEE h:mma") : null;
 
   // Check if dates are different for comparison
   const areDifferentDates =

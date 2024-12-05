@@ -3,7 +3,7 @@ import axios from "axios";
 export async function getStatement(slug: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/doctrines/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/doctrines/${slug}`,
       {
         next: { revalidate: 60 },
       },
@@ -21,7 +21,7 @@ export async function getStatement(slug: string) {
 export async function getStatements() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/doctrines?pagination[limit]=30`,
+      `${process.env.NEXT_PUBLIC_API_URL}/doctrines?pagination[limit]=30`,
       {
         next: { revalidate: 60 },
       },

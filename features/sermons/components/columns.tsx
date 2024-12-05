@@ -1,18 +1,9 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { DataTableColumnHeader } from "../../../app/dashboard/sermon-manager/_components/data-table-column-header";
 import Link from "next/link";
 import Image from "next/image";
+import { Check } from "lucide-react";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -23,15 +14,19 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const imageUrl = row.original.attributes.imageUrl;
       return (
-        <div className="flex space-x-2">
-          <Image
-            src={imageUrl}
-            alt="Sermon thumbnail"
-            width={64}
-            height={64}
-            className="rounded object-cover"
-          />
-        </div>
+        <>
+          {imageUrl && (
+            <div className="flex space-x-2">
+              <Image
+                src={imageUrl}
+                alt="Sermon thumbnail"
+                width={64}
+                height={64}
+                className="rounded object-cover"
+              />
+            </div>
+          )}
+        </>
       );
     },
   },
@@ -68,6 +63,26 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
+
+  {
+    accessorKey: "attributes.audio",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Audio" />
+    ),
+    cell: ({ row }) => {
+      const audio = row.original.attributes.audio.data;
+      return (
+        <div>{audio && <Check />}</div>
+        // <div className="flex space-x-2">
+        //   {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+        //   <Link href={`/dashboard/sermon-manager/sermons/${row.original.id}`}>
+        //     <span className="max-w-[500px] truncate font-medium">{title}</span>
+        //   </Link>
+        // </div>
+      );
+    },
+  },
+
   // {
   //   accessorKey: "role",
   //   header: ({ column }) => (
