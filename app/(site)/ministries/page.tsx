@@ -79,7 +79,7 @@ export default function ministries() {
         },
         {
           // day: 'Sunday',
-          time: "3:00 pm",
+          time: "6:00 pm",
           name: "English Evening Service",
           description: "",
           frequency: "Weekly",
