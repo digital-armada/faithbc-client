@@ -1,27 +1,27 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const MultiSelect = ({ allUsers: users, commUsers, onSelectionChange }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUsers, setSelectedUsers] = useState(commUsers);
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef(null);
+
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  useEffect(() => {
+    onSelectionChange(selectedUsers);
+  }, [selectedUsers]);
+
   const toggleUser = (user) => {
-    setSelectedUsers((prevSelected) => {
-      const newSelected = prevSelected.some((u) => u.id === user.id)
+    setSelectedUsers((prevSelected) =>
+      prevSelected.some((u) => u.id === user.id)
         ? prevSelected.filter((u) => u.id !== user.id)
-        : [...prevSelected, user];
-
-      // Call the callback function with the new selection
-      onSelectionChange(newSelected);
-
-      return newSelected;
-    });
+        : [...prevSelected, user],
+    );
   };
 
   return (

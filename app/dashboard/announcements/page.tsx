@@ -1,7 +1,6 @@
 import { getAnnouncements } from "@/data/services/announcement-service";
 import AnnouncementForm from "./_components/AnnouncementForm";
 import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
-import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 import AnnouncementTable from "./_components/AnnouncementTable";
 import { auth } from "@/auth";
 import { checkUserRole } from "@/lib/checkUserRoleServer";
@@ -13,7 +12,7 @@ export default async function AnnouncementsPage() {
 
   const canCreateAnnouncement = await checkUserRole(["admin", "ministry"]);
   return (
-    <ContentLayout title="Announcements">
+    <ContentLayout title="Announcements bg-">
       {canCreateAnnouncement && <AnnouncementForm />}
       <AnnouncementTable announcements={data.data} />
     </ContentLayout>

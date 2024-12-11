@@ -1,11 +1,12 @@
 import CommsDisplay from "../../_components/CommsDisplay";
 import CommsForm from "../../_components/CommsForm";
-import DashHeader from "../../_components/DashHeader";
 import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
 
 export default function page() {
   return (
     <ContentLayout title="Communications">
+      {/* <UpdateMembers /> */}
+
       <div className="divide-y-[1px] divide-slate-950/10">
         <CommsForm />
         <CommsDisplay />
@@ -13,3 +14,6 @@ export default function page() {
     </ContentLayout>
   );
 }
+
+// Check member status, if member is now blocked, add them to non-members list
+// Check non-member status, if non-member is now unblocked, add them to members list

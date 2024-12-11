@@ -4,12 +4,14 @@ import { useState, useTransition } from "react";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import Modal from "./Modal";
 import MultiSelect from "./MultiListBox";
-import { updateUserCommGroup } from "@/data/actions/comms-actions";
+import { updateUserCommGroup } from "@/features/comms/comms-actions";
 import { Button } from "@/components/ui/button";
 
 export default function AddNew({ allUsers, commUsers, group }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPending, startTransition] = useTransition();
+
+  console.log("selectedUsers", selectedUsers);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);

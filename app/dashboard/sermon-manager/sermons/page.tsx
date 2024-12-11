@@ -1,21 +1,24 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
 import ContentLayout from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
 import { sermonsService } from "@/features/sermons/sermons-service";
-import { Suspense } from "react";
 import SermonsTable from "@/features/sermons/components/SermonsTable";
+import { getQueryClient } from "@/lib/get-query-client";
 
 async function page() {
-  const initialSermons = await sermonsService.getInfiniteSermons({ page: 1 });
+  const queryClient = getQueryClient();
+
+  // Prefetch the initial data
+  queryClient.prefetchQuery({
+    queryKey: ["sermons", { page: 1 }],
+    queryFn: async () => await sermonsService.getInfiniteSermons({ page: 1 }),
+  });
+
   return (
     <ContentLayout title="Sermons">
-      <Suspense
-        fallback={
-          <div className="flex h-screen items-center justify-center">
-            Loading
-          </div>
-        }
-      >
-        <SermonsTable initialData={initialSermons.data} />
-      </Suspense>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SermonsTable />
+      </HydrationBoundary>
     </ContentLayout>
   );
 }

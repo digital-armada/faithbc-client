@@ -1,5 +1,5 @@
 "use client";
-import { DataTable } from "@/components/Table/DataTable";
+import { DataTable } from "@/components/Table/data-table";
 import {
   keepPreviousData,
   useQuery,

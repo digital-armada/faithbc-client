@@ -15,27 +15,35 @@ export const strapiRequest = async <T>(
     requiredRole?: string;
     query?: object;
     data?: any;
-    // next?: { revalidate?: number };
+    session?: any;
   },
 ) => {
-  // INITIALIZE HEADERS
+  /*/  INITIALIZE HEADERS  */
+
   let headers: HeadersInit = {
     "Content-Type": "application/json",
   };
-  console.log("options", options);
-  // IF AUTH IS REQUIRED
-  if (options?.requireAuth) {
+
+  /*/  IF AUTH IS REQUIRED   */
+
+  if (options?.requireAuth && options.session == undefined) {
     const session = await auth();
+
     if (!session?.strapiToken) {
       return {
         success: false,
-        error: { message: "Unauthorized: No valid session token" },
+        error: { message: "Unauthorized: No valid session token " },
       };
     }
     headers.Authorization = `Bearer ${session.strapiToken}`;
   }
 
-  // IF REQUIRED ROLE IS SPECIFIED
+  if (options?.session && options.session) {
+    headers["Authorization"] = `Bearer ${options.session.data.strapiToken}`;
+  }
+
+  /*/ Comment  IF REQUIRED ROLE IS SPECIFIED  */
+
   if (options?.requiredRole) {
     const hasPermission = await checkPermission(options.requiredRole);
     if (!hasPermission) {
@@ -46,10 +54,12 @@ export const strapiRequest = async <T>(
     }
   }
 
-  // BUILD URL
+  /*/  BUILD URL  */
+
   const url = new URL(`${API_CONFIG.API_URL}${endpoint}`);
 
-  // CONSTRUCT QUERY STRING
+  /*/  CONSTRUCT QUERY STRING  */
+
   if (options?.query) {
     // If query is already a string, use it directly
     url.search =
@@ -66,7 +76,7 @@ export const strapiRequest = async <T>(
     });
 
     const data = await response.json();
-    console.log("strapiReturnedValue", data);
+
     if (!response.ok) {
       return {
         success: false,
@@ -94,37 +104,3 @@ export const strapiRequest = async <T>(
     };
   }
 };
-
-/**
-// Public request
-
-const publicData = await strapiRequest('GET', '/api/events', {
-  query: { populate: '*' }
-});
-
-// Authorized request
-
-const privateData = await strapiRequest('GET', '/api/admin/events', {
-  requireAuth: true,
-  requiredRole: 'admin'
-});
-
-*/
-
-/*
-For feature-specific API calls, you would create services in their respective feature folders that use this base strapi-service. For example:
-
-import { strapiRequest } from '@/lib/services/strapi-service'
-
-export const sermonsService = {
-  getSermons: (options) =>
-    strapiRequest('GET', API_ENDPOINTS.SERMONS.GET_ALL, options),
-
-  updateSermon: (id, data) =>
-    strapiRequest('PUT', API_ENDPOINTS.SERMONS.UPDATE(id), { data }),
-
-  deleteSermon: (id) =>
-    strapiRequest('DELETE', API_ENDPOINTS.SERMONS.DELETE(id))
-}
-
-*/

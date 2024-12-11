@@ -27,6 +27,16 @@ export const menuItems = [
         },
       },
       {
+        text: "Announcements",
+        link: "/dashboard/announcements",
+        icon: <TiVolumeUp />,
+        roles: {
+          member: { show: false },
+          admin: { show: true },
+          ministry: { show: true },
+        },
+      },
+      {
         text: "Sermon Manager",
         link: "/dashboard/sermon-manager",
         icon: <TiVideoOutline />,
@@ -43,16 +53,7 @@ export const menuItems = [
           ministry: { show: true },
         },
       },
-      {
-        text: "Announcements",
-        link: "/dashboard/announcements",
-        icon: <TiVolumeUp />,
-        roles: {
-          member: { show: false },
-          admin: { show: true },
-          ministry: { show: true },
-        },
-      },
+
       {
         text: "Contacts",
         link: "/dashboard/contacts",
@@ -131,25 +132,10 @@ export const menuItems = [
           ministry: { show: true },
         },
       },
-    ],
-  },
-  {
-    title: "Account",
-    items: [
       {
         text: "Info",
         link: "/dashboard/info",
         icon: <TiInfoLargeOutline />,
-        roles: {
-          member: { show: true },
-          admin: { show: true },
-          ministry: { show: true },
-        },
-      },
-      {
-        icon: <TiPower />,
-        text: "Logout",
-        link: "#",
         roles: {
           member: { show: true },
           admin: { show: true },

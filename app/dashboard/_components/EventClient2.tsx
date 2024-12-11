@@ -34,7 +34,15 @@ function EventCard({ event }) {
   const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
   const endDate = endDateObj ? format(endDateObj, "MMM do") : null;
   const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
-  const startTime = startDateObj ? format(startDateObj, "EEEE h:mma") : null;
+
+  const startTime =
+    startDateObj &&
+    // Check if time is midnight (00:00:00)
+    (startDateObj.getHours() === 0 &&
+    startDateObj.getMinutes() === 0 &&
+    startDateObj.getSeconds() === 0
+      ? format(startDateObj, "EEEE") // Show only day name for midnight
+      : format(startDateObj, "EEEE h:mma")); // Show day name and time for other times
 
   // Check if dates are different for comparison
   const areDifferentDates =

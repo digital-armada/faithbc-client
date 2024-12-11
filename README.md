@@ -1,37 +1,113 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Strapi Request Client
 
-First, run the development server:
+```js
+import { auth } from "@/auth";
+import { API_CONFIG } from "./constants/api-endpoints";
+import qs from "qs";
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+const checkPermission = async (requiredRole: string) => {
+  const session = await auth();
+  return session?.user?.role === requiredRole;
+};
+
+export const strapiRequest = async <T>(
+  method: string,
+  endpoint: string,
+  options?: {
+    requireAuth?: boolean;
+    requiredRole?: string;
+    query?: object;
+    data?: any;
+    session?: any;
+  },
+) => {
+  /*/  INITIALIZE HEADERS  */
+
+  let headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  /*/  IF AUTH IS REQUIRED   */
+
+  if (options?.requireAuth && options.session == undefined) {
+    const session = await auth();
+
+    if (!session?.strapiToken) {
+      return {
+        success: false,
+        error: { message: "Unauthorized: No valid session token " },
+      };
+    }
+    headers.Authorization = `Bearer ${session.strapiToken}`;
+  }
+
+  if (options?.session && options.session) {
+    headers["Authorization"] = `Bearer ${options.session.data.strapiToken}`;
+  }
+
+  /*/ Comment  IF REQUIRED ROLE IS SPECIFIED  */
+
+  if (options?.requiredRole) {
+    const hasPermission = await checkPermission(options.requiredRole);
+    if (!hasPermission) {
+      return {
+        success: false,
+        error: { message: "Unauthorized: Insufficient permissions" },
+      };
+    }
+  }
+
+  /*/  BUILD URL  */
+
+  const url = new URL(`${API_CONFIG.API_URL}${endpoint}`);
+
+  /*/  CONSTRUCT QUERY STRING  */
+
+  if (options?.query) {
+    // If query is already a string, use it directly
+    url.search =
+      typeof options.query === "string"
+        ? options.query
+        : qs.stringify(options.query, { encodeValuesOnly: true });
+  }
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: options?.data ? JSON.stringify(options?.data) : undefined,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          message: data?.error?.message || "An error occurred",
+          details: data?.error,
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
+        details: error,
+      },
+    };
+  }
+};
+
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# faithbc-client

@@ -6,7 +6,7 @@ import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 import CreateNew from "@/features/missions/components/CreateNew";
 import MissionsMap from "../_components/MissionsMap";
 import Image from "next/image";
-import { DataTable } from "@/components/Table/DataTable";
+import { DataTable } from "@/components/Table/data-table";
 import { MissionsColumns } from "@/features/missions/components/MissionsColumns";
 import MissionsTable from "@/features/missions/components/MissionsTable";
 

@@ -3,7 +3,6 @@ import Link from "next/link";
 import EmailSMS from "./EmailSMS";
 export default async function CommsDisplay() {
   const { data } = await getComms();
-  console.log(data);
 
   return (
     <div>

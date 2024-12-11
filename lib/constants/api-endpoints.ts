@@ -22,12 +22,12 @@ export const API = {
     DELETE: (id: string) => `/events/${id}`,
   },
 
-  CONTACTS: {
-    BASE: "/contacts",
-    GET_ALL: `/contacts`,
-    GET_ONE: (id: string) => `/contacts/${id}`,
-    CREATE: `/contacts`,
-    UPDATE: (id: string) => `/contacts/${id}`,
-    DELETE: (id: string) => `/contacts/${id}`,
+  USERS: {
+    BASE: "/users",
+    GET_ALL: `/users`,
+    GET_ONE: (id: string) => `/users/${id}`,
+    CREATE: `/users`,
+    UPDATE: (id: string) => `/users/${id}`,
+    DELETE: (id: string) => `/users/${id}`,
   },
 } as const;

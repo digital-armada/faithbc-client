@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
+import MemberStatus from "./table/MemberStatus";
+
 export const columns: ColumnDef<any>[] = [
   // {
   //   id: "select",
@@ -38,6 +40,7 @@ export const columns: ColumnDef<any>[] = [
   //   enableSorting: false,
   //   enableHiding: false,
   // },
+
   {
     accessorKey: "firstName",
     header: ({ column }) => (
@@ -84,27 +87,18 @@ export const columns: ColumnDef<any>[] = [
       return <div>{role?.name ?? "N/A"}</div>;
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+      const roleName = row.getValue("role") as { name: string } | null;
+      return value.includes(roleName?.name || "");
     },
   },
 
   {
     accessorKey: "blocked",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Blocked" />
+      <DataTableColumnHeader column={column} title="Member" />
     ),
-    cell: ({ row }) => {
-      const blocked = row.getValue("blocked");
-      return (
-        <>
-          {blocked ? (
-            <span className="text-red-500">Yes</span>
-          ) : (
-            <span className="text-green-500">No</span>
-          )}
-        </>
-      );
-    },
+    cell: MemberStatus,
+
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },

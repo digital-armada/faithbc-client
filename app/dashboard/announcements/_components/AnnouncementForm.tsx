@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { createNewAnnouncement } from "@/features/announcements/announcement-actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export default function AnnouncementForm() {
   const formRef = useRef<HTMLFormElement>(null); // Specify the type as HTMLFormElement
@@ -60,12 +61,19 @@ export default function AnnouncementForm() {
             {state?.error && <p>{state.inputErrors?.date}</p>}
           </div>
 
-          <Button type="submit" className="my-2">
-            Submit
-          </Button>
+          <Submit />
         </div>
         {/* {state?.error && <p>Error: {state.message}</p>} */}
       </form>
     </div>
+  );
+}
+
+function Submit() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="my-2" disabled={pending}>
+      {pending ? <Loader2 className="animate-spin" /> : "Submit"}
+    </Button>
   );
 }

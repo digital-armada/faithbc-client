@@ -61,6 +61,42 @@ export const logout = async () => {
 
 // ------------------------------------------------------------
 
+export async function registerUserAction(
+  prevState: any,
+  data: RegisterUserProps,
+): Promise<ApiResponse<UserData>> {
+  try {
+    const response = await registerUserService(data);
+
+    if (!response.success || !response.data) {
+      return {
+        success: false,
+        error: response.error || {
+          message: "Registration failed",
+        },
+      };
+    }
+
+    // If successful, redirect
+    redirect("/dashboard");
+
+    // This won't actually be reached due to redirect,
+    // but TypeScript needs it for type safety
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: "Something went wrong. Please try again.",
+        details: error instanceof Error ? error.message : error,
+      },
+    };
+  }
+}
+
 export async function updateUserAction(payload: RegisterUserProps) {
   const responseData = await updateUserService(payload);
 

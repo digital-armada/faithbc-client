@@ -1,34 +1,29 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight, Gift } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { format } from "date-fns";
 import WidgetHeadings from "../WidgetHeadings";
+import { contactsService } from "@/features/contacts/contacts-service";
+import { useSession } from "next-auth/react";
 
 function BirthdayList({ currentMonth }: { currentMonth: number }) {
-  const { data: users } = useSuspenseQuery({
+  const session = useSession();
+
+  const { data: users, isLoading } = useQuery({
     queryKey: ["birthdays", currentMonth],
-    queryFn: async () => {
-      const response = await fetch(
-        "https://api.faithbc.org.au/api/users?populate=*",
-      );
-      return response.json();
-    },
+    queryFn: async () =>
+      await contactsService.getUsers({ currentMonth, session }),
   });
 
-  const filteredBirthdays = users
-    ?.filter((user) => new Date(user.dateOfBirth).getMonth() === currentMonth)
-    .sort((a, b) => {
-      const dayA = new Date(a.dateOfBirth).getDate();
-      const dayB = new Date(b.dateOfBirth).getDate();
-      return dayA - dayB;
-    });
+  if (isLoading) {
+    return <p className="text-center">Loading birthdays...</p>;
+  }
 
-  if (!filteredBirthdays?.length) {
+  if (!users?.data?.length) {
     return (
       <p className="text-center text-muted-foreground">
         No birthdays this month.
@@ -38,7 +33,7 @@ function BirthdayList({ currentMonth }: { currentMonth: number }) {
 
   return (
     <ul className="space-y-2 divide-y-[.5px] divide-gray-200">
-      {filteredBirthdays.map((user) => (
+      {users?.data.map((user) => (
         <li key={user.id} className="flex items-center">
           <div className="mt-2 flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">
@@ -57,26 +52,11 @@ function BirthdayList({ currentMonth }: { currentMonth: number }) {
 
 export default function BirthdayWidget({ className }: { className?: string }) {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   return (
     <Card className={`w-full ${className}`}>
       <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2 lg:flex-row">
         <WidgetHeadings heading="Birthdays" />
-
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
@@ -86,7 +66,7 @@ export default function BirthdayWidget({ className }: { className?: string }) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm font-medium">
-            {monthNames[currentMonth]}
+            {format(new Date(0, currentMonth), "MMMM")}
           </span>
           <Button
             variant="outline"
@@ -98,11 +78,7 @@ export default function BirthdayWidget({ className }: { className?: string }) {
         </div>
       </CardHeader>
       <CardContent>
-        <Suspense
-          fallback={<p className="text-center">Loading birthdays...</p>}
-        >
-          <BirthdayList currentMonth={currentMonth} />
-        </Suspense>
+        <BirthdayList currentMonth={currentMonth} />
       </CardContent>
     </Card>
   );

@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 export async function createNewCommGroup(prevState: any, formData: FormData) {
   try {
     const groupName = formData.get("list");
-
     const payload = {
       data: {
         groupName,
@@ -16,6 +15,7 @@ export async function createNewCommGroup(prevState: any, formData: FormData) {
 
     const response = await strapiRequest("POST", "/commgroups", {
       data: payload,
+      requireAuth: true,
     });
 
     if (response.data) {
@@ -40,11 +40,13 @@ export async function updateUserCommGroup(user, group) {
   try {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
+    console.log(user, group);
 
     const response = await strapiRequest("PUT", `/commgroups/${group}`, {
+      requireAuth: true,
       data: {
-        users: {
-          set: user,
+        data: {
+          users: user,
         },
       },
     });
@@ -68,10 +70,11 @@ export async function deleteUserCommGroup(payload) {
     const userId = payload.userId;
     const groupId = payload.groupId;
 
-    const session = await auth();
-    if (!session?.strapiToken) throw new Error("No auth token found");
+    // const session = await auth();
+    // if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await strapiRequest("PUT", `/commgroups/${groupId}`, {
+    const response = await strapiRequest("DELETE", `/commgroups/${groupId}`, {
+      requireAuth: true,
       data: {
         users: {
           disconnect: [userId],

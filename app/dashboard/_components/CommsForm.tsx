@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createNewCommGroup } from "@/data/actions/comms-actions";
+import { createNewCommGroup } from "@/features/comms/comms-actions";
 import { useFormState } from "react-dom";
 
 const INITIAL_STATE = {

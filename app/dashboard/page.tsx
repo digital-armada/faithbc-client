@@ -9,6 +9,7 @@ import DashHeader from "@/app/dashboard/_components/DashHeader";
 
 export default async function DashboardPage() {
   const { data: user } = await getUserMeLoader();
+  // console.log("user", user);
   const { data: events } = await getEvents({
     includesPast: false,
     sort: ["startDate:asc"],

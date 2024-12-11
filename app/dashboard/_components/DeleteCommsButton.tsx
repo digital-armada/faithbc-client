@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { redirect, useRouter } from "next/navigation";
-import { deleteCommGroup } from "@/data/actions/comms-actions";
+import { deleteCommGroup } from "@/features/comms/comms-actions";
 import { Button } from "@/components/ui/button";
 import { MdDeleteOutline } from "react-icons/md";
 

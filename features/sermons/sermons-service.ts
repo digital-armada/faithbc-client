@@ -13,13 +13,9 @@ export const sermonsService = {
   getInfiniteSermons: async ({
     page = 1,
     pageSize = 10,
-    search = "",
-    isClient = false,
   }: {
     page?: number;
     pageSize?: number;
-    search?: string;
-    isClient?: boolean;
   }) => {
     const query = {
       populate: "*",
@@ -28,13 +24,6 @@ export const sermonsService = {
         page,
         pageSize,
       },
-      // ...(search?.trim() && {
-      //   filters: {
-      //     name: {
-      //       $contains: search,
-      //     },
-      //   },
-      // }),
     };
 
     const response = await strapiRequest<Sermon[]>("GET", API.SERMONS.GET_ALL, {

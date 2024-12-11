@@ -17,6 +17,9 @@ import { format } from "date-fns";
 import { Trash } from "lucide-react";
 import { TiTrash } from "react-icons/ti";
 import { deleteAnnouncement } from "@/features/announcements/announcement-actions";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { set } from "lodash";
 
 type AnnouncementAttributes = {
   message: string;
@@ -50,25 +53,51 @@ export const defaultColumns = [
   }),
   columnHelper.display({
     id: "actions",
-    cell: (props) => (
-      <div className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => deleteAnnouncement(props.row.original.id)}
-            >
-              <TiTrash className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
+    cell: (props) => {
+      const { toast } = useToast();
+      const [pending, setIsPending] = useState(false);
+
+      const handleDelete = async () => {
+        setIsPending(true);
+        toast({
+          title: "Deleting...",
+          description: "Please wait while we delete the announcement",
+        });
+        const result = await deleteAnnouncement(props.row.original.id);
+        setIsPending(false);
+        if (result.error) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.error,
+          });
+        } else {
+          toast({
+            variant: "success",
+            title: "Success",
+            description: "Announcement deleted successfully",
+          });
+        }
+      };
+
+      return (
+        <div className="flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleDelete}>
+                <TiTrash className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
   }),
 ];
