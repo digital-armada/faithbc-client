@@ -1,3 +1,4 @@
+import UpdateMembers from "@/features/contacts/components/UpdateMembers";
 import CommsDisplay from "../../_components/CommsDisplay";
 import CommsForm from "../../_components/CommsForm";
 import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
@@ -5,7 +6,7 @@ import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
 export default function page() {
   return (
     <ContentLayout title="Communications">
-      {/* <UpdateMembers /> */}
+      <UpdateMembers />
 
       <div className="divide-y-[1px] divide-slate-950/10">
         <CommsForm />

@@ -24,7 +24,7 @@ export default async function ConfirmationSubmit({ confirmationToken }: Props) {
   // send email validation request to strapi and wait for the response.
   try {
     const strapiResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/email-confirmation?confirmation=${confirmationToken}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/email-confirmation?confirmation=${confirmationToken}`,
     );
 
     if (!strapiResponse.ok) {

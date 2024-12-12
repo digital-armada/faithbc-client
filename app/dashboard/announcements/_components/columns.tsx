@@ -47,10 +47,12 @@ export const defaultColumns = [
       );
     },
   }),
+
   columnHelper.accessor("attributes.message", {
     header: () => <span>Message</span>,
     cell: (props) => <span>{props.getValue()}</span>,
   }),
+
   columnHelper.display({
     id: "actions",
     cell: (props) => {

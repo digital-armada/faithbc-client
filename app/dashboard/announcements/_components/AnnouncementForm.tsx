@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { FormDateTimePicker } from "@/components/ui/FormDateTimePicker";
 
 export default function AnnouncementForm() {
   const formRef = useRef<HTMLFormElement>(null); // Specify the type as HTMLFormElement
@@ -51,12 +52,17 @@ export default function AnnouncementForm() {
               Select date and time
             </Label>
             <div className="mt-2">
-              <Input
+              <FormDateTimePicker
+                id="event-date"
+                name="event-date"
+                label="date"
+              />
+              {/* <Input
                 id="event-date"
                 name="event-date"
                 type="datetime-local"
                 className="w-full"
-              />
+              /> */}
             </div>
             {state?.error && <p>{state.inputErrors?.date}</p>}
           </div>

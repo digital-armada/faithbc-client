@@ -30,15 +30,63 @@ export async function updateMember({ id, blocked }) {
 }
 
 export async function checkMemberStatus() {
-  const result = await strapiRequest("PUT", "/users", {
-    requireAuth: true,
-    data: {
-      filters: {
-        blocked: true,
-        updates: { commGroup: 3 },
+  try {
+    // Step 1: Fetch blocked users
+    const blockedUsers = await strapiRequest("GET", "/users", {
+      requireAuth: true,
+      query: {
+        filters: {
+          blocked: true,
+        },
       },
-    },
-  });
-  console.log(result);
-  return result;
+    });
+
+    // Step 2: Update each blocked user
+
+    const { data: returnedBlockedUsers } = blockedUsers;
+
+    for (const user of returnedBlockedUsers) {
+      await strapiRequest("PUT", `/users/${user.id}`, {
+        requireAuth: true,
+        data: {
+          commgroups: [1, 3],
+        },
+      });
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Error in checkMemberStatus:", error);
+    return { error: error.message || "An error occurred" };
+  }
+}
+
+export async function addMembersToComm() {
+  try {
+    // Step 1: Fetch blocked users
+    const members = await strapiRequest("GET", "/users", {
+      requireAuth: true,
+      query: {
+        filters: {
+          blocked: false,
+        },
+      },
+    });
+
+    // Step 2: Update each blocked user
+
+    const { data: returnedMembers } = members;
+
+    for (const user of returnedMembers) {
+      await strapiRequest("PUT", `/users/${user.id}`, {
+        requireAuth: true,
+        data: {
+          commgroups: [1, 2],
+        },
+      });
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Error in checkMemberStatus:", error);
+    return { error: error.message || "An error occurred" };
+  }
 }

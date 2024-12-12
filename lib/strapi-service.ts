@@ -57,7 +57,6 @@ export const strapiRequest = async <T>(
   /*/  BUILD URL  */
 
   const url = new URL(`${API_CONFIG.API_URL}${endpoint}`);
-
   /*/  CONSTRUCT QUERY STRING  */
 
   if (options?.query) {

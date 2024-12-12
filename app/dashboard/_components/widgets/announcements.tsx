@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BellIcon, BellOffIcon } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import AnnouncementItem from "../../announcements/_components/AnnouncementItem";
 
 interface Announcement {
   id: number;
@@ -44,22 +45,10 @@ export default async function AnnouncementsWidget({
         ) : (
           <ScrollArea className="pr-4">
             {data?.data.map((announcement: Announcement) => (
-              <div key={announcement.id} className="mb-4 last:mb-0">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">
-                    {announcement.attributes.message}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {format(
-                      parseISO(announcement.attributes.date),
-                      announcement.attributes.date.endsWith("13:00:00.000Z")
-                        ? "eeee PP"
-                        : "eeee PPpp",
-                    )}
-                  </p>
-                </div>
-                <hr className="my-2 border-muted" />
-              </div>
+              <AnnouncementItem
+                key={announcement.id}
+                announcement={announcement}
+              />
             ))}
           </ScrollArea>
         )}
