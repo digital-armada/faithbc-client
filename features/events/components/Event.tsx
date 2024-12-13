@@ -21,8 +21,6 @@ const MonthHeader = ({ month }) => (
 export default function Event({ initialEvents }) {
   const [today, setToday] = useState<Date | null>(null);
 
-  console.log("initialEvents", initialEvents);
-
   useEffect(() => {
     setToday(startOfToday());
   }, []);

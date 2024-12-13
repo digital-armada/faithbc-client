@@ -5,9 +5,11 @@ import { sermonsService } from "@/features/sermons/sermons-service";
 import PageHeader from "../ui/PageHeader";
 import { useCallback } from "react";
 
-export default function WrapperSermons({ initialSermons }) {
+export default function WrapperSermons({ initialSermons = [] }) {
   const fetchData = useCallback(async ({ page }) => {
-    const { data } = await sermonsService.getClientInfiniteSermons({ page });
+    const { data } = (await sermonsService.getClientInfiniteSermons({
+      page,
+    })) || { data: [] };
     return data ?? [];
   }, []);
 
