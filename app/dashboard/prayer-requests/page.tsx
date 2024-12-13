@@ -1,4 +1,3 @@
-import { getChurchPrayers } from "@/data/services/prayerItem-service";
 import AddPrayerRequests from "./_components/AddPrayerRequests";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
@@ -10,13 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getChurch } from "@/features/missions/_api/data/missionary-service";
+import { getChurch } from "@/features/missions/api/missionary-service";
 import { deletePrayerRequest } from "@/data/actions/prayer-actions";
 import DeleteRequest from "./_components/DeleteRequest";
+import { checkUserRole } from "@/lib/checkUserRoleServer";
 
 export default async function page() {
   const { data: user } = await getUserMeLoader();
   const { data } = await getChurch();
+
+  const canCreateAnnouncement = await checkUserRole(["admin", "ministry"]);
+
   return (
     <ContentLayout title="Prayer Requests">
       <div>

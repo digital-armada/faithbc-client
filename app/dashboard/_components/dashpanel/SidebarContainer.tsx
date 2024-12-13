@@ -1,6 +1,5 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { useSelector } from "react-redux";
 import { SidebarToggle } from "./SidebarToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

@@ -11,6 +11,7 @@ import {
   TiWorldOutline,
 } from "react-icons/ti";
 import { PiHandsPraying } from "react-icons/pi";
+import { sub } from "date-fns";
 // import { MenuSection } from "@/types/types";
 export const menuItems = [
   {
@@ -46,11 +47,18 @@ export const menuItems = [
             show: true,
             asSubItem: true,
             subItems: [
-              { text: "Sermons", link: "/dashboard/sermon-manager/sermons" },
+              { text: "Sermons", link: "/dashboard/sermon-manager" },
               { text: "Youtube", link: "/dashboard/sermon-manager/youtube" },
             ],
           },
-          ministry: { show: true },
+          ministry: {
+            show: true,
+            asSubItem: true,
+            subItems: [
+              { text: "Sermons", link: "/dashboard/sermon-manager" },
+              { text: "Youtube", link: "/dashboard/sermon-manager/youtube" },
+            ],
+          },
         },
       },
 
@@ -64,14 +72,12 @@ export const menuItems = [
             show: true,
             asSubItem: true,
             subItems: [
-              { text: "All", link: "/dashboard/contacts/all" },
+              { text: "All", link: "/dashboard/contacts" },
               { text: "Comms Lists", link: "/dashboard/contacts/comms" },
             ],
           },
           ministry: {
-            show: true,
-            asSubItem: true,
-            subItems: [{ text: "All", link: "/dashboard/contacts/all" }],
+            show: false,
           },
         },
       },
@@ -93,7 +99,11 @@ export const menuItems = [
           ministry: {
             show: true,
             asSubItem: true,
-            subItems: [{ text: "All Events", link: "/dashboard/events" }],
+            subItems: [
+              { text: "All Events", link: "/dashboard/events" },
+              { text: "Create New Event", link: "/dashboard/events/new" },
+              { text: "Manage Events", link: "/dashboard/events/manage" },
+            ],
           },
         },
       },
@@ -119,29 +129,29 @@ export const menuItems = [
       },
     ],
   },
-  {
-    title: "Settings",
-    items: [
-      {
-        text: "Profile",
-        link: "/dashboard/profile",
-        icon: <TiCogOutline />,
-        roles: {
-          member: { show: true },
-          admin: { show: true },
-          ministry: { show: true },
-        },
-      },
-      {
-        text: "Info",
-        link: "/dashboard/info",
-        icon: <TiInfoLargeOutline />,
-        roles: {
-          member: { show: true },
-          admin: { show: true },
-          ministry: { show: true },
-        },
-      },
-    ],
-  },
+  // {
+  //   title: "Settings",
+  //   items: [
+  //     {
+  //       text: "Profile",
+  //       link: "/dashboard/profile",
+  //       icon: <TiCogOutline />,
+  //       roles: {
+  //         member: { show: true },
+  //         admin: { show: true },
+  //         ministry: { show: true },
+  //       },
+  //     },
+  //     {
+  //       text: "Info",
+  //       link: "/dashboard/info",
+  //       icon: <TiInfoLargeOutline />,
+  //       roles: {
+  //         member: { show: true },
+  //         admin: { show: true },
+  //         ministry: { show: true },
+  //       },
+  //     },
+  //   ],
+  // },
 ];

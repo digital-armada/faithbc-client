@@ -11,8 +11,9 @@ export default async function AnnouncementsPage() {
   console.log(session);
 
   const canCreateAnnouncement = await checkUserRole(["admin", "ministry"]);
+
   return (
-    <ContentLayout title="Announcements bg-">
+    <ContentLayout title="Announcements">
       {canCreateAnnouncement && <AnnouncementForm />}
       <AnnouncementTable announcements={data.data} />
     </ContentLayout>

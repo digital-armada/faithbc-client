@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createNewMissions } from "@/features/missions/_api/actions/missions-actions";
+import { createNewMissions } from "@/features/missions/api/missions-actions";
 import { useFormState } from "react-dom";
 
 const INITIAL_STATE = {

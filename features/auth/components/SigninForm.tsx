@@ -62,7 +62,7 @@ export default function SignInForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="w-full text-center text-2xl">Login</CardTitle>
         <CardDescription>
           Enter your email below to login to your account
         </CardDescription>
@@ -87,7 +87,7 @@ export default function SignInForm() {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
-                  href="#"
+                  href="/password/request-reset"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?

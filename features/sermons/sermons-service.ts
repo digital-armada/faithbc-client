@@ -78,36 +78,6 @@ export const sermonsService = {
     });
   },
 
-  //   getInfiniteSermons: async ({ page = 1, search = "" }) => {
-  //     const query = qs.stringify({
-  //       populate: "*",
-  //       sort: "date:desc",
-  //       pagination: {
-  //         page,
-  //         pageSize: 10,
-  //       },
-  //       ...(search?.trim() && {
-  //         filters: {
-  //           name: {
-  //             $contains: search,
-  //           },
-  //         },
-  //       }),
-  //     });
-  //
-  // const response = await strapiRequest<Sermon[]>("GET", API.SERMONS.GET_ALL, {
-  //   query,
-  //   // next: { revalidate: 60 },
-  // });
-  // console.log("response", response);
-  // return response;
-  //   },
-
-  /**
-   * Client-side function to fetch sermons using the client-specific request utility
-   * @/lib/strapiClient-service.ts
-   */
-
   getClientInfiniteSermons: async ({
     page = 1,
     search = "",

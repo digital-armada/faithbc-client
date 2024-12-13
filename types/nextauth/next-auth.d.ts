@@ -27,6 +27,8 @@ declare module "next-auth" {
     blocked?: boolean;
     confirmed?: boolean;
     role?: string;
+    firstName?: string;
+    lastName?: string;
   }
 }
 
@@ -39,6 +41,8 @@ declare module "next-auth/jwt" {
     provider?: "credentials" | "google";
     confirmed?: boolean;
     role?: string;
+    firstName?: string;
+    lastName?: string;
   }
 }
 

@@ -23,8 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DataTablePagination from "./data-table-pagination";
-import { DataTableToolbar } from "./data-table-toolbar";
+import DataTablePagination from "@/features/missions/components/data-table-pagination";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];

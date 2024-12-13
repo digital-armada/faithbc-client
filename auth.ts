@@ -24,8 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        console.log("credentials", credentials);
-
         try {
           const strapiResponse = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/local`,
@@ -68,7 +66,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           const userData = await userResponse.json();
-          console.log("userData", userData);
 
           return {
             name: data.user.username,
@@ -79,6 +76,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             strapiToken: data.jwt,
             confirmed: data.user.confirmed,
             role: userData.role.name, // Add user's role here
+            firstName: data.user.firstName,
+            lastName: data.user.lastName,
           };
         } catch (error) {
           // Catch errors in try but also f.e. connection fails
@@ -119,20 +118,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.blocked = user.blocked;
           token.confirmed = user.confirmed;
           token.role = user.role;
+          token.firstName = user.firstName;
+          token.lastName = user.lastName;
         }
       }
       // console.log(token, trigger, account, user, session);
       return token;
     },
     async session({ token, session }) {
-      // console.log("token", token);
       session.strapiToken = token.strapiToken;
       session.provider = token.provider;
       session.user.strapiUserId = token.strapiUserId;
       session.user.blocked = token.blocked;
       session.user.confirmed = token.confirmed;
       session.user.role = token.role;
-
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
       return session;
     },
   },

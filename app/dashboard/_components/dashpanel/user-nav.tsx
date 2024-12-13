@@ -14,9 +14,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/features/auth/auth-actions";
+import { getSession } from "next-auth/react";
+import React from "react";
 
-export function UserNav({ user }) {
-  console.log(user);
+export function UserNav() {
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      setUser(session?.user);
+    };
+    fetchSession();
+  }, []);
+
+  console.log("user", user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

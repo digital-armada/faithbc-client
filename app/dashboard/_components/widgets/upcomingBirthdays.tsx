@@ -55,7 +55,7 @@ export default function BirthdayWidget({ className }: { className?: string }) {
 
   return (
     <Card className={`w-full ${className}`}>
-      <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2 lg:flex-row">
+      <CardHeader className="flex w-full flex-col items-center justify-between space-y-0 pb-2 sm:flex-row lg:flex-col xl:flex-row">
         <WidgetHeadings heading="Birthdays" />
         <div className="flex items-center space-x-2">
           <Button

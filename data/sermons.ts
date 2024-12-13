@@ -90,48 +90,6 @@ export async function getSermon(id: string) {
 //   return data.data;
 // }
 
-export async function getLatestFourSermons() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?pagination[limit]=4&sort=date:desc&[populate]=*`,
-      {
-        next: { revalidate: 60 },
-      },
-    );
-    if (res.status !== 200) {
-      throw new Error("Failed to fetch sermons");
-    }
-
-    return res.json();
-  } catch (error) {
-    throw new Error("Failed to fetch sermons");
-  }
-}
-
-export async function getSermons({ pageIndex = 0, pageSize = 10 }) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/sermons?pagination[page]=${pageIndex + 1}&pagination[pageSize]=${pageSize}&populate=*&sort=date:desc`,
-      {
-        next: { revalidate: 60 },
-      },
-    );
-
-    if (res.status !== 200) {
-      throw new Error("Failed to fetch sermons");
-    }
-
-    const data = await res.json();
-    return {
-      sermons: data.data,
-      pageCount: Math.ceil(data.meta.pagination.total / pageSize),
-    };
-  } catch (error) {
-    console.error("Failed to fetch sermons:", error);
-    throw new Error("Failed to fetch sermons");
-  }
-}
-
 export async function getInfiniteSermons({ page = 1, search = "" }) {
   try {
     let url = `${API_CONFIG.API_URL}/sermons?populate=*&sort=date:desc&pagination[page]=${page}`;

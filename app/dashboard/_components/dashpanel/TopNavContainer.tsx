@@ -1,4 +1,4 @@
-import { getUserMeLoader } from "@/data/services/get-user-me-loader";
+// import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 import { TopNavSheetMenu } from "./TopNavSheetMenu";
 import { UserNav } from "./user-nav";
 
@@ -8,7 +8,7 @@ interface NavbarProps {
 
 export async function TopNavContainer({ title }: NavbarProps) {
   //FIXME getUserMeLoader issue
-  const { data } = await getUserMeLoader();
+  // const { data } = await getUserMeLoader();
   return (
     <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
       <div className="mx-4 flex h-14 items-center sm:mx-8">
@@ -18,7 +18,7 @@ export async function TopNavContainer({ title }: NavbarProps) {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           {/* <ModeToggle /> */}
-          <UserNav user={data} />
+          <UserNav />
         </div>
       </div>
     </header>
