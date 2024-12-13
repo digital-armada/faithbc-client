@@ -21,6 +21,8 @@ const MonthHeader = ({ month }) => (
 export default function Event({ initialEvents }) {
   const [today, setToday] = useState<Date | null>(null);
 
+  console.log("initialEvents", initialEvents);
+
   useEffect(() => {
     setToday(startOfToday());
   }, []);
@@ -43,21 +45,23 @@ export default function Event({ initialEvents }) {
   }
 
   // Filter and sort all valid future events (including today)
-  const validEvents = initialEvents
-    .filter((event) => {
-      if (!isRegularEvent(event)) return false;
-      const eventDate = getEventDate(event);
-      if (!eventDate) return false;
-      return isSameDay(eventDate, today) || isAfter(eventDate, today);
-    })
-    .sort((a, b) => {
-      const dateA = getEventDate(a);
-      const dateB = getEventDate(b);
-      if (dateA && dateB) {
-        return compareAsc(dateA, dateB);
-      }
-      return 0;
-    });
+  const validEvents = Array.isArray(initialEvents)
+    ? initialEvents
+        .filter((event) => {
+          if (!isRegularEvent(event)) return false;
+          const eventDate = getEventDate(event);
+          if (!eventDate) return false;
+          return isSameDay(eventDate, today) || isAfter(eventDate, today);
+        })
+        .sort((a, b) => {
+          const dateA = getEventDate(a);
+          const dateB = getEventDate(b);
+          if (dateA && dateB) {
+            return compareAsc(dateA, dateB);
+          }
+          return 0;
+        })
+    : [];
 
   // Group events by month
   const eventsByMonth = validEvents.reduce(
