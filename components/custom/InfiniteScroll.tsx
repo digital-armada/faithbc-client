@@ -49,7 +49,7 @@ export default function InfiniteScroll<T>({
       console.log("inView triggered, loading more data");
       loadMoreData();
     }
-  }, [inView]);
+  }, [inView, loadMoreData]);
 
   return (
     <div className="space-y-4" aria-live="polite">

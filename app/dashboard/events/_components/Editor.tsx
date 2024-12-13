@@ -55,10 +55,14 @@ const MenuBar = ({ editor }) => {
   }, []);
 
   useEffect(() => {
+    const currentContainer = containerRef.current;
+
     checkScroll();
-    containerRef.current?.addEventListener("scroll", checkScroll);
-    return () =>
-      containerRef.current?.removeEventListener("scroll", checkScroll);
+    currentContainer?.addEventListener("scroll", checkScroll);
+
+    return () => {
+      currentContainer?.removeEventListener("scroll", checkScroll);
+    };
   }, [checkScroll]);
 
   const handleButtonClick = (action: () => void) => (e: React.MouseEvent) => {

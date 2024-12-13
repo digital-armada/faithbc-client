@@ -17,16 +17,16 @@ import {
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
-interface Speaker {
+interface SpeakerData {
   id: string;
   attributes: { speaker: string };
 }
 
-interface SpeakerProps {
-  speakerList: Speaker[];
+interface SpeakerSelectProps {
+  speakerList: SpeakerData[];
 }
 
-export function Speaker({ speakerList }: SpeakerProps) {
+export function Speaker({ speakerList }: SpeakerSelectProps) {
   const { setValue, watch } = useFormContext();
   const [open, setOpen] = useState(false);
 
@@ -44,7 +44,6 @@ export function Speaker({ speakerList }: SpeakerProps) {
     );
 
     if (selectedSpeaker) {
-      console.log("Selected Speaker:", selectedSpeaker.value);
       setValue("speaker", selectedSpeaker.value, {
         shouldValidate: true,
         shouldDirty: true,

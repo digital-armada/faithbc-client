@@ -53,7 +53,7 @@ export default function EventWidget({ className, events }: EventsProps) {
                         )}
                       {event?.attributes?.endDate && (
                         <>
-                           - 
+                          <span>&ndash;</span>
                           {format(
                             new Date(event.attributes.endDate),
                             "MMMM d, yyyy",

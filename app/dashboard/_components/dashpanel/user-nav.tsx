@@ -14,21 +14,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/features/auth/auth-actions";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import React from "react";
 
 export function UserNav() {
-  const [user, setUser] = React.useState(null);
+  const { data: session } = useSession();
+  const user = session?.user;
 
-  React.useEffect(() => {
-    const fetchSession = async () => {
-      const session = await getSession();
-      setUser(session?.user);
-    };
-    fetchSession();
-  }, []);
-
-  console.log("user", user);
+  console.log("usewwwr", user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,8 +29,8 @@ export function UserNav() {
           <Avatar className="h-8 w-8">
             <AvatarImage src="#" alt="Avatar" />
             <AvatarFallback className="bg-transparent">
-              {user?.firstName.charAt(0).toUpperCase()}
-              {user?.lastName.charAt(0).toUpperCase()}{" "}
+              {user?.firstName?.charAt(0).toUpperCase() ?? ""}
+              {user?.lastName?.charAt(0).toUpperCase() ?? ""}
             </AvatarFallback>
           </Avatar>
         </Button>

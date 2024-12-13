@@ -17,7 +17,7 @@ import { format } from "date-fns";
 import { Trash } from "lucide-react";
 import { TiTrash } from "react-icons/ti";
 import { deleteAnnouncement } from "@/features/announcements/announcement-actions";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { set } from "lodash";
 
@@ -56,30 +56,30 @@ export const defaultColumns = [
   columnHelper.display({
     id: "actions",
     cell: (props) => {
-      const { toast } = useToast();
-      const [pending, setIsPending] = useState(false);
+      // const { toast } = useToast();
+      // const [pending, setIsPending] = useState(false);
 
       const handleDelete = async () => {
-        setIsPending(true);
-        toast({
-          title: "Deleting...",
-          description: "Please wait while we delete the announcement",
-        });
+        // setIsPending(true);
+        // toast({
+        //   title: "Deleting...",
+        //   description: "Please wait while we delete the announcement",
+        // });
         const result = await deleteAnnouncement(props.row.original.id);
-        setIsPending(false);
-        if (result.error) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: result.error,
-          });
-        } else {
-          toast({
-            variant: "success",
-            title: "Success",
-            description: "Announcement deleted successfully",
-          });
-        }
+        // setIsPending(false);
+        // if (result.error) {
+        //   toast({
+        //     variant: "destructive",
+        //     title: "Error",
+        //     description: result.error,
+        //   });
+        // } else {
+        //   toast({
+        //     variant: "success",
+        //     title: "Success",
+        //     description: "Announcement deleted successfully",
+        //   });
+        // }
       };
 
       return (

@@ -23,11 +23,12 @@ export default async function page() {
   return (
     <ContentLayout title="Prayer Requests">
       <div>
-        {user.role.type === "admin" && (
+        {canCreateAnnouncement && (
           <div className="mb-10">
             <AddPrayerRequests />
           </div>
         )}
+
         <div className="space-y-4">
           {data?.data.map((prayer) =>
             prayer.attributes.prayerrequests.map((item) => {

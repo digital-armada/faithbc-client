@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
 import { API_CONFIG } from "./constants/api-endpoints";
 import qs from "qs";
+import { auth } from "@/auth";
 
 const checkPermission = async (requiredRole: string) => {
   const session = await auth();
@@ -20,7 +20,7 @@ export const strapiRequest = async <T>(
 ) => {
   /*/  INITIALIZE HEADERS  */
 
-  let headers: HeadersInit = {
+  let headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 

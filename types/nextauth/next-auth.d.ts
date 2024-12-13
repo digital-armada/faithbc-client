@@ -14,6 +14,8 @@ declare module "next-auth" {
     user: User;
     confirmed?: boolean;
     role?: string;
+    firstName?: string;
+    lastName?: string;
   }
 
   /**

@@ -14,6 +14,7 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 import { Column } from "@tanstack/react-table";
+import React from "react";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;

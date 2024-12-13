@@ -1,3 +1,5 @@
+import React from "react";
+
 interface WidgetHeadingsProps {
   heading: string;
   icon?: React.ReactNode;

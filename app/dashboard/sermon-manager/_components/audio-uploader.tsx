@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import FileUploader from "./FileUploader";
-import { convertVideo } from "@/data/ytConvert";
 
 interface AudioUploaderProps {
   audioFileId: number | null;

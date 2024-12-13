@@ -14,7 +14,7 @@ const MultiSelect = ({ allUsers: users, commUsers, onSelectionChange }) => {
 
   useEffect(() => {
     onSelectionChange(selectedUsers);
-  }, [selectedUsers]);
+  }, [selectedUsers, onSelectionChange]);
 
   const toggleUser = (user) => {
     setSelectedUsers((prevSelected) =>

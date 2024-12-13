@@ -44,7 +44,10 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("blocked")}
             title="Blocked"
-            options={blocked}
+            options={blocked.map((option) => ({
+              ...option,
+              value: option.value.toString(),
+            }))}
           />
         )}
         {/* FILTER */}
@@ -52,7 +55,10 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("confirmed")}
             title="Confirmed"
-            options={confirmed}
+            options={confirmed.map((option) => ({
+              ...option,
+              value: option.value.toString(),
+            }))}
           />
         )}
 

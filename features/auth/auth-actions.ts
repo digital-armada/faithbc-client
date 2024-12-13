@@ -118,28 +118,28 @@ export async function updateUserAction(payload: RegisterUserProps) {
   redirect("/dashboard");
 }
 
-export async function updateUserRole(userId, roleId) {
-  try {
-    const session = await auth();
-    if (!session?.strapiToken) throw new Error("No auth token found");
-    // FIXME:
-    const response = await strapiRequest("PUT", `/api/users/${userId}`, {
-      role: roleId,
-    });
-
-    if (response.data) {
-      revalidatePath("/dashboard/contacts");
-      return { data: response.data };
-    } else if (response.error) {
-      return { error: response.error || "An error occurred" };
-    }
-
-    return { error: "Unexpected response from server" };
-  } catch (error) {
-    console.error("Error in updateUserCommGroup:", error);
-    return { error: error.message || "An error occurred" };
-  }
-}
+// export async function updateUserRole(userId, roleId) {
+//   try {
+//     const session = await auth();
+//     if (!session?.strapiToken) throw new Error("No auth token found");
+//     // FIXME:
+//     const response = await strapiRequest("PUT", `/api/users/${userId}`, {
+//       role: roleId,
+//     });
+//
+//     if (response.data) {
+//       revalidatePath("/dashboard/contacts");
+//       return { data: response.data };
+//     } else if (response.error) {
+//       return { error: response.error || "An error occurred" };
+//     }
+//
+//     return { error: "Unexpected response from server" };
+//   } catch (error) {
+//     console.error("Error in updateUserCommGroup:", error);
+//     return { error: error.message || "An error occurred" };
+//   }
+// }
 
 const formSchema = z.object({
   email: z.string().email("Enter a valid email.").trim(),
