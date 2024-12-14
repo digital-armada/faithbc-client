@@ -1,5 +1,4 @@
 "use server";
-import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { strapiRequest } from "@/lib/strapi-service";
 import slugify from "slugify";
@@ -19,11 +18,6 @@ interface ActionResponse {
 }
 
 export async function createSermonFromVideo(video) {
-  const session = await auth();
-  if (!session?.strapiToken) {
-    throw new Error("No authentication token available");
-  }
-
   const baseSlug = slugify(video.title, { lower: true, strict: true });
   let uniqueSlug = baseSlug;
   let slugExists = true;
@@ -99,6 +93,7 @@ export async function updateSermon(payload): Promise<ActionResponse> {
     if (response.data) {
       revalidatePath("/dashboard/sermon-manager/");
       revalidatePath(`/dashboard/sermon-manager/${payload.id}`);
+      revalidatePath(`/sermons`);
       return { success: true, data: response.data };
     }
 
