@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { registerUserAction } from "@/features/auth/auth-actions";
 import { useFormState } from "react-dom";
 import { schemaFormData, schemaRegister } from "@/features/auth/schemaAuth";
+import { ApiResponse } from "@/types/types";
 
 type FormErrors = Partial<Record<keyof schemaFormData, string>>;
 
-const initialState: ApiResponse<UserData> = {
+const initialState = {
   success: false,
   error: undefined,
   data: undefined,
