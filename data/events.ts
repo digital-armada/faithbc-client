@@ -2,31 +2,28 @@ import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 
-export async function getEventSlug(id: number) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${id}?populate=*`,
-      {
-        next: { revalidate: 60 },
-      },
-    );
-
-    console.log("Response status:", res.status);
-    console.log("Response headers:", res.headers);
-
-    if (res.status !== 200) {
-      throw new Error("Failed to fetch event");
-    }
-
-    const data = await res.json();
-    console.log("Fetched event data:", data);
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching event:", error);
-    throw new Error("Failed to fetch event: " + error.message);
-  }
-}
+// export async function getEventSlug(id: number) {
+//   try {
+//     const res = await fetch(
+//       `${process.env.NEXT_PUBLIC_API_URL}/events/${id}?populate=*`,
+//       {
+//         next: { revalidate: 60 },
+//       },
+//     );
+//
+//     if (res.status !== 200) {
+//       throw new Error("Failed to fetch event");
+//     }
+//
+//     const data = await res.json();
+//     console.log("Fetched event data:", data);
+//
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching event:", error);
+//     throw new Error("Failed to fetch event: " + error.message);
+//   }
+// }
 
 export async function getEvent(id: string) {
   const query = qs.stringify(

@@ -1,5 +1,6 @@
 "use client";
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -20,8 +21,9 @@ import Dropdown from "./Dropdown";
 // import { updateUserRole } from "@/features/auth/auth-actions";
 import { format, parseISO } from "date-fns";
 import { TiTick, TiTimes } from "react-icons/ti";
+import { User } from "@/types/types";
 
-const columnHelper = createColumnHelper();
+const columnHelper = createColumnHelper<User>();
 
 export default function Table({ users, roles }) {
   const [data, setData] = useState(users);
@@ -35,40 +37,40 @@ export default function Table({ users, roles }) {
   }, [users]);
 
   const columns = [
-    columnHelper.accessor("firstName", {
+    columnHelper.accessor("attributes.firstName", {
       header: "First Name",
       cell: (info) => info.getValue(),
       minSize: 150,
       enableSorting: true,
     }),
-    columnHelper.accessor("lastName", {
+    columnHelper.accessor("attributes.lastName", {
       header: "Last Name",
       cell: (info) => info.getValue(),
       minSize: 150,
       enableSorting: true,
     }),
-    columnHelper.accessor("confirmed", {
+    columnHelper.accessor("attributes.confirmed", {
       header: "Active",
       cell: (info) => <p>{info.getValue() ? <TiTick /> : <TiTimes />}</p>,
       minSize: 150,
       enableSorting: true,
     }),
-    columnHelper.accessor("contactNumber", {
+    columnHelper.accessor("attributes.contactNumber", {
       header: "Contact",
       cell: (info) => info.getValue(),
       minSize: 150,
 
       enableSorting: true,
     }),
-    columnHelper.accessor("dateOfBirth", {
+    columnHelper.accessor("attributes.dateOfBirth", {
       header: "D.O.B",
       cell: (info) => {
         const date = info.getValue();
-        if (date === null) {
+        if (date === null || date === undefined) {
           return "-";
         }
         try {
-          const parsedDate = new Date(info.getValue());
+          const parsedDate = parseISO(date);
           return format(parsedDate, "PPP");
         } catch (error) {
           return "Invalid Date";
@@ -101,19 +103,19 @@ export default function Table({ users, roles }) {
       header: "address",
       id: "address",
       columns: [
-        columnHelper.accessor("address.street", {
+        columnHelper.accessor("attributes.address.street", {
           header: "Street",
           footer: (props) => props.column.id,
         }),
-        columnHelper.accessor("address.suburb", {
-          header: "Suburb",
-          footer: (props) => props.column.id,
-        }),
-        columnHelper.accessor("address.state", {
+        // columnHelper.accessor("attributes.address.suburb", {
+        //   header: "Suburb",
+        //   footer: (props) => props.column.id,
+        // }),
+        columnHelper.accessor("attributes.address.state", {
           header: "State",
           footer: (props) => props.column.id,
         }),
-        columnHelper.accessor("address.pCode", {
+        columnHelper.accessor("attributes.address.postalCode", {
           header: "PostCode",
           footer: (props) => props.column.id,
         }),
@@ -133,7 +135,7 @@ export default function Table({ users, roles }) {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: { pagination, sorting, globalFilter: filtering },
-    onSortingChange: setSorting,
+    // onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
   });
 

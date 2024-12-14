@@ -46,7 +46,7 @@ export async function createNewAnnouncement(prevState, formData: FormData) {
 
     if (response.data) {
       revalidatePath("/dashboard/announcements");
-      return { data: response.data };
+      return { success: true, data: response.data };
     } else if (response.error) {
       return { error: response.error || "An error occurred" };
     }
@@ -54,7 +54,7 @@ export async function createNewAnnouncement(prevState, formData: FormData) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in createNewAnnouncement:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -69,7 +69,7 @@ export async function deleteAnnouncement(id: number) {
 
     if (response.data) {
       revalidatePath("/dashboard/announcements");
-      return { data: response.data };
+      return { success: true, data: response.data };
     } else if (response.error) {
       return { error: response.error || "An error occurred" };
     }
@@ -77,6 +77,6 @@ export async function deleteAnnouncement(id: number) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in deleteAnnouncement:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }

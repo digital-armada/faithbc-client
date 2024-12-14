@@ -40,7 +40,7 @@ export async function uploadMediaAction(
     console.error(`Error uploading ${type}:`, error);
     return {
       data: null,
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       message: `Failed to upload ${type}`,
     };
   }

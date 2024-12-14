@@ -5,17 +5,17 @@ import { registerUserAction } from "@/features/auth/auth-actions";
 import { useFormState } from "react-dom";
 import { schemaFormData, schemaRegister } from "@/features/auth/schemaAuth";
 
-const initialState = {
-  error: false,
+type FormErrors = Partial<Record<keyof schemaFormData, string>>;
+
+const initialState: ApiResponse<UserData> = {
+  success: false,
+  error: undefined,
+  data: undefined,
 };
 
 export default function FormRegisterUser() {
   const [state, formAction] = useFormState(registerUserAction, initialState);
-
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof schemaFormData, string>>
-  >({});
-  const [formError, setFormError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,7 +56,7 @@ export default function FormRegisterUser() {
     const result = schemaRegister.safeParse(data);
 
     if (!result.success) {
-      const fieldErrors: Partial<Record<keyof schemaFormData, string>> = {};
+      const fieldErrors: FormErrors = {};
       result.error.issues.forEach((issue) => {
         const path = issue.path.join(".");
         fieldErrors[path as keyof schemaFormData] = issue.message;
@@ -66,15 +66,8 @@ export default function FormRegisterUser() {
     }
 
     setErrors({});
-    setFormError(null); // Clear form error on success
 
-    try {
-      //@ts-ignore
-      await formAction(result.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setFormError("An unexpected error occurred. Please try again.");
-    }
+    await formAction(result.data);
   };
 
   return (
@@ -333,7 +326,7 @@ export default function FormRegisterUser() {
           </button>
         </div>
       </form>
-      {state.error && (
+      {/* {state.error && (
         <div className="mt-4 text-red-600">
           <p>{state.message}</p>
           {state.inputErrors && (
@@ -347,7 +340,7 @@ export default function FormRegisterUser() {
             </ul>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

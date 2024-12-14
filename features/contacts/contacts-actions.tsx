@@ -17,7 +17,7 @@ export async function updateMember({ id, blocked }) {
 
     if (response.data) {
       revalidatePath("/dashboard/contacts");
-      return { success: response.success };
+      return { success: true, data: response.data };
     } else if (response.error) {
       return { error: response.error || "An error occurred" };
     }
@@ -25,7 +25,7 @@ export async function updateMember({ id, blocked }) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in updateUserCommGroup:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -56,7 +56,7 @@ export async function checkMemberStatus() {
     return { success: true };
   } catch (error) {
     console.error("Error in checkMemberStatus:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -87,6 +87,6 @@ export async function addMembersToComm() {
     return { success: true };
   } catch (error) {
     console.error("Error in checkMemberStatus:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }

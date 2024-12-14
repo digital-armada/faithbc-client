@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "strict": false, // put back to true when ready
+    "strict": true, // put back to true when ready
     "noImplicitAny": false, /// put back to true when ready
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "noEmitOnError": false,
@@ -28,9 +24,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "target": "ES2017"
   },
@@ -41,7 +35,5 @@
     ".next/types/**/*.ts",
     "app/api/auth/[...nextauth]/.authOptions.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

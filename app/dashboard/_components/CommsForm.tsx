@@ -7,7 +7,7 @@ import { useFormState } from "react-dom";
 
 const INITIAL_STATE = {
   data: "",
-  error: "",
+  // error: "",
 };
 
 export default function CommsForm() {

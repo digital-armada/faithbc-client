@@ -61,7 +61,7 @@ export async function updateUserCommGroup(user, group) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in updateUserCommGroup:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -91,7 +91,7 @@ export async function deleteUserCommGroup(payload) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in deleteUserCommGroup:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 export async function deleteCommGroup(groupId) {
@@ -111,6 +111,6 @@ export async function deleteCommGroup(groupId) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in deleteCommGroup:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }

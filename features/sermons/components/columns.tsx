@@ -56,7 +56,7 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div className="flex space-x-2">
           {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <Link href={`/dashboard/sermon-manager/sermons/${row.original.id}`}>
+          <Link href={`/dashboard/sermon-manager/${row.original.id}`}>
             <span className="max-w-[500px] truncate font-medium">{title}</span>
           </Link>
         </div>

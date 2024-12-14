@@ -1,9 +1,6 @@
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import PageHeader from "@/components/ui/PageHeader";
-import HeadingTwo from "@/components/custom/headingtwo";
 import { getStatements } from "@/data/doctrines";
 import Link from "next/link";
-import Markdown from "react-markdown";
 
 export default async function Page() {
   const { data = [] } = (await getStatements()) || { data: [] };

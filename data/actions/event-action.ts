@@ -78,7 +78,7 @@ export async function createEvent(formData) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in createEvent:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -137,7 +137,7 @@ export async function updateEvent(eventID, formData) {
     return { error: response.error || "Unexpected response from server" };
   } catch (error) {
     console.error("Error in updateEvent:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }
 
@@ -158,6 +158,6 @@ export async function deleteEvent(id: string) {
     return { error: "Unexpected response from server" };
   } catch (error) {
     console.error("Error in deleteEvent:", error);
-    return { error: error.message || "An error occurred" };
+    return { success: false, message: error || "An error occurred" };
   }
 }

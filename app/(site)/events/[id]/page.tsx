@@ -1,4 +1,3 @@
-import { getEventSlug } from "@/data/events";
 import EventMap from "@/features/events/components/EventMap";
 import HeadingTwo from "@/components/custom/headingtwo";
 import formatDateRange from "@/lib/formatDate";

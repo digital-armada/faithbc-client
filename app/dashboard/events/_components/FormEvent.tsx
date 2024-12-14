@@ -51,16 +51,16 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
 
   // console.log("watching", watch());
   const onSubmit = async (formData: typeof defaultValues) => {
-    console.log("formData", formData);
+    // console.log("formData", formData);
     try {
       setSubmitError(null);
       const response = eventID
         ? await updateEvent(eventID, formData)
         : await createEvent(formData);
       console.log("back from server", response);
-      if (response.error) {
-        throw new Error(response.error || "Failed to submit form");
-      }
+      // if (response.error) {
+      //   throw new Error(response.error || "Failed to submit form");
+      // }
 
       router.refresh();
     } catch (error) {
