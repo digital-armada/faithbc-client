@@ -1,12 +1,10 @@
+import { strapiRequest } from "@/lib/strapi-service";
+
 export async function getStatement(slug: string) {
+  console.log("SLUG", slug);
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/doctrines/${slug}`,
-    );
-    if (res.status !== 200) {
-      throw new Error("Failed to fetch statements");
-    }
-    return res.json();
+    const response = await strapiRequest("GET", `/doctrines/${slug}`);
+    return response;
   } catch (error) {
     throw new Error("Failed to fetch statements");
   }
