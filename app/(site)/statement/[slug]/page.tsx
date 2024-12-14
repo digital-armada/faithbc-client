@@ -5,7 +5,10 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const data = await getStatement(params.slug);
+  const response = await getStatement(params.slug).catch(() => ({
+    data: null,
+  }));
+  const data = response?.data || { title: "", content: "", id: "" };
 
   return (
     <section>
