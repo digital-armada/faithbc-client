@@ -99,24 +99,36 @@ const EventDetails = ({
   venAdd,
   content,
 }: EventDetailsProps) => {
-  const startDateObj = startDate ? new Date(startDate) : null;
-  const endDateObj = endDate ? new Date(endDate) : null;
+  console.log("startDate", startDate);
 
-  const eventStartDate = startDateObj
-    ? format(startDateObj, "MMM do", { timeZone: "America/New_York" })
-    : null;
+  const startDateObj = startDate ? parseISO(startDate) : null;
+  const endDateObj = endDate ? parseISO(endDate) : null;
+  console.log("startDateObj", startDateObj);
+
+  // Remove timeZone option from format calls
+  const eventStartDate = startDateObj ? format(startDateObj, "MMM do") : null;
+  const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
+  const eventEndDate = endDateObj ? format(endDateObj, "MMM do") : null;
+  const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
 
   const startTime =
     startDateObj &&
-    format(
-      startDateObj,
-      startDateObj.getHours() === 0 &&
-        startDateObj.getMinutes() === 0 &&
-        startDateObj.getSeconds() === 0
-        ? "EEEE"
-        : "EEEE h:mmaaa",
-      { timeZone: "America/New_York" },
-    );
+    // Check if time is midnight (00:00:00)
+    (startDateObj.getHours() === 0 &&
+    startDateObj.getMinutes() === 0 &&
+    startDateObj.getSeconds() === 0
+      ? format(startDateObj, "EEEE") // Show only day name for midnight
+      : format(startDateObj, "EEEE h:mma")); // Show day name and time for other times
+
+  console.log("startTime", startTime);
+
+  // Check if dates are different for comparison
+  const areDifferentDates =
+    startDateObj &&
+    endDateObj &&
+    startDateObj.getTime() !== endDateObj.getTime();
+
+  const shouldShowEndDate = endDate && endDate !== "Jan 1st";
 
   return (
     <div className="w-full space-y-8 pb-8 text-gray-700">
