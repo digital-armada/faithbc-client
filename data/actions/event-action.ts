@@ -70,6 +70,7 @@ export async function createEvent(formData) {
 
     if (response.data) {
       revalidatePath("/dashboard/events");
+      revalidatePath("/events");
       return { data: response.data };
     } else if (response.error) {
       return { error: response.error || "An error occurred" };
@@ -131,6 +132,8 @@ export async function updateEvent(eventID, formData) {
 
     if (response.data) {
       revalidatePath("/dashboard/events");
+      revalidatePath("/events");
+
       return { data: response.data };
     }
 
