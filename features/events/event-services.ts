@@ -25,41 +25,36 @@ export const eventsService = {
   },
 
   getEvents: async () => {
-    const query = qs.stringify(
-      {
-        populate: "*",
-        sort: ["startDate:desc"],
-        pagination: {
-          pageSize: 100,
-        },
-        filters: {
-          $and: [
-            {
-              startDate: {
-                $gte: new Date().toISOString().split("T")[0],
+    const query = {
+      populate: "*",
+      sort: ["startDate:desc"],
+      pagination: {
+        pageSize: 100,
+      },
+      filters: {
+        $and: [
+          {
+            startDate: {
+              $gte: new Date().toISOString().split("T")[0],
+            },
+          },
+          {
+            $or: [
+              {
+                internal: {
+                  $null: true,
+                },
               },
-            },
-            {
-              $or: [
-                {
-                  internal: {
-                    $null: true,
-                  },
+              {
+                internal: {
+                  $eq: false,
                 },
-                {
-                  internal: {
-                    $eq: false,
-                  },
-                },
-              ],
-            },
-          ],
-        },
+              },
+            ],
+          },
+        ],
       },
-      {
-        encodeValuesOnly: true, // prettify URL
-      },
-    );
+    };
     const response = await strapiRequest<Event[]>("GET", API.EVENTS.GET_ALL, {
       query,
     });

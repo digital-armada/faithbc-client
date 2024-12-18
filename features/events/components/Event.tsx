@@ -87,7 +87,7 @@ export default function Event({ initialEvents }) {
           {Object.entries(eventsByMonth).map(([monthYear, events]) => (
             <div key={monthYear} className="rounded-lg p-6">
               <MonthHeader month={monthYear} />
-              <div className="divide-y divide-gray-100">
+              <div>
                 {(events as any[]).map((event, index) => (
                   <div key={index} className="py-4">
                     <EventItem event={event} />

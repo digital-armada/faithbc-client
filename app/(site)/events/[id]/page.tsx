@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import RenderTipTap from "../../../../features/events/components/RenderTipTap";
 import { eventsService } from "@/features/events/event-services";
 import { Event } from "@/features/events/types";
+import { format, parseISO } from "date-fns";
 
 export default async function EventPage({
   params,
@@ -17,16 +18,14 @@ export default async function EventPage({
   params: { id: number };
 }) {
   const id = params.id.toString();
-  const response = await eventsService.getEvent(id);
+  const { data } = await eventsService.getEvent(id);
 
-  console.log("response", response);
-
-  if (!response?.attributes) {
+  if (!data?.attributes) {
     return <section>Event not found</section>;
   }
 
   const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
-    response.attributes;
+    data.attributes;
 
   return (
     <section>
@@ -100,13 +99,34 @@ const EventDetails = ({
   venAdd,
   content,
 }: EventDetailsProps) => {
+  const startDateObj = startDate ? new Date(startDate) : null;
+  const endDateObj = endDate ? new Date(endDate) : null;
+
+  const eventStartDate = startDateObj
+    ? format(startDateObj, "MMM do", { timeZone: "America/New_York" })
+    : null;
+
+  const startTime =
+    startDateObj &&
+    format(
+      startDateObj,
+      startDateObj.getHours() === 0 &&
+        startDateObj.getMinutes() === 0 &&
+        startDateObj.getSeconds() === 0
+        ? "EEEE"
+        : "EEEE h:mmaaa",
+      { timeZone: "America/New_York" },
+    );
+
   return (
     <div className="w-full space-y-8 pb-8 text-gray-700">
       <div>
         <h3 className="text-lg font-bold">Date and Time</h3>
         <div className="flex items-center gap-3">
           <IoMdCalendar className="text-2xl" />
-          <p className="text-md">{formatDateRange(startDate, endDate)}</p>
+          {eventStartDate}
+          {startTime}
+          {/* <p className="text-md">{formatDateRange(startDate, endDate)}</p> */}
         </div>
       </div>
       {(venName || venAdd) && (

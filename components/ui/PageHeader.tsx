@@ -3,7 +3,7 @@ import HeadingTwo from "@/components/custom/headingtwo";
 
 export default function PageHeader({ heading }: { heading: string }) {
   return (
-    <div className="mb-10">
+    <div className="mb-4">
       <HeadingTwo heading={heading} />
       <Breadcrumbs
         labelsToUppercase={false}

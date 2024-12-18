@@ -3,6 +3,7 @@ import { eventsService } from "@/features/events/event-services";
 
 export default async function page() {
   const { data } = await eventsService.getEvents();
+  const events = data?.data;
 
-  return <Event initialEvents={data} />;
+  return <Event initialEvents={events} />;
 }

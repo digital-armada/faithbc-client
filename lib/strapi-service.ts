@@ -75,7 +75,7 @@ export const strapiRequest = async <T>(
     });
 
     const data = await response.json();
-
+    console.log("STRAPI_REQUEST_RESPONSE", data);
     if (!response.ok) {
       return {
         success: false,
