@@ -1,22 +1,23 @@
 "use client";
 import { DateTime } from "luxon";
+import { useState, useEffect } from "react";
 
 interface DateDisplayProps {
   isoString: string;
 }
 
 export default function DateDisplay({ isoString }: DateDisplayProps) {
-  console.log("isoString", isoString);
-  const sydneyDate = DateTime.fromISO(isoString)
-    .setZone("Australia/Sydney")
-    .toFormat("MMM dd, yyyy h:mm a");
-  console.log(sydneyDate);
-  // Simple check if we have a valid date string
-  if (!isoString) {
-    return <div>No date available</div>;
-  }
+  const [formattedDate, setFormattedDate] = useState<string>("");
 
-  return <div>{sydneyDate}</div>;
+  useEffect(() => {
+    const sydneyDate = DateTime.fromISO(isoString)
+      .setZone("Australia/Sydney")
+      .toFormat("MMM dd, yyyy h:mm a");
+
+    setFormattedDate(sydneyDate);
+  }, [isoString]);
+
+  return <div>{formattedDate}</div>;
 }
 
 // "use client";
