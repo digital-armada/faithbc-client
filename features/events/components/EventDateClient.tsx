@@ -2,16 +2,16 @@
 import { DateTime } from "luxon";
 
 export default function EventDateClient({ startDate, endDate }) {
-  // Log input for verification
-  console.log("Original UTC input:", startDate);
+  // First create a DateTime from the ISO string in UTC
+  const utcDate = DateTime.fromISO(startDate, { zone: "UTC" });
 
-  const formattedDate = DateTime.fromISO(startDate)
-    .toUTC()
-    .setZone("Australia/Sydney")
+  // Convert to Sydney time while preserving the intended local time
+  const formattedDate = utcDate
+    .setZone("Australia/Sydney", { keepLocalTime: false })
     .toFormat("EEE, d MMM yyyy, h:mm a ZZZZZ");
 
-  // Log output for verification
-  console.log("Formatted Sydney time:", formattedDate);
+  console.log("UTC input:", startDate);
+  console.log("Sydney output:", formattedDate);
 
   return <div>{formattedDate}</div>;
 }
