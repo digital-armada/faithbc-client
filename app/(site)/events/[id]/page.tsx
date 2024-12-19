@@ -22,13 +22,24 @@ export default async function EventPage({
 }) {
   const id = params.id.toString();
   const { data } = await eventsService.getEvent(id);
-
+  console.log(data);
   if (!data?.attributes) {
     return <section>Event not found</section>;
   }
 
-  const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
-    data.attributes;
+  const {
+    title,
+    content,
+    startDate,
+    endDate,
+    venName,
+    venAdd,
+    featuredImage,
+    eventStartDate,
+    eventEndDate,
+    eventStartTime,
+    eventEndTime,
+  } = data.attributes;
 
   return (
     <section>
@@ -54,6 +65,8 @@ export default async function EventPage({
             <>
               <div className="w-full sm:w-1/2">
                 <EventDateClient startDate={startDate} endDate={endDate} />
+                {eventStartDate}, {eventEndDate}, {eventStartTime},{" "}
+                {eventEndTime},
                 {/* <EventDetails
                   title={title}
                   startDate={startDate}
