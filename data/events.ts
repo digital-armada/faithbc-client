@@ -38,14 +38,14 @@ export async function getEvent(id: string) {
   const url = new URL(`/api/events/${id}`, baseUrl);
   url.search = query;
 
-  const session = await auth();
+  // const session = await auth();
 
   try {
     const response = await fetch(url.href, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.strapiToken}`,
+        // Authorization: `Bearer ${session?.strapiToken}`,
       },
       cache: "no-cache",
     });

@@ -13,6 +13,7 @@ import { Event } from "@/features/events/types";
 import { format, parseISO } from "date-fns";
 import DateDisplay from "@/components/Forms/DateDisplay";
 import { DateTime } from "luxon";
+import EventDateClient from "@/features/events/components/EventDateClient";
 
 export default async function EventPage({
   params,
@@ -28,20 +29,6 @@ export default async function EventPage({
 
   const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
     data.attributes;
-
-  const startDateObj = DateTime.fromISO(startDate, { zone: "utc" })
-    .setZone("Australia/Sydney")
-    .toFormat("EEE, d MMM, h:mm a");
-
-  // const startDateObj = parseISO(startDate).toLocaleString("en-AU", {
-  //   timeZone: "Australia/Sydney",
-  // });
-
-  const endDateObj = endDate
-    ? parseISO(endDate).toLocaleString("en-AU", {
-        timeZone: "Australia/Sydney",
-      })
-    : null;
 
   return (
     <section>
@@ -66,14 +53,15 @@ export default async function EventPage({
           {venAdd ? (
             <>
               <div className="w-full sm:w-1/2">
-                <EventDetails
+                <EventDateClient startDate={startDate} endDate={endDate} />
+                {/* <EventDetails
                   title={title}
-                  startDate={startDateObj}
-                  endDate={endDateObj}
+                  startDate={startDate}
+                  endDate={endDate}
                   venName={venName}
                   venAdd={venAdd}
                   content={content}
-                />
+                /> */}
               </div>
               <div className="w-full sm:w-1/2">
                 <Suspense fallback={<div>Loading...</div>}>
@@ -85,8 +73,8 @@ export default async function EventPage({
             <div className="w-full">
               <EventDetails
                 title={title}
-                startDate={startDateObj}
-                endDate={endDateObj}
+                startDate={startDate}
+                endDate={endDate}
                 venName={venName}
                 venAdd={venAdd}
                 content={content}
