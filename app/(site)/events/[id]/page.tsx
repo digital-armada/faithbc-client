@@ -12,7 +12,7 @@ import { eventsService } from "@/features/events/event-services";
 import { Event } from "@/features/events/types";
 import { format, parseISO } from "date-fns";
 import DateDisplay from "@/components/Forms/DateDisplay";
-// import { DateTime } from "luxon";
+import { DateTime } from "luxon";
 
 export default async function EventPage({
   params,
@@ -29,13 +29,13 @@ export default async function EventPage({
   const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
     data.attributes;
 
-  // const startDateObj = DateTime.fromISO(startDate)
-  //   .setZone("Australia/Sydney")
-  //   .toFormat("EEE, d MMM, h:mm a");
+  const startDateObj = DateTime.fromISO(startDate)
+    .setZone("Australia/Sydney")
+    .toFormat("EEE, d MMM, h:mm a");
 
-  const startDateObj = parseISO(startDate).toLocaleString("en-AU", {
-    timeZone: "Australia/Sydney",
-  });
+  // const startDateObj = parseISO(startDate).toLocaleString("en-AU", {
+  //   timeZone: "Australia/Sydney",
+  // });
 
   const endDateObj = endDate
     ? parseISO(endDate).toLocaleString("en-AU", {
