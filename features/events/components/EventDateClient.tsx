@@ -2,9 +2,15 @@
 import { DateTime } from "luxon";
 
 export default function EventDateClient({ startDate, endDate }) {
-  const formattedDate = DateTime.fromISO(startDate)
-    .setZone("Australia/Sydney")
-    .toFormat("dd/MM/yyyy, h:mm a");
+  // Log the incoming date for verification
+  console.log("Input startDate:", startDate);
 
-  return <div>{formattedDate}</div>;
+  const sydneyTime = DateTime.fromISO(startDate)
+    .setZone("Australia/Sydney")
+    .toFormat("EEE, d MMM yyyy, h:mm a ZZZZZ");
+
+  // Log the calculated time for verification
+  console.log("Calculated Sydney time:", sydneyTime);
+
+  return <div>{sydneyTime}</div>;
 }
