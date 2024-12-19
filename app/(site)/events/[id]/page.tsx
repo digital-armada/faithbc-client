@@ -11,6 +11,7 @@ import RenderTipTap from "../../../../features/events/components/RenderTipTap";
 import { eventsService } from "@/features/events/event-services";
 import { Event } from "@/features/events/types";
 import { format, parseISO } from "date-fns";
+import DateDisplay from "@/components/Forms/DateDisplay";
 
 export default async function EventPage({
   params,
@@ -136,8 +137,9 @@ const EventDetails = ({
         <h3 className="text-lg font-bold">Date and Time</h3>
         <div className="flex items-center gap-3">
           <IoMdCalendar className="text-2xl" />
-          {eventStartDate}
-          {startTime}
+          <DateDisplay isoString={startDate} />
+          {/* {eventStartDate} */}
+          {/* {startTime} */}
           {/* <p className="text-md">{formatDateRange(startDate, endDate)}</p> */}
         </div>
       </div>
