@@ -1,3 +1,4 @@
+"use client";
 import { DateTime } from "luxon";
 
 export function formatDateForTimezone(
