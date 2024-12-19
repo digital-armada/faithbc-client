@@ -29,7 +29,7 @@ export default async function EventPage({
   const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
     data.attributes;
 
-  const startDateObj = DateTime.fromISO(startDate)
+  const startDateObj = DateTime.fromISO(startDate, { zone: "utc" })
     .setZone("Australia/Sydney")
     .toFormat("EEE, d MMM, h:mm a");
 
