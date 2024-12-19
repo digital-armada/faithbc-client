@@ -1,9 +1,10 @@
-import { format } from "date-fns-tz";
+import { DateTime } from "luxon";
 
-export function formatDateForTimezone(date, timeZone = "Australia/Sydney") {
-  // Ensure the input date is a valid Date object
-  const parsedDate = new Date(date);
-
-  // Using format from date-fns-tz to format the date according to the specified timezone
-  return format(parsedDate, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone });
+export function formatDateForTimezone(
+  date: string | Date,
+  timeZone = "Australia/Sydney",
+) {
+  return DateTime.fromISO(date.toString())
+    .setZone(timeZone)
+    .toFormat("yyyy-MM-dd'T'HH:mm:ssZZ");
 }
