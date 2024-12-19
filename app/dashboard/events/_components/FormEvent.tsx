@@ -23,7 +23,7 @@ interface FormEventProps {
 export default function FormEvent({ data, eventID }: FormEventProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
-
+  console.log("startDate", data?.attributes.startDate);
   const defaultValues = {
     title: data?.attributes?.title || "",
     slug: data?.attributes?.slug || "",
@@ -49,7 +49,7 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
     defaultValues,
   });
 
-  // console.log("watching", watch());
+  console.log("watching", watch());
   const onSubmit = async (formData: typeof defaultValues) => {
     // console.log("formData", formData);
     try {

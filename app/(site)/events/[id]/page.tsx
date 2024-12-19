@@ -12,6 +12,7 @@ import { eventsService } from "@/features/events/event-services";
 import { Event } from "@/features/events/types";
 import { format, parseISO } from "date-fns";
 import DateDisplay from "@/components/Forms/DateDisplay";
+// import { DateTime } from "luxon";
 
 export default async function EventPage({
   params,
@@ -27,6 +28,20 @@ export default async function EventPage({
 
   const { title, content, startDate, endDate, venName, venAdd, featuredImage } =
     data.attributes;
+
+  // const startDateObj = DateTime.fromISO(startDate)
+  //   .setZone("Australia/Sydney")
+  //   .toFormat("EEE, d MMM, h:mm a");
+
+  const startDateObj = parseISO(startDate).toLocaleString("en-AU", {
+    timeZone: "Australia/Sydney",
+  });
+
+  const endDateObj = endDate
+    ? parseISO(endDate).toLocaleString("en-AU", {
+        timeZone: "Australia/Sydney",
+      })
+    : null;
 
   return (
     <section>
@@ -53,8 +68,8 @@ export default async function EventPage({
               <div className="w-full sm:w-1/2">
                 <EventDetails
                   title={title}
-                  startDate={startDate}
-                  endDate={endDate}
+                  startDate={startDateObj}
+                  endDate={endDateObj}
                   venName={venName}
                   venAdd={venAdd}
                   content={content}
@@ -70,8 +85,8 @@ export default async function EventPage({
             <div className="w-full">
               <EventDetails
                 title={title}
-                startDate={startDate}
-                endDate={endDate}
+                startDate={startDateObj}
+                endDate={endDateObj}
                 venName={venName}
                 venAdd={venAdd}
                 content={content}
@@ -100,34 +115,30 @@ const EventDetails = ({
   venAdd,
   content,
 }: EventDetailsProps) => {
+  // Remove timeZone option from format calls
+  // const eventStartDate = startDate ? format(startDate, "MMM do") : null;
+  // const startYear = startDate ? format(startDate, "yyyy") : null;
+  // const eventEndDate = endDate ? format(endDate, "MMM do") : null;
+  // const endYear = endDate ? format(endDate, "yyyy") : null;
+
   console.log("startDate", startDate);
 
-  const startDateObj = startDate ? parseISO(startDate) : null;
-  const endDateObj = endDate ? parseISO(endDate) : null;
-  console.log("startDateObj", startDateObj);
-
-  // Remove timeZone option from format calls
-  const eventStartDate = startDateObj ? format(startDateObj, "MMM do") : null;
-  const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
-  const eventEndDate = endDateObj ? format(endDateObj, "MMM do") : null;
-  const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
-
-  const startTime =
-    startDateObj &&
-    // Check if time is midnight (00:00:00)
-    (startDateObj.getHours() === 0 &&
-    startDateObj.getMinutes() === 0 &&
-    startDateObj.getSeconds() === 0
-      ? format(startDateObj, "EEEE") // Show only day name for midnight
-      : format(startDateObj, "EEEE h:mma")); // Show day name and time for other times
-
-  console.log("startTime", startTime);
-
-  // Check if dates are different for comparison
-  const areDifferentDates =
-    startDateObj &&
-    endDateObj &&
-    startDateObj.getTime() !== endDateObj.getTime();
+  //   const startTime =
+  //     startDateObj &&
+  //     // Check if time is midnight (00:00:00)
+  //     (startDateObj.getHours() === 0 &&
+  //     startDateObj.getMinutes() === 0 &&
+  //     startDateObj.getSeconds() === 0
+  //       ? format(startDateObj, "EEEE") // Show only day name for midnight
+  //       : format(startDateObj, "EEEE h:mma")); // Show day name and time for other times
+  //
+  //   console.log("startTime", startTime);
+  //
+  //   // Check if dates are different for comparison
+  //   const areDifferentDates =
+  //     startDateObj &&
+  //     endDateObj &&
+  //     startDateObj.getTime() !== endDateObj.getTime();
 
   const shouldShowEndDate = endDate && endDate !== "Jan 1st";
 
@@ -137,7 +148,8 @@ const EventDetails = ({
         <h3 className="text-lg font-bold">Date and Time</h3>
         <div className="flex items-center gap-3">
           <IoMdCalendar className="text-2xl" />
-          <DateDisplay isoString={startDate} />
+          {startDate}
+          {/* <DateDisplay isoString={startDate} /> */}
 
           {/* {eventStartDate} */}
           {/* {startTime} */}

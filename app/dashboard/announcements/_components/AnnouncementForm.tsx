@@ -52,11 +52,11 @@ export default function AnnouncementForm() {
               Select date and time
             </Label>
             <div className="mt-2">
-              <FormDateTimePicker
+              {/* <FormDateTimePicker
                 id="event-date"
                 name="event-date"
                 label="date"
-              />
+              /> */}
               {/* <Input
                 id="event-date"
                 name="event-date"
