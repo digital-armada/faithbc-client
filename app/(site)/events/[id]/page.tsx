@@ -138,6 +138,7 @@ const EventDetails = ({
         <div className="flex items-center gap-3">
           <IoMdCalendar className="text-2xl" />
           <DateDisplay isoString={startDate} />
+
           {/* {eventStartDate} */}
           {/* {startTime} */}
           {/* <p className="text-md">{formatDateRange(startDate, endDate)}</p> */}
