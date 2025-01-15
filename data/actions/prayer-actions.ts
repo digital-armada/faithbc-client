@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { strapiRequest } from "@/lib/strapi-service";
+import { strapiRequest } from "@/db/strapi-service";
 import { revalidatePath } from "next/cache";
 
 export async function createNewChurchPrayerRequest(formData: FormData) {

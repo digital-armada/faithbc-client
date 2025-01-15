@@ -3,7 +3,6 @@ import WidgetHeadings from "../WidgetHeadings";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BellIcon, BellOffIcon } from "lucide-react";
-import { format, parseISO } from "date-fns";
 import AnnouncementItem from "../../announcements/_components/AnnouncementItem";
 
 interface Announcement {
@@ -22,7 +21,7 @@ export default async function AnnouncementsWidget({
   className,
 }: AnnouncementsProps) {
   const { data } = await getAnnouncements({ includesPast: false });
-
+  // console.log("announcements", data);
   return (
     <Card className={`h-auto w-full ${className}`}>
       <CardHeader>

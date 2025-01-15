@@ -2,7 +2,7 @@ import { ChevronLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { toggleSidebar } from "@/redux/features/sidebarSlice";
+import { toggleSidebar } from "@/store/features/sidebarSlice";
 import { useDispatch } from "react-redux";
 
 interface SidebarToggleProps {

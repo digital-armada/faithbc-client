@@ -7,6 +7,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   The authorize function in the Credentials provider is called first when a user attempts to sign in. This function is responsible for validating the user's credentials against your Strapi backend and returning a user object if the authentication is successful.
   If the authorize function returns a user object, NextAuth.js considers the authentication successful and proceeds to create a session.
    */
+  trustHost: true,
+
   providers: [
     Credentials({
       name: "email and password",

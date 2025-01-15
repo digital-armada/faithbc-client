@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import ResetPassword from "@/components/auth/password/ResetPassword";
 import { redirect } from "next/navigation";
+import ResetPassword from "./_components/ResetPassword";
 
 type Props = {
   searchParams: {

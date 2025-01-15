@@ -16,14 +16,16 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Trash } from "lucide-react";
 import { TiTrash } from "react-icons/ti";
-import { deleteAnnouncement } from "@/features/announcements/announcement-actions";
+import { deleteAnnouncement } from "@/components/features/announcements/announcement-actions";
 // import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { set } from "lodash";
+import formatTimeString, { formatTime } from "@/lib/timeHelper";
 
 type AnnouncementAttributes = {
   message: string;
-  date: string; // ISO 8601 date string
+  announcementDate: string;
+  announcementTime: string;
 };
 
 type Announcements = {
@@ -34,16 +36,17 @@ type Announcements = {
 const columnHelper = createColumnHelper<Announcements>();
 
 export const defaultColumns = [
-  columnHelper.accessor("attributes.date", {
-    header: () => <span>Date</span>,
+  columnHelper.accessor("attributes.announcementDate", {
+    header: () => <span>Date & Time</span>,
     cell: (props) => {
       const date = new Date(props.getValue());
+      const time = formatTime(props.row.original.attributes.announcementTime); // access the time field
+
       return (
-        <span>
-          {format(new Date(date), "EEE MMM dd yyyy")}
-          {new Date(date).toTimeString().slice(0, 8) !== "00:00:00" &&
-            ` ${format(new Date(date), "h:mm a")}`}
-        </span>
+        <div>
+          <span>{format(new Date(date), "EEE MMM dd yyyy")}</span>
+          {time && <span> {`@ ${time}`}</span>}
+        </div>
       );
     },
   }),

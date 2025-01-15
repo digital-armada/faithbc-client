@@ -1,5 +1,5 @@
-import SermonManagerClient from "../_components/SermonManagerClient";
-import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
+import SermonManagerClient from "../../../../components/features/SermonManager/components/SermonManagerClient";
+import ContentLayout from "../../../../components/common/Layouts/DashboardContentWrapper";
 
 export default async function page() {
   return (

@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 
 export default function AnnouncementItem({ announcement }) {
-  const date = new Date(announcement.attributes.date);
+  const date = new Date(announcement.attributes.announcementDate);
   return (
     <div key={announcement.id} className="mb-4 last:mb-0">
       <div className="flex flex-col space-y-1">

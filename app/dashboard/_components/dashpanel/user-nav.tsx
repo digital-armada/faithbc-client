@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
 import { LayoutGrid, LogOut, User } from "lucide-react";
@@ -13,15 +13,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/features/auth/auth-actions";
-import { getSession, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React from "react";
+import { auth } from "@/auth";
+import { SignOut } from "@/components/blocks/Forms/SignOut";
 
-export function UserNav() {
-  const { data: session } = useSession();
+export async function UserNav() {
+  // const { data: session, status, update } = useSession();
+  // const user = session?.user;
+
+  const session = await auth();
   const user = session?.user;
 
-  console.log("usewwwr", user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -63,12 +66,8 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="hover:cursor-pointer"
-          onClick={() => logout()}
-        >
-          <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
-          Sign out
+        <DropdownMenuItem className="hover:cursor-pointer">
+          <SignOut />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

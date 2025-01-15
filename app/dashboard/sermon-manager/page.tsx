@@ -1,8 +1,8 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-import ContentLayout from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
-import { sermonsService } from "@/features/sermons/sermons-service";
-import SermonsTable from "@/features/sermons/components/SermonsTable";
+import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
+import { sermonsService } from "@/components/features/sermons/sermons-service";
+import SermonManager from "@/components/features/SermonManager";
 import { getQueryClient } from "@/lib/get-query-client";
 
 async function page() {
@@ -17,7 +17,7 @@ async function page() {
   return (
     <ContentLayout title="Sermons">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <SermonsTable />
+        <SermonManager />
       </HydrationBoundary>
     </ContentLayout>
   );

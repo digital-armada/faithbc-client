@@ -60,7 +60,7 @@ export async function getEvent(id: string) {
 }
 
 export async function getEvents({
-  sort = ["startDate:desc"],
+  sort = ["eventStartDate:desc"],
   includesPast = true,
 } = {}) {
   const today = new Date();
@@ -71,7 +71,9 @@ export async function getEvents({
       sort,
       populate: "*",
       filters: {
-        ...(includesPast ? {} : { startDate: { $gte: today.toISOString() } }),
+        ...(includesPast
+          ? {}
+          : { eventStartDate: { $gte: today.toISOString() } }),
       },
     },
     {
@@ -103,7 +105,7 @@ export async function getEvents({
   }
 }
 
-export async function getDashEvents({ sort = ["startDate:desc"] } = {}) {
+export async function getDashEvents({ sort = ["eventStartDate:desc"] } = {}) {
   const query = qs.stringify(
     {
       // filters: {

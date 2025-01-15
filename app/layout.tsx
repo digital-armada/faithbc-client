@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, Lora } from "next/font/google";
 
 import "./globals.css";
-import Menu from "@/components/Menu/Menu";
+import Menu from "@/components/blocks/Menu/Menu";
 import Providers from "@/lib/Providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

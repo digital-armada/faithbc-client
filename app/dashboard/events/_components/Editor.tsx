@@ -1,3 +1,4 @@
+"use client";
 import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
 import Highlight from "@tiptap/extension-highlight";
@@ -286,7 +287,7 @@ export default function Editor({ content, onContentChange }) {
       </BubbleMenu>
 
       <EditorContent
-        className="markdown"
+        className="markdown rounded-lg border"
         style={{ whiteSpace: "pre-line" }}
         editor={editor}
       />

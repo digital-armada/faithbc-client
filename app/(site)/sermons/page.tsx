@@ -1,5 +1,5 @@
-import { sermonsService } from "@/features/sermons/sermons-service";
-import WrapperSermons from "@/components/Sermons/WrapperSermons";
+import { sermonsService } from "@/components/features/sermons/sermons-service";
+import WrapperSermons from "@/components/features/sermons/Sermons/WrapperSermons";
 
 export default async function Page() {
   const { data } = (await sermonsService.getInfiniteSermons({

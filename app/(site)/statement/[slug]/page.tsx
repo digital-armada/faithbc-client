@@ -1,5 +1,5 @@
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import HeadingTwo from "@/components/custom/headingtwo";
+import HeadingTwo from "@/components/blocks/headingtwo";
 import { getStatement } from "@/data/doctrines";
 import Link from "next/link";
 import Markdown from "react-markdown";

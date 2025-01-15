@@ -1,4 +1,4 @@
-import ConfirmationSubmit from '@/components/auth/confirmation/ConfirmationSubmit';
+import ConfirmationSubmit from "@/app/(auth)/confirmation/submit/_components/ConfirmationSubmit";
 
 type Props = {
   searchParams: {

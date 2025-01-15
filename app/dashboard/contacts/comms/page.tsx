@@ -1,7 +1,7 @@
-import UpdateMembers from "@/features/contacts/components/UpdateMembers";
+import UpdateMembers from "@/components/features/contacts/components/UpdateMembers";
 import CommsDisplay from "../../_components/CommsDisplay";
 import CommsForm from "../../_components/CommsForm";
-import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
+import ContentLayout from "../../../../components/common/Layouts/DashboardContentWrapper";
 
 export default function page() {
   return (
@@ -11,6 +11,14 @@ export default function page() {
       <div className="divide-y-[1px] divide-slate-950/10">
         <CommsForm />
         <CommsDisplay />
+      </div>
+      <hr />
+      <div className="mt-2 text-gray-400">
+        <ul>Todo</ul>
+        <li>
+          Automaticaly reassign members and non-members to difference groups
+        </li>
+        <li>Remove the buttons component once completed</li>
       </div>
     </ContentLayout>
   );

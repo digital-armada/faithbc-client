@@ -2,9 +2,9 @@
 import React from "react";
 import { useFormState } from "react-dom";
 import { cn } from "@/lib/utils";
-import { SubmitButton } from "@/components/custom/SubmitButton";
-import { ZodErrors } from "@/components/custom/ZodErrors";
-import { StrapiErrors } from "@/components/custom/StrapiErrors";
+import { SubmitButton } from "@/components/blocks/SubmitButton";
+import { ZodErrors } from "@/components/blocks/ZodErrors";
+import { StrapiErrors } from "@/components/blocks/StrapiErrors";
 import ImagePicker from "./FormImageInput";
 
 const initialState = {

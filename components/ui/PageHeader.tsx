@@ -1,5 +1,5 @@
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import HeadingTwo from "@/components/custom/headingtwo";
+import HeadingTwo from "@/components/blocks/headingtwo";
 
 export default function PageHeader({ heading }: { heading: string }) {
   return (

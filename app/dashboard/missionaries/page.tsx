@@ -1,15 +1,11 @@
-import { getMissionaries } from "@/features/missions/api/missionary-service";
+import { getMissionaries } from "@/app/dashboard/missionaries/_api/missionary-service";
 import Missions from "../_components/Missions";
-
-import ContentLayout from "../_components/Layouts/DashboardContentWrapper";
-import { getUserMeLoader } from "@/data/services/get-user-me-loader";
-import CreateNew from "@/features/missions/components/CreateNew";
+import ContentLayout from "../../../components/common/Layouts/DashboardContentWrapper";
 import MissionsMap from "../_components/MissionsMap";
-import Image from "next/image";
-import { DataTable } from "@/components/Table/data-table";
-import { MissionsColumns } from "@/features/missions/components/MissionsColumns";
-import MissionsTable from "@/features/missions/components/MissionsTable";
+
 import { auth } from "@/auth";
+import CreateNew from "./_components/CreateNew";
+import MissionsTable from "./_components/MissionsTable";
 
 export default async function page() {
   const session = await auth();

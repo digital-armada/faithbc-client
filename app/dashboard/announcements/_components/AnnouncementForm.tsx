@@ -2,21 +2,21 @@
 
 import { useRef, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { createNewAnnouncement } from "@/features/announcements/announcement-actions";
+import { createNewAnnouncement } from "@/components/features/announcements/announcement-actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { FormDateTimePicker } from "@/components/ui/FormDateTimePicker";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AnnouncementForm() {
-  const formRef = useRef<HTMLFormElement>(null); // Specify the type as HTMLFormElement
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(createNewAnnouncement, null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (state?.data && formRef.current) {
-      // Check if formRef.current is not null
-      // If the submission was successful, reset the form
+      toast({ title: "Announcement created successfully" });
       formRef.current.reset();
     }
   }, [state]);
@@ -41,30 +41,44 @@ export default function AnnouncementForm() {
                 placeholder=" ... Enter announcement"
               />
             </div>
-            {state?.error && <p>{state.inputErrors?.message}</p>}
+            {state?.error && (
+              <p className="text-red-500">{state.inputErrors?.message}</p>
+            )}
           </div>
 
           <div className="my-2">
             <Label
-              htmlFor="event-date"
+              htmlFor="announcementDate"
               className="text-sm font-medium leading-6 text-gray-900"
             >
-              Select date and time
+              Select date
             </Label>
             <div className="mt-2">
-              {/* <FormDateTimePicker
-                id="event-date"
-                name="event-date"
-                label="date"
-              /> */}
-              {/* <Input
-                id="event-date"
-                name="event-date"
-                type="datetime-local"
+              <Input
+                id="announcementDate"
+                name="announcementDate"
+                type="date"
                 className="w-full"
-              /> */}
+              />
             </div>
-            {state?.error && <p>{state.inputErrors?.date}</p>}
+            {state?.error && (
+              <p className="text-red-500">
+                {state.inputErrors?.announcementDate}
+              </p>
+            )}
+
+            <Label
+              htmlFor="announcementTime"
+              className="text-sm font-medium leading-6 text-gray-900"
+            >
+              Select Time
+            </Label>
+            <Input
+              id="announcementTime"
+              name="announcementTime"
+              type="time"
+              className="w-full"
+            />
           </div>
 
           <Submit />

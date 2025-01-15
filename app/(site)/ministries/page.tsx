@@ -1,6 +1,6 @@
 import PageHeader from "@/components/ui/PageHeader";
-import HeadingTwo from "@/components/custom/headingtwo";
-import NottyDot from "@/components/custom/NottyDot";
+import HeadingTwo from "@/components/blocks/headingtwo";
+import NottyDot from "@/components/blocks/NottyDot";
 
 export default function ministries() {
   const services = {

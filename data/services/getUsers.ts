@@ -1,6 +1,6 @@
 import { getStrapiURL } from "@/lib/utils";
 import { auth } from "@/auth";
-import { strapiRequest } from "@/lib/strapi-service";
+import { strapiRequest } from "@/db/strapi-service";
 import { User } from "@/types/types";
 import { API } from "@/lib/constants/api-endpoints";
 

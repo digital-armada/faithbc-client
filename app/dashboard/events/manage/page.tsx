@@ -1,21 +1,51 @@
-import { getDashEvents } from "@/data/events";
-import Link from "next/link";
-import { TiTrash } from "react-icons/ti";
-import ManageEventsClient from "../_components/ManageEventsClient";
-import DashHeader from "../../_components/DashHeader";
-import ContentLayout from "../../_components/Layouts/DashboardContentWrapper";
-import { DataTable } from "../_components/DataTable";
-import { columns } from "../_components/columns";
+"use client";
 
-export default async function page() {
-  const { data } = await getDashEvents();
+import { useState } from "react";
+import ContentLayout from "../../../../components/common/Layouts/DashboardContentWrapper";
+import {
+  DataTable,
+  DataTableToolbar,
+  DataTableFilter,
+  DataTableColumnVisibility,
+  DataTableContent,
+  DataTablePagination,
+} from "../../../../components/blocks/Table/data-table";
+import { EventsColumns } from "./_components/EventsColumns";
+import { useEvents } from "../../../../db/hooks/events/useEvents";
 
-  // console.log(data);
+export default function Page() {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const { data, isLoading, isFetching } = useEvents({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <ContentLayout title="Manage Events">
-      <DataTable columns={columns} data={data} />
-      <ManageEventsClient data={data} />
+      <DataTable
+        data={data?.data ?? []}
+        columns={EventsColumns}
+        pageCount={data?.pageCount ?? 0}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        isLoading={isLoading}
+        isFetching={isFetching}
+      >
+        <DataTableToolbar>
+          {/* <DataTableFilter column="title" /> */}
+          <DataTableColumnVisibility />
+        </DataTableToolbar>
+
+        <DataTableContent />
+
+        <DataTablePagination />
+      </DataTable>
     </ContentLayout>
   );
 }

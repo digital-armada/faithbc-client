@@ -1,5 +1,5 @@
-import Menu from "@/components/Menu/Menu";
-import DesktopAudioWrapper from "@/components/Music/DesktopAudioWrapper";
+import Menu from "@/components/blocks/Menu/Menu";
+import DesktopAudioWrapper from "@/components/features/Music/DesktopAudioWrapper";
 import Providers from "@/lib/Providers";
 import React from "react";
 

@@ -25,7 +25,7 @@ const MultiSelect = ({ allUsers: users, commUsers, onSelectionChange }) => {
   };
 
   return (
-    <div className="relative min-h-96 w-full">
+    <div className="relative h-96 w-full overflow-auto">
       <input
         ref={inputRef}
         type="text"

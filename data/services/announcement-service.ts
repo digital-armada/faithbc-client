@@ -10,7 +10,7 @@ interface GetAnnouncementsOptions {
 
 export async function getAnnouncements({
   limit = null,
-  sort = ["date:desc"],
+  sort = ["announcementDate:desc"],
   includesPast = false,
 }: GetAnnouncementsOptions = {}) {
   const today = new Date();
@@ -21,7 +21,9 @@ export async function getAnnouncements({
       sort,
       ...(limit && { pagination: { limit } }),
       filters: {
-        ...(includesPast ? {} : { date: { $gte: today.toISOString() } }),
+        ...(includesPast
+          ? {}
+          : { announcementDate: { $gte: today.toISOString() } }),
         // ...(!showBeforeToday ? { date: { $gte: today.toISOString() } } : {}),
       },
     },

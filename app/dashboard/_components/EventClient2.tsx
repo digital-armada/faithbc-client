@@ -10,6 +10,7 @@ import { ChevronDown, ChevronUp, Map, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
+import formatEventTime from "@/lib/formatDateTime";
 
 export default function EventClient2({ events }) {
   return (
@@ -23,38 +24,21 @@ export default function EventClient2({ events }) {
 }
 
 function EventCard({ event }) {
-  // const [isExpanded, setIsExpanded] = useState(false);
-
-  // Replace toDate with parseISO for date string parsing
-  const startDateObj = event?.startDate ? parseISO(event.startDate) : null;
-  const endDateObj = event?.endDate ? parseISO(event.endDate) : null;
-
-  // Remove timeZone option from format calls
-  const startDate = startDateObj ? format(startDateObj, "MMM do") : null;
-  const startYear = startDateObj ? format(startDateObj, "yyyy") : null;
-  const endDate = endDateObj ? format(endDateObj, "MMM do") : null;
-  const endYear = endDateObj ? format(endDateObj, "yyyy") : null;
-
-  const startTime =
-    startDateObj &&
-    // Check if time is midnight (00:00:00)
-    (startDateObj.getHours() === 0 &&
-    startDateObj.getMinutes() === 0 &&
-    startDateObj.getSeconds() === 0
-      ? format(startDateObj, "EEEE") // Show only day name for midnight
-      : format(startDateObj, "EEEE h:mma")); // Show day name and time for other times
-
-  // Check if dates are different for comparison
-  const areDifferentDates =
-    startDateObj &&
-    endDateObj &&
-    startDateObj.getTime() !== endDateObj.getTime();
-
-  const shouldShowEndDate = endDate && endDate !== "Jan 1st";
-
+  const {
+    title,
+    eventStartDate,
+    eventEndDate,
+    eventStartTime,
+    eventEndTime,
+    featuredImage,
+    venAdd,
+    venName,
+    organiser,
+  } = event;
   return (
     <>
       <Card className="w-full overflow-hidden">
+        {/* <pre>{JSON.stringify(event, null, 2)}</pre> */}
         <div className="flex items-center p-4">
           {event.featuredImage.data?.attributes?.url ? (
             <Image
@@ -69,24 +53,14 @@ function EventCard({ event }) {
           )}
           <div className="flex-grow">
             <h3 className="font-semibold">{event.title}</h3>
-            <div className="text-md flex-initial sm:inline-block">
+            <div className="flex-initial text-xs sm:inline-block">
               <p>
-                {startDate}
-                {areDifferentDates && shouldShowEndDate ? ` - ${endDate}` : ""}
+                {format(eventStartDate, "PPPP")}
+                {eventStartTime &&
+                  ` @ ${formatEventTime(eventStartTime)}${eventEndTime ? ` - ${formatEventTime(eventEndTime)}` : ""}`}
               </p>
-              <div className="text-[10px]">
-                <p>{startTime}</p>
-                <p>{startYear}</p>
-              </div>
             </div>
-            <div className="flex gap-4 text-xs text-muted-foreground">
-              {event.venAdd && (
-                <div className="mt-1 flex items-center">
-                  <Map className="mr-1 h-4 w-4" />
-                  <span>{event.venAdd}</span>
-                </div>
-              )}
-
+            <div className="flex flex-col text-xs text-muted-foreground md:flex-row md:gap-4">
               {event.venName && (
                 <div className="mt-1 flex items-center">
                   <MapPin className="mr-1 h-4 w-4" />
@@ -94,30 +68,16 @@ function EventCard({ event }) {
                   <span>{event.venName}</span>
                 </div>
               )}
+
+              {event.venAdd && (
+                <div className="mt-1 flex items-center">
+                  <Map className="mr-1 h-4 w-4" />
+                  <span>{event.venAdd}</span>
+                </div>
+              )}
             </div>
           </div>
-          {/* <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-expanded={isExpanded}
-            aria-controls={`details-${event.id}`}
-          >
-            {isExpanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-            <span className="sr-only">
-              {isExpanded ? "Hide" : "Show"} details
-            </span>
-          </Button> */}
         </div>
-        {/* {isExpanded && (
-          <CardContent id={`details-${event.id}`}>
-            <p className="text-sm">{event.description}</p>
-          </CardContent>
-        )} */}
       </Card>
     </>
   );

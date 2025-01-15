@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Ellipsis, LogOut } from "lucide-react";
@@ -17,8 +17,9 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { SidebarCollapsibleButton } from "./SidebarCollapsibleButton";
-import { logout } from "@/features/auth/auth-actions";
-import { menuItems } from "@/app/dashboard/_components/Sidenav/MenuItems";
+import { logout } from "@/components/features/auth/auth-actions";
+// import { menuItems } from "@/lib/constants/MenuItems";
+import { useRoleBasedMenu } from "@/hooks/userRoleBasedMenu";
 
 type Role = "member" | "admin" | "ministry";
 
@@ -29,8 +30,20 @@ interface MenuProps {
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const session = useSession();
-  const userRole = (session?.data?.user as { role?: Role })?.role || "member";
+  const menuItems = useRoleBasedMenu();
+
+  // const session = useSession();
+  // const [userRole, setUserRole] = useState(
+  //   session?.data?.user as { role?: Role },
+  // );
+  // const userRole = (session?.data?.user as { role?: Role })?.role || "member";
+  // console.log("client", userRole);
+  // React.useEffect(() => {
+  //   if (session?.data?.user) {
+  //     setUserRole(session?.data?.user.role || "member");
+  //   }
+  // }, [session]);
+  // console.log("menu", menuItems);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const renderIcon = (iconName: string) => {
@@ -139,7 +152,35 @@ export function Menu({ isOpen }: MenuProps) {
   return (
     <>
       <ScrollArea className="[&>div>div[style]]:!block">
-        <nav className="h-full w-full pt-4">
+        <nav>
+          {menuItems.map((category) => (
+            <div key={category.title}>
+              <h2>{category.title}</h2>
+              <ul>
+                {category.items.map((item) => (
+                  <li key={item.text}>
+                    <Link href={item.link}>
+                      {item.icon}
+                      <span>{item.text}</span>
+                    </Link>
+                    {item.subItems && (
+                      <ul>
+                        {item.subItems.map((subItem) => (
+                          <li key={subItem.text}>
+                            <Link href={subItem.link}>
+                              <span>{subItem.text}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        {/* <nav className="h-full w-full pt-4">
           <ul className="flex flex-col items-start space-y-1 px-2">
             {menuItems.map(({ title, items }, index) => (
               <li className={cn("w-full", title ? "pt-5" : "")} key={index}>
@@ -167,7 +208,7 @@ export function Menu({ isOpen }: MenuProps) {
               </li>
             ))}
           </ul>
-        </nav>
+        </nav> */}
       </ScrollArea>
       <div className="flex w-full grow items-end">
         <TooltipProvider disableHoverableContent>

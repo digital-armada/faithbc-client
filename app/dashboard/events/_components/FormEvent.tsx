@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,11 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { FormDateTimePicker } from "@/components/ui/FormDateTimePicker";
-import { MediaUpload } from "@/components/MediaUpload";
+import { RHFFormDatePicker } from "@/components/ui/RHFFormDatePicker";
+import { MediaUpload } from "@/components/blocks/MediaUpload";
 import Editor from "./Editor";
 import { createEvent, updateEvent } from "@/data/actions/event-action";
-import { Event } from "@/features/events/types";
+import { Event } from "@/components/features/events/types";
+import formatTimeString from "@/lib/timeHelper";
 
 interface FormEventProps {
   data?: Event;
@@ -23,13 +24,15 @@ interface FormEventProps {
 export default function FormEvent({ data, eventID }: FormEventProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  console.log("startDate", data?.attributes.startDate);
+
   const defaultValues = {
     title: data?.attributes?.title || "",
     slug: data?.attributes?.slug || "",
     content: data?.attributes?.content || "",
-    startDate: data?.attributes?.startDate || "",
-    endDate: data?.attributes?.endDate || "",
+    eventStartDate: data?.attributes?.eventStartDate || null,
+    eventEndDate: data?.attributes?.eventEndDate || null,
+    eventStartTime: data?.attributes?.eventStartTime || "",
+    eventEndTime: data?.attributes?.eventEndTime || "",
     organiser: data?.attributes?.organiser || "",
     venName: data?.attributes?.venName || "",
     venAdd: data?.attributes?.venAdd || "",
@@ -50,24 +53,43 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
   });
 
   console.log("watching", watch());
+  console.log("Form Errors:", errors);
+
   const onSubmit = async (formData: typeof defaultValues) => {
-    // console.log("formData", formData);
     try {
       setSubmitError(null);
+
+      const formattedData = {
+        ...formData,
+        eventStartTime: formData.eventStartTime
+          ? formatTimeString(formData.eventStartTime)
+          : null,
+        eventEndTime: formData.eventEndTime
+          ? formatTimeString(formData.eventEndTime)
+          : null,
+        eventEndDate: formData.eventEndDate || null,
+        eventStartDate: formData.eventStartDate || null,
+      };
+
       const response = eventID
-        ? await updateEvent(eventID, formData)
-        : await createEvent(formData);
-      console.log("back from server", response);
+        ? await updateEvent(eventID, formattedData)
+        : await createEvent(formattedData);
       // if (response.error) {
       //   throw new Error(response.error || "Failed to submit form");
       // }
-
-      router.refresh();
     } catch (error) {
       setSubmitError(
         error instanceof Error ? error.message : "An unexpected error occurred",
       );
     }
+  };
+
+  const clearEndDateTime = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setValue("eventStartDate", "");
+    setValue("eventStartTime", "");
+    setValue("eventEndDate", "");
+    setValue("eventEndTime", "");
   };
 
   return (
@@ -86,7 +108,6 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
               <span className="block sm:inline"> {submitError}</span>
             </div>
           )}
-
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -99,6 +120,19 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
             )}
           </div>
 
+          {/* /// FILE UPLOAD */}
+          <div className="space-y-2">
+            <Label>Featured Image</Label>
+            <MediaUpload
+              type="image"
+              onUploadComplete={(data) => {
+                setValue("featuredImage", data?.id ?? null);
+              }}
+              preview={data?.attributes?.featuredImage?.data?.attributes?.url}
+            />
+          </div>
+
+          {/* /// CONTENT */}
           <div className="space-y-2">
             <Label>Content</Label>
             <Editor
@@ -107,43 +141,50 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <Controller
-              name="startDate"
-              control={control}
-              rules={{ required: "Start date is required" }}
-              render={({ field }) => (
-                <FormDateTimePicker
-                  label="Start Date and Time"
-                  name={field.name}
-                  defaultValue={field.value}
-                  onChange={field.onChange}
+          {/* /// DATES */}
+          <div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="col-span-1 space-y-4 pb-4">
+                <Controller
+                  name="eventStartDate"
+                  control={control}
+                  render={({ field: { value, ...fieldProps } }) => {
+                    return (
+                      <RHFFormDatePicker
+                        label="Event Start Date"
+                        name="eventStartDate"
+                        setValue={setValue}
+                        defaultValue={value}
+                        className="w-full"
+                      />
+                    );
+                  }}
                 />
-              )}
-            />
-            <Controller
-              name="endDate"
-              control={control}
-              render={({ field }) => (
-                <FormDateTimePicker
-                  label="End Date and Time"
-                  name={field.name}
-                  defaultValue={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </div>
+                <Input type="time" {...register("eventStartTime")} />
+              </div>
 
-          <div className="space-y-2">
-            <Label>Featured Image</Label>
-            <MediaUpload
-              type="image"
-              onUploadComplete={(data) => {
-                setValue("featuredImage", data.id);
-              }}
-              preview={data?.attributes?.featuredImage?.data?.attributes?.url}
-            />
+              <div className="col-span-1 space-y-4 pb-4">
+                <Controller
+                  name="eventEndDate"
+                  control={control}
+                  render={({ field: { value, ...fieldProps } }) => {
+                    return (
+                      <RHFFormDatePicker
+                        label="Event End Date"
+                        name="eventEndDate"
+                        setValue={setValue}
+                        defaultValue={value}
+                        className="w-full"
+                      />
+                    );
+                  }}
+                />
+                <Input type="time" {...register("eventEndTime")} />
+              </div>
+            </div>
+            <Button onClick={clearEndDateTime} className="w-full">
+              Reset Dates
+            </Button>
           </div>
 
           <div className="space-y-2">
@@ -154,7 +195,6 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
               placeholder="Enter organiser name"
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="venName">Venue Name</Label>
             <Input
@@ -163,16 +203,14 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
               placeholder="Enter venue name"
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="venAdd">Venue Address</Label>
-            <Textarea
+            <Input
               id="venAdd"
               {...register("venAdd")}
               placeholder="Enter venue address"
             />
           </div>
-
           <div className="flex items-center space-x-2">
             <Controller
               name="internal"
@@ -187,7 +225,6 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
             />
             <Label htmlFor="internal">Internal Event</Label>
           </div>
-
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting
               ? "Submitting..."

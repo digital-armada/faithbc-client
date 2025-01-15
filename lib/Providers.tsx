@@ -2,7 +2,7 @@
 import React from "react";
 
 import { SessionProvider } from "next-auth/react";
-import { store } from "@/lib/store";
+import { store } from "@/store/store";
 import { Provider } from "react-redux";
 
 import {
@@ -39,12 +39,12 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <SessionProvider>
+      <SessionProvider>
+        <QueryClientProvider client={queryClient}>
           <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
           <ReactQueryDevtools initialIsOpen={false} />
-        </SessionProvider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </SessionProvider>
     </Provider>
   );
 };

@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
-import { strapiRequest } from "@/lib/strapi-service";
+import { strapiRequest } from "@/db/strapi-service";
 
 export async function createEvent(formData) {
   // console.log(typeof formData);
@@ -84,11 +84,12 @@ export async function createEvent(formData) {
 }
 
 export async function updateEvent(eventID, formData) {
+  console.log("updateEvent", eventID, formData);
   const {
     title,
     content,
-    startDate,
-    endDate,
+    eventStartDate,
+    eventEndDate,
     organiser,
     venName,
     venAdd,
@@ -107,23 +108,24 @@ export async function updateEvent(eventID, formData) {
 
     const payload = {
       data: {
+        ...formData,
         id: eventID,
-        title,
+        // title,
         slug: newSlug,
-        content,
-        startDate,
-        endDate,
-        organiser,
-        venName,
-        venAdd,
-        internal,
+        // content,
+        // startDate,
+        // endDate,
+        // organiser,
+        // venName,
+        // venAdd,
+        // internal,
         featuredImage: parseInt(featuredImage, 10),
       },
     };
-
-    if (!endDate) {
-      payload.data.endDate = startDate;
-    }
+    console.log("payload", payload);
+    // if (!endDate) {
+    //   payload.data.endDate = startDate;
+    // }
 
     const response = await strapiRequest("PUT", `/events/${eventID}`, {
       data: payload,
@@ -134,7 +136,7 @@ export async function updateEvent(eventID, formData) {
       revalidatePath("/dashboard/events");
       revalidatePath("/events");
 
-      return { data: response.data };
+      return { response };
     }
 
     return { error: response.error || "Unexpected response from server" };
@@ -149,7 +151,9 @@ export async function deleteEvent(id: string) {
     const session = await auth();
     if (!session?.strapiToken) throw new Error("No auth token found");
 
-    const response = await strapiRequest("DELETE", `/events/${id}`);
+    const response = await strapiRequest("DELETE", `/events/${id}`, {
+      requireAuth: true,
+    });
 
     if (response.data) {
       revalidatePath("/dashboard/events");

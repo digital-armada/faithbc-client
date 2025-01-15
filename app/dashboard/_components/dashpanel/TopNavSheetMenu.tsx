@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { MenuIcon, PanelsTopLeft } from "lucide-react";
 
@@ -9,8 +10,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Menu } from "./SidebarMenuArea";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/hooks/useRedux";
 
 export function TopNavSheetMenu() {
+  const sidebar = useAppSelector((state) => state.sidebar.isCollapsed);
+
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -26,8 +32,20 @@ export function TopNavSheetMenu() {
             asChild
           >
             <Link href="/dashboard" className="flex items-center gap-2">
-              <PanelsTopLeft className="mr-1 h-6 w-6" />
-              <h1 className="text-lg font-bold">Brand</h1>
+              {/* <PanelsTopLeft className="mr-1 h-6 w-6" /> */}
+              <div className="relative mt-4 flex h-12 w-14 flex-shrink-0 items-center justify-center">
+                <Image src="/logo.png" alt="logo" fill />
+              </div>
+              <h1
+                className={cn(
+                  "whitespace-nowrap text-lg font-bold transition-[transform,opacity,display] duration-300 ease-in-out",
+                  sidebar === false
+                    ? "hidden -translate-x-96 opacity-0"
+                    : "translate-x-0 opacity-100",
+                )}
+              >
+                FBC
+              </h1>
             </Link>
           </Button>
         </SheetHeader>

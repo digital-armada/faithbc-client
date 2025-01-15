@@ -4,8 +4,8 @@ import DeleteUserButton from "@/app/dashboard/_components/DeleteUserButton";
 import DeleteCommsButton from "@/app/dashboard/_components/DeleteCommsButton";
 import AddNew from "@/app/dashboard/_components/AddNew";
 // import DashHeader from "@/app/dashboard/_components/DashHeader";
-import ContentLayout from "@/app/dashboard/_components/Layouts/DashboardContentWrapper";
-import { contactsService } from "@/features/contacts/contacts-service";
+import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
+import { contactsService } from "@/components/features/contacts/contacts-service";
 
 const PROTECTED_GROUPS = ["All", "Members", "Non-members"];
 

@@ -1,10 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import { registerUserAction } from "@/features/auth/auth-actions";
+import { registerUserAction } from "@/components/features/auth/auth-actions";
 import { useFormState } from "react-dom";
-import { schemaFormData, schemaRegister } from "@/features/auth/schemaAuth";
+import {
+  schemaFormData,
+  schemaRegister,
+} from "@/components/features/auth/schemaAuth";
 import { ApiResponse } from "@/types/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type FormErrors = Partial<Record<keyof schemaFormData, string>>;
 
@@ -17,11 +27,13 @@ const initialState = {
 export default function FormRegisterUser() {
   const [state, formAction] = useFormState(registerUserAction, initialState);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [selectedState, setSelectedState] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+
     const firstName = formData.get("firstName")?.toString() || "";
     const lastName = formData.get("lastName")?.toString() || "";
 
@@ -47,7 +59,7 @@ export default function FormRegisterUser() {
       address: {
         street: formData.get("street")?.toString() || "",
         suburb: formData.get("suburb")?.toString() || "",
-        state: formData.get("state")?.toString() || "",
+        state: selectedState || "",
         pCode: formData.get("pCode")?.toString() || "",
       },
       commgroups: 1,
@@ -183,6 +195,20 @@ export default function FormRegisterUser() {
                     autoComplete="new-password"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  <details className="mt-2 cursor-pointer text-[10px] text-gray-500">
+                    <summary>Tip: Creating/Updating password for user</summary>
+                    <p>
+                      <span className="font-bold">New Account:</span> Put any
+                      random 6 letters/digits to complete registration. User
+                      will then receive an email overriding the password with a
+                      temporary password, which they can also change later.
+                    </p>
+                    <p>
+                      <span className="font-bold">Updating Account:</span>
+                      Whatever password you enter will become their new
+                      password, which they can also change later.
+                    </p>
+                  </details>
                   {errors.password && (
                     <p className="mt-2 text-sm text-red-600">
                       {errors.password}
@@ -267,17 +293,21 @@ export default function FormRegisterUser() {
                   State / Province
                 </label>
                 <div className="mt-2">
-                  <select name="state" id="state">
-                    <option value="">Select State</option>
-                    <option value="NSW">NSW</option>
-                    <option value="VIC">VIC</option>
-                    <option value="ACT">ACT</option>
-                    <option value="QLD">QLD</option>
-                    <option value="NT">NT</option>
-                    <option value="WA">WA</option>
-                    <option value="SA">SA</option>
-                    <option value="TAS">TAS</option>
-                  </select>
+                  <Select onValueChange={(value) => setSelectedState(value)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select State" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="NSW">NSW</SelectItem>
+                      <SelectItem value="VIC">VIC</SelectItem>
+                      <SelectItem value="ACT">ACT</SelectItem>
+                      <SelectItem value="QLD">QLD</SelectItem>
+                      <SelectItem value="NT">NT</SelectItem>
+                      <SelectItem value="WA">WA</SelectItem>
+                      <SelectItem value="SA">SA</SelectItem>
+                      <SelectItem value="TAS">TAS</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors["address.state"] && (
                     <p className="mt-2 text-sm text-red-600">
                       {errors["address.state"]}

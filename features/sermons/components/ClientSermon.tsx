@@ -16,9 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Speaker } from "../../../app/dashboard/sermon-manager/_components/Speaker";
-import { AudioUploader } from "../../../app/dashboard/sermon-manager/_components/audio-uploader";
-import { ClipboardComponent } from "../../../app/dashboard/sermon-manager/_components/ClipboardComponent";
+import { Speaker } from "../../../components/features/SermonManager/components/Speaker";
+import { AudioUploader } from "../../../components/features/SermonManager/components/audio-uploader";
+import { ClipboardComponent } from "../../../components/features/SermonManager/components/ClipboardComponent";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
