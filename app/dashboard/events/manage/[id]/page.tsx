@@ -3,7 +3,8 @@ import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
 import { eventsService } from "@/components/features/events/event-services";
 import { Event } from "@/components/features/events/types";
 
-export default async function page({ params }: { params: { id: string } }) {
+export default async function page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { data } = await eventsService.getEvent(params.id);
 
   if (!data) {

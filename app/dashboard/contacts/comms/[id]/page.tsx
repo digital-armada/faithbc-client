@@ -9,7 +9,8 @@ import { contactsService } from "@/components/features/contacts/contacts-service
 
 const PROTECTED_GROUPS = ["All", "Members", "Non-members"];
 
-export default async function CommGroupPage({ params }) {
+export default async function CommGroupPage(props) {
+  const params = await props.params;
   // FETCH USER DATA
   const { data: commdata } = await getComm(params.id);
   const userData = await contactsService.getUsers({});

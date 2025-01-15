@@ -3,12 +3,13 @@ import { redirect } from "next/navigation";
 import ResetPassword from "./_components/ResetPassword";
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     code?: string;
-  };
+  }>;
 };
 
-export default async function page({ searchParams }: Props) {
+export default async function page(props: Props) {
+  const searchParams = await props.searchParams;
   const session = await auth();
   // if the user is logged in, redirect to account where password change is possible
   if (session) redirect("/dashboard/profile");

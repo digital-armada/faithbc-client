@@ -3,14 +3,14 @@ import React from "react";
 
 import { useDispatch } from "react-redux";
 
-import AudioProgressBar from "@/components/AudioPlayer/AudioProgressBar";
-import VolumeInput from "@/components/AudioPlayer/VolumeInput";
 // import { set } from "date-fns";
 import Audio from "./Audio";
 import PlayAndPause from "./PlayAndPause";
 import Image from "next/image";
 import { useAppSelector } from "@/hooks/useRedux";
 import { Sermon } from "@/components/features/sermons/types";
+import AudioProgressBar from "./AudioProgressBar";
+import VolumeInput from "./VolumeInput";
 
 function formatDurationDisplay(duration: number) {
   const min = Math.floor(duration / 60);

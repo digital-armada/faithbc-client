@@ -3,11 +3,12 @@ import Image from "next/image";
 import { eventsService } from "@/components/features/events/event-services";
 import EventDetails from "@/app/dashboard/events/_components/EventDetails";
 
-export default async function EventPage({
-  params,
-}: {
-  params: { id: number };
-}) {
+export default async function EventPage(
+  props: {
+    params: Promise<{ id: number }>;
+  }
+) {
+  const params = await props.params;
   const id = params.id.toString();
   const { data } = await eventsService.getEvent(id);
   if (!data?.attributes) {

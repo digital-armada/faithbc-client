@@ -4,7 +4,8 @@ import { getStatement } from "@/data/doctrines";
 import Link from "next/link";
 import Markdown from "react-markdown";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const { data } = await getStatement(params.slug);
   return (
     <section>

@@ -5,7 +5,8 @@ import { getSpeakers } from "@/data/services/speaker-service";
 import { getSeries } from "@/data/services/series-service";
 import { sermonsService } from "@/components/features/sermons/sermons-service";
 
-export default async function page({ params }: { params: { id: string } }) {
+export default async function page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const sermonId = params.id;
 
   const { data: sermon } = await sermonsService.getSermon(sermonId);

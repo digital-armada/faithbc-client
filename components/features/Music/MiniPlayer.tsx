@@ -1,9 +1,9 @@
 import React from "react";
 import { MdPlayArrow, MdPause } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
-import IconButton from "@/components/AudioPlayer/IconButton";
 import AudioProgressBar from "../AudioPlayer/AudioProgressBar";
 import Image from "next/image";
+import IconButton from "../AudioPlayer/IconButton";
 
 export default function MiniPlayer({
   activeSermon,

@@ -3,7 +3,6 @@
 import React, { use, useEffect, useState } from "react";
 import { playPause } from "@/store/features/playerSlice";
 
-import AudioPlayer from "@/components/AudioPlayer/index";
 import { MdPlayArrow, MdPause } from "react-icons/md";
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
 
@@ -13,6 +12,7 @@ import MiniPlayer from "./MiniPlayer";
 import MobilePlayer from "./MobilePlayer";
 import { useAppSelector } from "@/hooks/useRedux";
 import { Sermon } from "@/types/types";
+import AudioPlayer from "../AudioPlayer";
 
 export default function DesktopAudioWrapper() {
   const [miniOut, SetMiniOut] = useState(false);
