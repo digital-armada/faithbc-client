@@ -1,6 +1,6 @@
-import { API_CONFIG } from "../lib/constants/api-endpoints";
+import { API_CONFIG } from "../../lib/constants/api-endpoints";
+import { auth } from "@/lib/auth";
 import qs from "qs";
-import { auth } from "@/auth";
 
 const checkPermission = async (requiredRole: string) => {
   const session = await auth();

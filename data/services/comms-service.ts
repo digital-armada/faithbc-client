@@ -1,5 +1,5 @@
 import { getStrapiURL } from "@/lib/utils";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 
 export async function getComms() {
   const baseUrl = getStrapiURL();

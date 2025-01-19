@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { getStrapiURL } from "@/lib/utils";
 
 export async function getSeries() {

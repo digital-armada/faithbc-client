@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { API_CONFIG } from "@/lib/constants/api-endpoints";
 
 export async function getSermonsByYoutubeIds(youtubeIds) {

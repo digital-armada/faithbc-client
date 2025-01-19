@@ -1,9 +1,9 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 
 export async function createEvent(formData) {
   // console.log(typeof formData);

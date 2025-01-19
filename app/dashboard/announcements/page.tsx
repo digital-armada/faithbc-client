@@ -1,32 +1,26 @@
-"use client";
-import { getAnnouncements } from "@/data/services/announcement-service";
+import React from "react";
 import AnnouncementForm from "./_components/AnnouncementForm";
 import ContentLayout from "../../../components/common/Layouts/DashboardContentWrapper";
+import createAnnouncementService from "@/src/domain/services/announcementService";
 import AnnouncementTable from "./_components/AnnouncementTable";
-import { auth } from "@/auth";
-import { checkUserRole } from "@/lib/checkUserRoleServer";
-import DataTable from "@/components/blocks/Table/data-table";
-import { useSession } from "next-auth/react";
-import React from "react";
 
-export default function page() {
-  const session = useSession();
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 3,
-  });
-  // const { data } = await getAnnouncements({ includesPast: true });
-  // const session = await auth();
-  // console.log("announcements", data);
-  // const canCreateAnnouncement = await checkUserRole(["admin", "ministry"]);
-
+export default async function page() {
+  // const { data: announcements, meta } =
+  //   await getPublicAnnouncementsUseCase.execute();
+  // console.log("announcements", announcements);
   return (
     <ContentLayout title="Announcements">
-      ok
-      {/* {canCreateAnnouncement && <AnnouncementForm />} */}
-      {/* <DataTable>
-      </DataTable> */}
-      {/* <AnnouncementTable announcements={data.data} /> */}
+      {/* {canCreateAnnouncement && */}
+      <AnnouncementForm />
+      {/* } */}
+      <AnnouncementTable />
+      <h1>Announcements</h1>
+      {/* <ul>
+        {announcements.map((announcement) => (
+          <li key={announcement.id}>{announcement.message}</li>
+        ))}
+      </ul> */}
+      {/* {meta && <p>Total announcements: {meta.pagination.total}</p>} */}
     </ContentLayout>
   );
 }

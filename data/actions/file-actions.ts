@@ -1,6 +1,9 @@
 "use server";
 
-import { imageSchema, audioSchema } from "@/lib/media-validation";
+import {
+  imageSchema,
+  audioSchema,
+} from "@/src/interface-adapters/validation-schemas/media-validation";
 import { MediaUploadResult } from "@/types/media";
 import { fileUploadService } from "@/data/services/file-service";
 

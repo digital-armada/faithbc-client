@@ -3,7 +3,7 @@ import Missions from "../_components/Missions";
 import ContentLayout from "../../../components/common/Layouts/DashboardContentWrapper";
 import MissionsMap from "../_components/MissionsMap";
 
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import CreateNew from "./_components/CreateNew";
 import MissionsTable from "./_components/MissionsTable";
 

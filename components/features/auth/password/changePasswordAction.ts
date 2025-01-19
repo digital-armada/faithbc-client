@@ -6,7 +6,7 @@ import {
   ChangePasswordActionStateT,
   ErrorActionStateT,
 } from "./ChangePassword";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 
 const formSchema = z.object({
   currentPassword: z.string().min(6).max(25).trim(),

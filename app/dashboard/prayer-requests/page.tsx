@@ -12,13 +12,19 @@ import {
 import { getChurch } from "@/app/dashboard/missionaries/_api/missionary-service";
 import { deletePrayerRequest } from "@/data/actions/prayer-actions";
 import DeleteRequest from "./_components/DeleteRequest";
-import { checkUserRole } from "@/lib/checkUserRoleServer";
+import { checkUserRole } from "@/lib/checkUserRole";
+import { AuthService } from "@/src/infrastructure/services/authentication.service";
+// import { checkUserRole } from "@/lib/checkUserRoleServer";
+const authService = new AuthService();
 
 export default async function page() {
   const { data: user } = await getUserMeLoader();
   const { data } = await getChurch();
 
-  const canCreateAnnouncement = await checkUserRole(["admin", "ministry"]);
+  const canCreateAnnouncement = await checkUserRole(
+    ["admin", "ministry"],
+    authService,
+  );
 
   return (
     <ContentLayout title="Prayer Requests">

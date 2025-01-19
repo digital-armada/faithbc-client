@@ -3,14 +3,15 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { signIn, auth, signOut } from "@/auth";
+import { signIn, auth, signOut } from "@/lib/auth";
 import { AuthError, CredentialsSignin } from "next-auth";
 import { LoginSchema } from "@/db/schemas";
 import {
   registerUserService,
   updateUserService,
 } from "../../../data/services/auth-service";
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
+import { AuthService } from "@/src/infrastructure/services/authentication.service";
 // export const DEFAULT_LOGIN_REDIRECT = "/profile";
 
 // import { ConfirmationNewRequestFormStateT } from "./ConfirmationNewRequest";
@@ -25,18 +26,25 @@ export async function loginUserAction(
     return { error: "Invalid fields!" };
   }
 
-  const { identifier, password, code } = validatedFields.data;
+  const { identifier, password } = validatedFields.data;
+
+  const authService = new AuthService();
+
+  console.log("authService", authService);
 
   try {
-    await signIn("credentials", {
+    await authService.signIn("credentials", {
       identifier,
       password,
       // redirectTo: callbackUrl || "/dashboard",
       redirect: false, // Handle redirect manually for more control
       callbackUrl: callbackUrl || "/dashboard",
     });
+
     return { success: true };
   } catch (error) {
+    console.error("Login error:", error);
+
     if (error instanceof Error) {
       const credentialsError = error as CredentialsSignin;
       if (credentialsError.cause?.err?.message) {

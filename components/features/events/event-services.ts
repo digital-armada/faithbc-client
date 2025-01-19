@@ -1,5 +1,5 @@
 import { API } from "@/lib/constants/api-endpoints";
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 import qs from "qs";
 import { Event } from "./types";
 

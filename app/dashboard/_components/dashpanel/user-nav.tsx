@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { SignOut } from "@/components/blocks/Forms/SignOut";
 
 export async function UserNav() {

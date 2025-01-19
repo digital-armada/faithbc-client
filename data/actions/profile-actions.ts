@@ -6,7 +6,7 @@ import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 
 import { flattenAttributes } from "@/lib/utils";
 import { fileUploadService } from "../services/file-service";
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 
 export async function updateProfileAction(
   userId: string,

@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 import slugify from "slugify";
 
 interface StrapiError {

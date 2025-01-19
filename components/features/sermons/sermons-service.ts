@@ -1,4 +1,4 @@
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 import { API } from "@/lib/constants/api-endpoints";
 import { Sermon } from "@/components/features/sermons/types";
 import { strapiRequestClient } from "@/lib/strapiClient-service";

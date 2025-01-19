@@ -2,7 +2,7 @@
 
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 
 export async function updateEvent(eventData) {
   console.log(eventData);

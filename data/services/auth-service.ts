@@ -1,6 +1,6 @@
 import { getStrapiURL } from "@/lib/utils";
-import { auth } from "@/auth";
-import { strapiRequest } from "@/db/strapi-service";
+import { auth } from "@/lib/auth";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 
 interface RegisterUserProps {
   username: string;

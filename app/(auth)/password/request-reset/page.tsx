@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import RequestPasswordReset from "@/app/(auth)/password/request-reset/_components/RequestPasswordReset";
 export default async function RequestResetPage() {

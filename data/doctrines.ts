@@ -1,4 +1,4 @@
-import { strapiRequest } from "@/db/strapi-service";
+import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 
 export async function getStatement(slug: string) {
   try {

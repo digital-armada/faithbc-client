@@ -2,7 +2,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
-import { labels } from "./data/data";
+// import { labels } from "./data/data";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,69 +20,36 @@ import { deleteAnnouncement } from "@/components/features/announcements/announce
 // import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { set } from "lodash";
-import formatTimeString, { formatTime } from "@/lib/timeHelper";
+import { Announcement } from "@/src/domain/entities/models/Announcement";
 
-type AnnouncementAttributes = {
-  message: string;
-  announcementDate: string;
-  announcementTime: string;
-};
+const columnHelper = createColumnHelper<Announcement>();
 
-type Announcements = {
-  id: number; // Unique identifier for the announcement
-  attributes: AnnouncementAttributes; // Nested attributes
-};
-
-const columnHelper = createColumnHelper<Announcements>();
-
-export const defaultColumns = [
-  columnHelper.accessor("attributes.announcementDate", {
+export const AnnouncementColumns: ColumnDef<Announcement>[] = [
+  {
+    accessorFn: (row) => row.announcementDate,
+    id: "announcementDate",
     header: () => <span>Date & Time</span>,
     cell: (props) => {
-      const date = new Date(props.getValue());
-      const time = formatTime(props.row.original.attributes.announcementTime); // access the time field
-
       return (
         <div>
-          <span>{format(new Date(date), "EEE MMM dd yyyy")}</span>
-          {time && <span> {`@ ${time}`}</span>}
+          {/* <span>{format(props.getValue(), "EEE MMM dd yyyy")}</span> */}
+          {props.row.original.announcementTime && (
+            <span> {`@ ${props.row.original.announcementTime}`}</span>
+          )}
         </div>
       );
     },
-  }),
-
-  columnHelper.accessor("attributes.message", {
+  },
+  {
+    accessorFn: (row) => row.message,
+    id: "message",
     header: () => <span>Message</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
-  }),
-
-  columnHelper.display({
+  },
+  {
     id: "actions",
     cell: (props) => {
-      // const { toast } = useToast();
-      // const [pending, setIsPending] = useState(false);
-
       const handleDelete = async () => {
-        // setIsPending(true);
-        // toast({
-        //   title: "Deleting...",
-        //   description: "Please wait while we delete the announcement",
-        // });
-        const result = await deleteAnnouncement(props.row.original.id);
-        // setIsPending(false);
-        // if (result.error) {
-        //   toast({
-        //     variant: "destructive",
-        //     title: "Error",
-        //     description: result.error,
-        //   });
-        // } else {
-        //   toast({
-        //     variant: "success",
-        //     title: "Success",
-        //     description: "Announcement deleted successfully",
-        //   });
-        // }
+        await deleteAnnouncement(props.row.original.id);
       };
 
       return (
@@ -104,5 +71,5 @@ export const defaultColumns = [
         </div>
       );
     },
-  }),
+  },
 ];

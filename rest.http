@@ -1,0 +1,9 @@
+POST http://localhost:1337/api/announcements HTTP/1.1
+Content-type: application/json
+
+{
+  "data":{
+    "message": "Hello Worlds",
+    "announcementDate": "2025-05-05"
+  }
+}
