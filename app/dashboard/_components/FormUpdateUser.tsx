@@ -2,8 +2,8 @@
 // import { updateUserAction } from "@/data/actions/auth-actions";
 import { z } from "zod";
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
 const addressSchema = z.object({
   street: z.string().min(1, "Street is required"),
   suburb: z.string().min(1, "Suburb is required"),
@@ -37,7 +37,7 @@ export default function FormUpdateUser({ user }) {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     contactNumber: user?.contactNumber || "",
-    dateOfBirth: new Date(user?.dateOfBirth) || new Date(),
+    dateOfBirth: user?.dateOfBirth ? new Date(user.dateOfBirth) : new Date(),
     address: {
       street: user?.address?.street || "",
       suburb: user?.address?.suburb || "",
