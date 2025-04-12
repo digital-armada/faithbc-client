@@ -1,5 +1,5 @@
 import { getStrapiURL } from "@/lib/utils";
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import qs from "qs";
 
 const query = qs.stringify({

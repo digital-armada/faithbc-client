@@ -1,9 +1,6 @@
-import { IAuthenticationService } from "@/src/domain/interfaces/IAuthenticationService";
-import { auth } from "@/lib/auth";
-import {
-  signIn as nextAuthSignIn,
-  signOut as nextAuthSignOut,
-} from "@/lib/auth";
+import { auth } from "@/auth";
+import { signIn as nextAuthSignIn, signOut as nextAuthSignOut } from "@/auth";
+import { IAuthenticationService } from "@/src/application/interfaces/IAuthenticationService";
 import { Session } from "next-auth";
 
 export class AuthService implements IAuthenticationService {

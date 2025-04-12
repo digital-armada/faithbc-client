@@ -93,7 +93,7 @@ export default function ImagePicker({
           accept="image/*"
         />
       </div>
-      <ImageCard dataUrl={dataUrl ?? ""} fileInput={fileInput} />
+      {/* <ImageCard dataUrl={dataUrl ?? ""} fileInput={fileInput} /> */}
     </React.Fragment>
   );
 }

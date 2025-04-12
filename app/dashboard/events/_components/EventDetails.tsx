@@ -1,7 +1,7 @@
 "use client";
 
-import EventMap from "@/components/features/events/components/EventMap";
-import RenderTipTap from "@/components/features/events/components/RenderTipTap";
+import EventMap from "@/features/events/components/EventMap";
+import RenderTipTap from "@/features/events/components/RenderTipTap";
 import formatEventTime from "@/lib/formatDateTime";
 import { format } from "date-fns";
 import { Suspense } from "react";
@@ -73,11 +73,11 @@ const EventDetails = ({
           )}
         </div>
         {/* /// MAP */}
-        <div className="w-full flex-1">
+        {/* <div className="w-full flex-1">
           <Suspense fallback={<div>Loading...</div>}>
             <EventMap address={venAdd} />
           </Suspense>
-        </div>{" "}
+        </div>{" "} */}
       </div>
       <div>
         {/* /// ABOUT */}

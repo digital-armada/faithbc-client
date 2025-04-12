@@ -1,7 +1,7 @@
 import FormEvent from "../../_components/FormEvent";
 import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
-import { eventsService } from "@/components/features/events/event-services";
-import { Event } from "@/components/features/events/types";
+import { eventsService } from "@/features/events/event-services";
+import { Event } from "@/features/events/types";
 
 export default async function page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

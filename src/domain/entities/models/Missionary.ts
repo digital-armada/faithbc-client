@@ -1,11 +1,27 @@
-import PrayerRequest from "./PrayerRequest";
+import { PrayerRequestSchema } from "@/src/domain/entities/models/PrayerRequest";
+import { z } from "zod";
+// import PrayerRequest from "./PrayerRequest";
 
-// domain/entities/Missionary.ts
-export interface Missionary {
-  id: number;
-  name: string;
-  location: string;
-  prayerrequests: PrayerRequest[]; // Array of PrayerRequest objects.
-}
+export const MissionarySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  location: z.string(),
+  prayerrequests: z.array(PrayerRequestSchema).optional(),
+});
 
-export default Missionary;
+export type Missionary = z.infer<typeof MissionarySchema>;
+
+export const CreateMissionarySchema = MissionarySchema.omit({
+  id: true,
+});
+
+export type CreateMissionaryType = z.infer<typeof CreateMissionarySchema>;
+
+// export interface Missionary {
+//   id: number;
+//   name: string;
+//   location: string;
+//   prayerrequests: PrayerRequest[];
+// }
+
+// export default Missionary;

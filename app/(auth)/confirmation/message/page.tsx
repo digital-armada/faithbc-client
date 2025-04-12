@@ -1,4 +1,4 @@
-import ConfirmationMessage from "@/app/(auth)/confirmation/message/_components/ConfirmationMessage";
+import ConfirmationMessage from "@/features/auth/ConfirmationMessage";
 
 export default function page() {
   return <ConfirmationMessage />;

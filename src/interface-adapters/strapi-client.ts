@@ -1,5 +1,5 @@
 import { API_CONFIG } from "../../lib/constants/api-endpoints";
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import qs from "qs";
 
 const checkPermission = async (requiredRole: string) => {
@@ -28,8 +28,20 @@ export const strapiRequest = async <T>(
 
   if (options?.requireAuth && options.session == undefined) {
     const session = await auth();
+    console.log("STRAPI_REQUEST_DEBUG: Session from auth()", {
+      sessionExists: !!session,
+      strapiTokenExists: !!session?.strapiToken,
+      sessionDetails: session
+        ? {
+            userId: session.user?.id,
+            email: session.user?.email,
+            role: session.user?.role,
+          }
+        : "No session",
+    });
 
     if (!session?.strapiToken) {
+      console.error("STRAPI_REQUEST_ERROR: No valid session token found");
       return {
         success: false,
         error: { message: "Unauthorized: No valid session token " },
@@ -77,6 +89,13 @@ export const strapiRequest = async <T>(
     const data = await response.json();
 
     if (!response.ok) {
+      console.error("Strapi API Error:", {
+        status: response.status,
+        statusText: response.statusText,
+        errorMessage: data?.error?.message || "An error occurred",
+        errorDetails: data?.error,
+        url: url.toString(),
+      });
       return {
         success: false,
         error: {
@@ -86,12 +105,25 @@ export const strapiRequest = async <T>(
       };
     }
 
+    console.log("Strapi API Response:", {
+      url: url.toString(),
+      dataStructure: Object.keys(data),
+      hasDataProperty: !!data.data,
+      hasMetaProperty: !!data.meta,
+    });
+
     return {
       success: true,
       data: data.data || data,
       meta: data.meta,
     };
   } catch (error) {
+    console.error("Strapi Request Unexpected Error:", {
+      message:
+        error instanceof Error ? error.message : "An unexpected error occurred",
+      details: error,
+      url: url.toString(),
+    });
     return {
       success: false,
       error: {

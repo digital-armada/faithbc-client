@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 

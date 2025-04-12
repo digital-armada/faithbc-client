@@ -1,5 +1,5 @@
-import HomeSermonCard from "@/components/features/sermons/components/HomeSermonCard";
-import { sermonsService } from "@/components/features/sermons/sermons-service";
+import HomeSermonCard from "@/features/sermons/components/HomeSermonCard";
+import { sermonsService } from "@/features/sermons/sermons-service";
 
 export default async function HomeSermon() {
   const data = await sermonsService.getSermons({ pageSize: 4 });

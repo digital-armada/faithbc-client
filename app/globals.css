@@ -255,4 +255,7 @@
       margin-bottom: 10px;
     }
   }
+  & a {
+    color: rgb(45, 123, 248);
+  }
 }

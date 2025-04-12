@@ -1,12 +1,12 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Roboto, Lora } from "next/font/google";
 
 import "./globals.css";
-import Menu from "@/components/blocks/Menu/Menu";
+// import Menu from "@/app/_components/blocks/Menu/Menu";
 import Providers from "@/lib/Providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React from "react";
 
 const loraFont = Lora({
   subsets: ["latin"],

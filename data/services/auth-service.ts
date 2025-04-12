@@ -1,5 +1,5 @@
 import { getStrapiURL } from "@/lib/utils";
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import { strapiRequest } from "@/src/interface-adapters/strapi-client";
 
 interface RegisterUserProps {

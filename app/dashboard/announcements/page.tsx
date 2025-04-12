@@ -1,26 +1,34 @@
 import React from "react";
-import AnnouncementForm from "./_components/AnnouncementForm";
-import ContentLayout from "../../../components/common/Layouts/DashboardContentWrapper";
-import createAnnouncementService from "@/src/domain/services/announcementService";
-import AnnouncementTable from "./_components/AnnouncementTable";
+import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
+
+import AnnouncementForm from "@/features/announcements/ctx.Dashboard/AnnouncementForm";
+import AnnouncementTable from "@/features/announcements/ctx.Dashboard/Table/AnnouncementTable";
+
+import { AuthService } from "@/src/infrastructure/services/authentication.service";
+import createAnnouncementService from "@/src/application/services/announcementService";
+import { redirect } from "next/navigation";
 
 export default async function page() {
-  // const { data: announcements, meta } =
-  //   await getPublicAnnouncementsUseCase.execute();
-  // console.log("announcements", announcements);
+  const authService = new AuthService();
+  const token = (await authService.getSession())?.strapiToken;
+
+  if (!token) {
+    redirect("/signin");
+  }
+
+  const { getPublicAnnouncementsUseCase } = createAnnouncementService();
+  const initialData = await getPublicAnnouncementsUseCase.execute({
+    page: 1,
+    pageSize: 10,
+    token,
+  });
+
   return (
     <ContentLayout title="Announcements">
       {/* {canCreateAnnouncement && */}
       <AnnouncementForm />
       {/* } */}
-      <AnnouncementTable />
-      <h1>Announcements</h1>
-      {/* <ul>
-        {announcements.map((announcement) => (
-          <li key={announcement.id}>{announcement.message}</li>
-        ))}
-      </ul> */}
-      {/* {meta && <p>Total announcements: {meta.pagination.total}</p>} */}
+      <AnnouncementTable initialData={initialData} />
     </ContentLayout>
   );
 }

@@ -23,6 +23,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
@@ -33,7 +34,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/api/auth/[...nextauth]/.authOptions.ts"
+    "app/api/auth/[...nextauth]/.authOptions.ts",
+    "src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

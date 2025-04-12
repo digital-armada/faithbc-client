@@ -1,11 +1,11 @@
 "use client";
 // import { dehydrate, HydrationBoundary, useQuery } from "@tanstack/react-query";
 
-import { contactsService } from "@/components/features/contacts/contacts-service";
+import { contactsService } from "@/features/contacts/contacts-service";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
-import ContactsTable from "@/components/features/contacts/components/ContactsTable";
+import ContactsTable from "@/features/contacts/components/ContactsTable";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 

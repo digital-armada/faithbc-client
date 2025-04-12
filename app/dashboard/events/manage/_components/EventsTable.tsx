@@ -11,7 +11,7 @@ import {
   DataTablePagination,
 } from "../../../../../components/blocks/Table/data-table";
 import { EventsColumns } from "@/app/dashboard/events/manage/_components/EventsColumns";
-import { useEvents } from "@/db/hooks/events/useEvents";
+import { useEvents } from "@/features/events/hooks/useEvents";
 
 export default function Page() {
   const [pagination, setPagination] = useState({

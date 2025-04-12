@@ -68,7 +68,7 @@ export function MediaUpload({
 
   const handleClear = (e) => {
     e.preventDefault;
-    setPreviewUrl(null);
+    // setPreviewUrl(null);
     onUploadComplete({ id: null, url: null });
   };
 

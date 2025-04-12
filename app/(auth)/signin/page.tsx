@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
-import SignInForm from "@/app/(auth)/signin/_components/SigninForm";
+import { auth } from "@/auth";
+import SignInForm from "@/features/auth/components/SigninForm";
 import { redirect } from "next/navigation";
 
 export default async function Page() {

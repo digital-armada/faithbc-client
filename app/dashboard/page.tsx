@@ -1,4 +1,4 @@
-import ContentLayout from "../../components/common/Layouts/DashboardContentWrapper";
+import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
 import { getBirthdayUsers } from "@/data/services/getUsers";
 import UpcomingBirthdays from "@/app/dashboard/_components/widgets/upcomingBirthdays";
 import Announcements from "@/app/dashboard/_components/widgets/announcements";

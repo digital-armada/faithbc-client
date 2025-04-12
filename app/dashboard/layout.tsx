@@ -1,8 +1,8 @@
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "../../components/blocks/dashboard/Sidebar/app-sidebar";
-import { auth } from "@/lib/auth";
+import { AppSidebar } from "@/components/blocks/dashboard/Sidebar/app-sidebar";
+import { auth } from "@/auth";
 
 export default async function Layout({
   children,

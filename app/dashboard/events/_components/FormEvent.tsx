@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { RHFFormDatePicker } from "@/components/ui/RHFFormDatePicker";
 import { MediaUpload } from "@/components/blocks/MediaUpload";
 import Editor from "./Editor";
 import { createEvent, updateEvent } from "@/data/actions/event-action";
-import { Event } from "@/components/features/events/types";
+import { Event } from "@/features/events/types";
 import formatTimeString from "@/lib/timeHelper";
 
 interface FormEventProps {
@@ -123,13 +123,13 @@ export default function FormEvent({ data, eventID }: FormEventProps) {
           {/* /// FILE UPLOAD */}
           <div className="space-y-2">
             <Label>Featured Image</Label>
-            <MediaUpload
+            {/* <MediaUpload
               type="image"
               onUploadComplete={(data) => {
                 setValue("featuredImage", data?.id ?? null);
               }}
               preview={data?.attributes?.featuredImage?.data?.attributes?.url}
-            />
+            /> */}
           </div>
 
           {/* /// CONTENT */}

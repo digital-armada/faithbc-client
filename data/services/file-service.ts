@@ -1,7 +1,7 @@
 "use server";
 
 import { getStrapiURL } from "@/lib/utils";
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 
 interface UploadResponse {
   id: number;

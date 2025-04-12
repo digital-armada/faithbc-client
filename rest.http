@@ -1,5 +1,6 @@
 POST http://localhost:1337/api/announcements HTTP/1.1
 Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjIsImlhdCI6MTczNzQ3MjA3MywiZXhwIjoxNzQwMDY0MDczfQ.cHgSKe5-o78koMXxPhtMkzVMtB7WGe_iqRwFWVvTPQA
 
 {
   "data":{

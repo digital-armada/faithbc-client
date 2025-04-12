@@ -1,5 +1,5 @@
 "server only";
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 export async function getDashEvents({

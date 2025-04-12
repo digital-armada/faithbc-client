@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { deleteMissionary } from "@/app/dashboard/missionaries/_api/missions-actions";
+import { deleteMissionary } from "@/features/missions/actions";
 
 export const MissionsColumns: ColumnDef<any>[] = [
   {

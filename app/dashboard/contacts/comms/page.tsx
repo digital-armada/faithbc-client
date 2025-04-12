@@ -1,4 +1,4 @@
-import UpdateMembers from "@/components/features/contacts/components/UpdateMembers";
+import UpdateMembers from "@/features/contacts/components/UpdateMembers";
 import CommsDisplay from "../../_components/CommsDisplay";
 import CommsForm from "../../_components/CommsForm";
 import ContentLayout from "../../../../components/common/Layouts/DashboardContentWrapper";

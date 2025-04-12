@@ -1,4 +1,4 @@
-import { IAuthenticationService } from "@/src/domain/interfaces/IAuthenticationService";
+import { IAuthenticationService } from "@/src/application/interfaces/IAuthenticationService";
 
 export async function checkUserRole(
   allowedRoles: string[],

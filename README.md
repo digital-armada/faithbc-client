@@ -111,3 +111,12 @@ export const strapiRequest = async <T>(
 };
 
 ```
+
+# tsconfig.json
+
+```json
+{
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative"
+}
+```

@@ -1,7 +1,7 @@
 // @/app/dashboard/_components/Modal.js
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   Dialog,

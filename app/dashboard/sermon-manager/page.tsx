@@ -1,8 +1,8 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
-import { sermonsService } from "@/components/features/sermons/sermons-service";
-import SermonManager from "@/components/features/SermonManager";
+import { sermonsService } from "@/features/sermons/sermons-service";
+import SermonManager from "@/features/SermonManager";
 import { getQueryClient } from "@/lib/get-query-client";
 
 async function page() {

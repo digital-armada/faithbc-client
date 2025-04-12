@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { deleteUserCommGroup } from "@/components/features/comms/comms-actions";
+import { deleteUserCommGroup } from "@/features/comms/comms-actions";
 import { toast } from "@/hooks/use-toast";
 
 interface DeleteUserButtonProps {

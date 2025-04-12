@@ -17,26 +17,39 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { SidebarCollapsibleButton } from "./SidebarCollapsibleButton";
-import { logout } from "@/components/features/auth/auth-actions";
+import { logout } from "@/features/auth/auth-actions";
 // import { menuItems } from "@/lib/constants/MenuItems";
 import { useRoleBasedMenu } from "@/hooks/userRoleBasedMenu";
+import { TiHomeOutline } from "react-icons/ti";
 
 type Role = "member" | "admin" | "ministry";
 
 interface MenuProps {
   isOpen: boolean | undefined;
 }
-
+export const menuItems = [
+  {
+    text: "Dashboard",
+    link: "/dashboard",
+    icon: <TiHomeOutline />,
+    roles: {
+      member: { show: true },
+      admin: { show: true },
+      ministry: { show: true },
+    },
+  },
+  // ...
+];
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const router = useRouter();
   const menuItems = useRoleBasedMenu();
 
-  // const session = useSession();
+  const session = useSession();
   // const [userRole, setUserRole] = useState(
   //   session?.data?.user as { role?: Role },
   // );
-  // const userRole = (session?.data?.user as { role?: Role })?.role || "member";
+  const userRole = (session?.data?.user as { role?: Role })?.role || "member";
   // console.log("client", userRole);
   // React.useEffect(() => {
   //   if (session?.data?.user) {
@@ -153,9 +166,9 @@ export function Menu({ isOpen }: MenuProps) {
     <>
       <ScrollArea className="[&>div>div[style]]:!block">
         <nav>
-          {menuItems.map((category) => (
-            <div key={category.title}>
-              <h2>{category.title}</h2>
+          {/* {menuItems.map((category) => (
+            <div key={category.text}>
+              <h2>{category.text}</h2>
               <ul>
                 {category.items.map((item) => (
                   <li key={item.text}>
@@ -178,7 +191,7 @@ export function Menu({ isOpen }: MenuProps) {
                 ))}
               </ul>
             </div>
-          ))}
+          ))} */}
         </nav>
         {/* <nav className="h-full w-full pt-4">
           <ul className="flex flex-col items-start space-y-1 px-2">

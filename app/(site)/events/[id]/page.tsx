@@ -1,19 +1,21 @@
 import HeadingTwo from "@/components/blocks/headingtwo";
 import Image from "next/image";
-import { eventsService } from "@/components/features/events/event-services";
+import { eventsService } from "@/features/events/event-services";
 import EventDetails from "@/app/dashboard/events/_components/EventDetails";
 
-export default async function EventPage(
-  props: {
-    params: Promise<{ id: number }>;
-  }
-) {
+export default async function EventPage(props: {
+  params: Promise<{ id: number }>;
+}) {
   const params = await props.params;
   const id = params.id.toString();
-  const { data } = await eventsService.getEvent(id);
-  if (!data?.attributes) {
-    return <section>Event not found</section>;
+  const result = await eventsService.getEvent(id);
+
+  if (!result || !result.data || !result.data.attributes) {
+    console.error("EVENT_PAGE_ERROR", result?.error || "No data returned");
+    return <section>Event not found or access denied</section>;
   }
+
+  const data = result.data;
 
   const {
     title,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ContentLayout from "../../../../components/common/Layouts/DashboardContentWrapper";
+import ContentLayout from "@/components/common/Layouts/DashboardContentWrapper";
 import {
   DataTable,
   DataTableToolbar,
@@ -9,9 +9,9 @@ import {
   DataTableColumnVisibility,
   DataTableContent,
   DataTablePagination,
-} from "../../../../components/blocks/Table/data-table";
+} from "@/components/blocks/Table/data-table";
 import { EventsColumns } from "./_components/EventsColumns";
-import { useEvents } from "../../../../db/hooks/events/useEvents";
+import { useEvents } from "../../../../features/events/hooks/useEvents";
 
 export default function Page() {
   const [pagination, setPagination] = useState({

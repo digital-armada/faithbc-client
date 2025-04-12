@@ -10,7 +10,7 @@ export default async function Page() {
         <PageHeader heading="Statement of Faith" />
         <ul role="list" className="flex flex-col divide-y divide-gray-700/10">
           {data &&
-            data?.data.map((statement: any) => {
+            data?.data?.map((statement: any) => {
               return (
                 <Link
                   key={statement.id}

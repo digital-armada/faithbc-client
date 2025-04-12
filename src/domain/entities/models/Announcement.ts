@@ -4,11 +4,7 @@ export const AnnouncementSchema = z.object({
   id: z.number(),
   message: z.string().min(3, { message: "Minimum 3 characters" }),
   announcementDate: z.string().min(1, { message: "Date is required" }),
-  announcementTime: z
-    .string()
-    .min(1, { message: "Time is required" })
-    .optional()
-    .nullable(),
+  announcementTime: z.string().optional().nullable(),
 });
 
 export type Announcement = z.infer<typeof AnnouncementSchema>;

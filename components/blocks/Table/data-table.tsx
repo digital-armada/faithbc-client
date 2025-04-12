@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -132,12 +132,14 @@ export function DataTableFilter({ column, placeholder }: DataTableFilterProps) {
   const columnInstance = table.getColumn(column);
 
   // Sync internal state with table filter value
-  useEffect(() => {
+  const handleFilterValueChange = useCallback(() => {
     const currentFilterValue = columnInstance?.getFilterValue() as string;
     if (currentFilterValue !== value) {
       setValue(currentFilterValue || "");
     }
-  }, [columnInstance?.getFilterValue()]);
+  }, [columnInstance, value]);
+
+  useEffect(handleFilterValueChange, [handleFilterValueChange]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;

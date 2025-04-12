@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { checkSlug } from "../services/event-service";
 import { strapiRequest } from "@/src/interface-adapters/strapi-client";

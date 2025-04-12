@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { updateSermon } from "@/features/sermons/sermon-actions";
+import React, { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,15 +11,15 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Speaker } from "../../../components/features/SermonManager/components/Speaker";
-import { AudioUploader } from "../../../components/features/SermonManager/components/audio-uploader";
-import { ClipboardComponent } from "../../../components/features/SermonManager/components/ClipboardComponent";
+import { Speaker } from "../../SermonManager/components/Speaker";
+import { AudioUploader } from "../../SermonManager/components/audio-uploader";
+import { ClipboardComponent } from "../../SermonManager/components/ClipboardComponent";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { updateSermon } from "@/features/sermons/sermon-actions";
 
 const formSchema = z.object({
   id: z.string(),

@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { registerUserAction } from "@/components/features/auth/auth-actions";
+import { registerUserAction } from "@/features/auth/auth-actions";
 import { useFormState } from "react-dom";
-import {
-  schemaFormData,
-  schemaRegister,
-} from "@/components/features/auth/schemaAuth";
+import { schemaFormData, schemaRegister } from "@/features/auth/schemaAuth";
 import { ApiResponse } from "@/types/types";
 import {
   Select,

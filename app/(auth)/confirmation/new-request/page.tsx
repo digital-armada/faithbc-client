@@ -1,4 +1,4 @@
-import ConfirmationNewRequest from "@/app/(auth)/confirmation/new-request/_components/ConfirmationNewRequest";
+import ConfirmationNewRequest from "@/features/auth/ConfirmationNewRequest";
 
 export default function page() {
   return <ConfirmationNewRequest />;

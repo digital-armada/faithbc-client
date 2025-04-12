@@ -18,7 +18,7 @@ import { TiTrash } from "react-icons/ti";
 import { deleteEvent } from "@/data/actions/event-action";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import EventDelete from "@/components/features/events/dashboard/components/Table-event-delete";
+import EventDelete from "@/features/events/dashboard/components/Table-event-delete";
 
 export const EventsColumns: ColumnDef<any>[] = [
   // {
